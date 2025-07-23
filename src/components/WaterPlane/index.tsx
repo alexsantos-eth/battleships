@@ -37,10 +37,12 @@ const WaterPlane = () => {
     <mesh ref={meshRef} rotation={[0, 0, 0]} position={[0, 0, 0.1]}>
       <planeGeometry args={[6, 6, 50, 50]} />
       <meshStandardMaterial
-        color="#51ffff"
+        color="#4aceff"
         roughness={0.6}
         metalness={0.4}
         flatShading
+        emissive="#a6ffff"
+        emissiveIntensity={0.1}
       />
     </mesh>
   );

@@ -9,9 +9,12 @@ interface EnvironmentBoxProps {
   children: React.ReactNode;
 }
 
+const CAMERA_Y_ROTATION = 0;
+const CAMERA_X_ROTATION = 0;
+const CAMERA_Z_ROTATION = 0;
+
 const EnvironmentBox: React.FC<EnvironmentBoxProps> = ({ children }) => {
   const cameraControlsRef = useRef<CameraControls>(null);
-  const [rotationY, setRotationY] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -24,24 +27,10 @@ const EnvironmentBox: React.FC<EnvironmentBoxProps> = ({ children }) => {
 
   const rotateCamera = () => {
     if (cameraControlsRef.current) {
-      const newRotation = rotationY === 0 ? Math.PI / 3 : 0;
-      setRotationY(newRotation);
-
-      const targetDistance =
-        newRotation === 0 ? (isMobile ? 7 : 4) : isMobile ? 8 : 4.5;
-
-      eventBus.emit(EVENTS.CAMERA_SHOOT_START, { newRotation, targetDistance });
-
-      if (newRotation !== 0) {
-        cameraControlsRef.current.rotate(-0.4, newRotation - rotationY, true);
-      } else {
-        cameraControlsRef.current.rotate(0.4, newRotation - rotationY, true);
-      }
-
-      cameraControlsRef.current.dollyTo(targetDistance, true);
+      eventBus.emit(EVENTS.CAMERA_SHOOT_START, {});
 
       setTimeout(() => {
-        eventBus.emit(EVENTS.CAMERA_SHOOT_END, { newRotation, targetDistance });
+        eventBus.emit(EVENTS.CAMERA_SHOOT_END, {});
       }, 1000);
     }
   };
@@ -67,7 +56,14 @@ const EnvironmentBox: React.FC<EnvironmentBoxProps> = ({ children }) => {
         Disparar
       </button>
 
-      <Canvas style={{ background: "white", height: "100dvh" }}>
+      <Canvas
+        orthographic
+        camera={{
+          zoom: isMobile ? 100 : 140,
+          far: 1000,
+        }}
+        style={{ background: "white", height: "100dvh" }}
+      >
         <ambientLight intensity={Math.PI * 0.55} color="white" />
 
         <directionalLight
@@ -77,7 +73,7 @@ const EnvironmentBox: React.FC<EnvironmentBoxProps> = ({ children }) => {
           castShadow={false}
         />
 
-        <CameraControls ref={cameraControlsRef} distance={isMobile ? 7 : 4} />
+        <CameraControls ref={cameraControlsRef} />
 
         {children}
       </Canvas>

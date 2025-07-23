@@ -4,22 +4,57 @@ import { Group } from "three";
 import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 
+useGLTF.preload("/assets/models/Ship_Small.gltf");
+useGLTF.preload("/assets/models/Ship_Large.gltf");
+useGLTF.preload("/assets/models/Environment_House1.gltf");
+useGLTF.preload("/assets/models/Environment_House3.gltf");
+
 interface ShipProps {
   coords: [number, number];
-  variant: "small" | "large";
+  variant: "small" | "large" | "house" | "house2";
   orientation?: "horizontal" | "vertical";
 }
 
 const SHIP_VARIANTS = {
   small: {
     size: 2,
-          url: "/assets/models/Ship_Small.gltf",
-    scale: [0.15, 0.15, 0.15] as [number, number, number],
+    url: "/assets/models/Ship_Small.gltf",
+    scale: [0.15, 0.15, 0.1] as [number, number, number],
+    extraOffset: 0,
+    pointLightOffset: [0, 0, 0.5] as [number, number, number],
+    pointLightIntensity: 0.3,
+    waveFrequency: 3.5,
+    waveAmplitude: 0.02,
   },
   large: {
     size: 3,
-          url: "/assets/models/Ship_Large.gltf",
+    url: "/assets/models/Ship_Large.gltf",
     scale: [0.08, 0.08, 0.08] as [number, number, number],
+    extraOffset: 0,
+    pointLightOffset: [0, 0, 0.5] as [number, number, number],
+    pointLightIntensity: 0.3,
+    waveFrequency: 2.5,
+    waveAmplitude: 0.03,
+  },
+  house: {
+    size: 5,
+    url: "/assets/models/Environment_House1.gltf",
+    scale: [0.17, 0.15, 0.1] as [number, number, number],
+    extraOffset: 0.2,
+    pointLightOffset: [0, 0, 0.9] as [number, number, number],
+    pointLightIntensity: 0.5,
+    waveFrequency: 2.0,
+    waveAmplitude: 0.04,
+  },
+  house2: {
+    size: 4,
+    url: "/assets/models/Environment_House3.gltf",
+    scale: [0.2, 0.15, 0.12] as [number, number, number],
+    extraOffset: 0.2,
+    pointLightOffset: [0, 0, 0.9] as [number, number, number],
+    pointLightIntensity: 0.5,
+    waveFrequency: 2.0,
+    waveAmplitude: 0.04,
   },
 } as const;
 
@@ -30,7 +65,15 @@ const Ship: React.FC<ShipProps> = ({
 }) => {
   const shipConfig = SHIP_VARIANTS[variant];
   const { scene } = useGLTF(shipConfig.url);
-  const clonedScene = useMemo(() => scene.clone(), [scene]);
+  const clonedScene = useMemo(() => {
+    try {
+      return scene.clone();
+    } catch (error) {
+      console.error(`Error cloning scene for ${variant}:`, error);
+      return scene;
+    }
+  }, [scene, variant]);
+
   const groupRef = useRef<Group>(null);
 
   const spacing = 0.5;
@@ -45,16 +88,17 @@ const Ship: React.FC<ShipProps> = ({
   const baseOffset = 0.2;
   const sizeOffset = 0.6;
   const sizeMultiplier = shipConfig.size * sizeOffset;
+  const extraOffset = shipConfig.extraOffset;
   const orientationOffsetY =
-    orientation === "vertical" ? baseOffset * sizeMultiplier : 0;
+    orientation === "vertical" ? baseOffset * sizeMultiplier + extraOffset : 0;
   const orientationOffsetX =
-    orientation === "vertical" ? 0 : baseOffset * sizeMultiplier;
+    orientation === "vertical" ? 0 : baseOffset * sizeMultiplier + extraOffset;
 
   useFrame(({ clock }) => {
     if (groupRef.current) {
       const time = clock.getElapsedTime();
-      const frequency = variant === "large" ? 2.5 : 3.5;
-      const amplitude = variant === "large" ? 0.03 : 0.02;
+      const frequency = shipConfig.waveFrequency;
+      const amplitude = shipConfig.waveAmplitude;
       const phase = (coords[0] + coords[1]) * 0.5;
 
       const waveY = Math.sin(time * frequency + phase) * amplitude;
@@ -73,12 +117,12 @@ const Ship: React.FC<ShipProps> = ({
     >
       <pointLight
         color="#ffd180"
-        intensity={0.3}
-        position={[0, 0, 0.5]}
+        intensity={shipConfig.pointLightIntensity}
+        position={shipConfig.pointLightOffset}
         distance={2}
         decay={2}
       />
-      
+
       <primitive
         object={clonedScene}
         position={[0, 0, 0.18]}

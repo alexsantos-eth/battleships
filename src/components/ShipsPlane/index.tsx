@@ -2,19 +2,6 @@ import { useMemo } from "react";
 
 import Ship from "../Ship";
 
-type ShipConfig = {
-  variant: "small" | "large";
-  orientation: "horizontal" | "vertical";
-  size: number;
-};
-
-const SHIP_VARIANTS: ShipConfig[] = [
-  { variant: "small", orientation: "horizontal", size: 2 },
-  { variant: "large", orientation: "vertical", size: 3 },
-  { variant: "small", orientation: "vertical", size: 2 },
-  { variant: "large", orientation: "horizontal", size: 3 },
-];
-
 const GRID_SIZE = 10;
 
 function getRandomInt(min: number, max: number) {
@@ -73,28 +60,42 @@ function getRandomShips() {
     orientation: "horizontal" | "vertical";
   }> = [];
 
-  return SHIP_VARIANTS.map((ship) => {
+  const shipDefinitions: Array<{
+    variant: "small" | "large" | "house" | "house2";
+    size: number;
+  }> = [
+    { variant: "small", size: 2 },
+    { variant: "large", size: 3 },
+    { variant: "large", size: 3 },
+    { variant: "house", size: 5 },
+    { variant: "house2", size: 4 },
+  ];
+
+  return shipDefinitions.map((shipDef) => {
     let x, y;
     let attempts = 0;
     const maxAttempts = 100;
 
+    const orientation: "horizontal" | "vertical" =
+      Math.random() < 0.5 ? "horizontal" : "vertical";
+
     do {
-      if (ship.orientation === "horizontal") {
-        x = getRandomInt(0, GRID_SIZE - ship.size);
+      if (orientation === "horizontal") {
+        x = getRandomInt(0, GRID_SIZE - shipDef.size);
         y = getRandomInt(0, GRID_SIZE - 1);
       } else {
         x = getRandomInt(0, GRID_SIZE - 1);
-        y = getRandomInt(0, GRID_SIZE - ship.size);
+        y = getRandomInt(0, GRID_SIZE - shipDef.size);
       }
 
-      const newShipCells = getShipCells(x, y, ship.size, ship.orientation);
+      const newShipCells = getShipCells(x, y, shipDef.size, orientation);
       const hasConflict = hasOverlap(newShipCells, placedShips);
 
       if (!hasConflict) {
         placedShips.push({
           coords: [x, y],
-          size: ship.size,
-          orientation: ship.orientation,
+          size: shipDef.size,
+          orientation: orientation,
         });
         break;
       }
@@ -104,8 +105,8 @@ function getRandomShips() {
 
     return {
       coords: [x, y] as [number, number],
-      variant: ship.variant,
-      orientation: ship.orientation,
+      variant: shipDef.variant,
+      orientation: orientation,
     };
   });
 }
