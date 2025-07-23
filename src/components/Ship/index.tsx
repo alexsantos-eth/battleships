@@ -13,12 +13,12 @@ interface ShipProps {
 const SHIP_VARIANTS = {
   small: {
     size: 2,
-    url: "/src/assets/models/Ship_Small.gltf",
+          url: "/assets/models/Ship_Small.gltf",
     scale: [0.15, 0.15, 0.15] as [number, number, number],
   },
   large: {
     size: 3,
-    url: "/src/assets/models/Ship_Large.gltf",
+          url: "/assets/models/Ship_Large.gltf",
     scale: [0.08, 0.08, 0.08] as [number, number, number],
   },
 } as const;

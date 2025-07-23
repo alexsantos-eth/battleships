@@ -1,4 +1,3 @@
-// WaterPlane.tsx
 import { useRef } from "react";
 import { createNoise2D } from "simplex-noise";
 
@@ -36,7 +35,7 @@ const WaterPlane = () => {
 
   return (
     <mesh ref={meshRef} rotation={[0, 0, 0]} position={[0, 0, 0.1]}>
-      <planeGeometry args={[10, 10, 50, 50]} />
+      <planeGeometry args={[6, 6, 50, 50]} />
       <meshStandardMaterial
         color="#51ffff"
         roughness={0.6}
