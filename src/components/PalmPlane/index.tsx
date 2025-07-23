@@ -75,7 +75,7 @@ const PalmPlane = () => {
   const palmTrees = useMemo(() => getRandomPalmTrees(), []);
 
   return (
-    <group rotation={[Math.PI / 2, Math.PI / 2, 0]}>
+    <group rotation={[Math.PI / 2, Math.PI / 2, 0]} position={[0, 0, 0.1]}>
       {palmTrees.map((palmTree, idx) => (
         <PalmTree
           key={idx}

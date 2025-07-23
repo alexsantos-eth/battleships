@@ -28,7 +28,7 @@ const EnvironmentBox: React.FC<EnvironmentBoxProps> = ({ children }) => {
       setRotationY(newRotation);
 
       const targetDistance =
-        newRotation === 0 ? (isMobile ? 8 : 4) : isMobile ? 9 : 4.5;
+        newRotation === 0 ? (isMobile ? 7 : 4) : isMobile ? 8 : 4.5;
 
       eventBus.emit(EVENTS.CAMERA_SHOOT_START, { newRotation, targetDistance });
 
@@ -77,7 +77,7 @@ const EnvironmentBox: React.FC<EnvironmentBoxProps> = ({ children }) => {
           castShadow={false}
         />
 
-        <CameraControls ref={cameraControlsRef} distance={isMobile ? 8 : 4} />
+        <CameraControls ref={cameraControlsRef} distance={isMobile ? 7 : 4} />
 
         {children}
       </Canvas>
