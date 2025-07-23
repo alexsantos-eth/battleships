@@ -55,7 +55,7 @@ const EnvironmentBox: React.FC<EnvironmentBoxProps> = ({ children }) => {
       <Canvas
         orthographic
         camera={{
-          zoom: isMobile ? 110 : 140,
+          zoom: isMobile ? window.innerWidth * 0.2 : 140,
           far: 1000,
         }}
         style={{ background: "white", height: "100dvh" }}
