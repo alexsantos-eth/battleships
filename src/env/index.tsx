@@ -9,10 +9,6 @@ interface EnvironmentBoxProps {
   children: React.ReactNode;
 }
 
-const CAMERA_Y_ROTATION = 0;
-const CAMERA_X_ROTATION = 0;
-const CAMERA_Z_ROTATION = 0;
-
 const EnvironmentBox: React.FC<EnvironmentBoxProps> = ({ children }) => {
   const cameraControlsRef = useRef<CameraControls>(null);
   const [isMobile, setIsMobile] = useState(false);
