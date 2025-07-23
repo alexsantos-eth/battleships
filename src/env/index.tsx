@@ -8,13 +8,13 @@ interface EnvironmentBoxProps {
 const EnvironmentBox: React.FC<EnvironmentBoxProps> = ({ children }) => {
   return (
     <Canvas style={{ background: "white" }}>
-      <ambientLight intensity={Math.PI / 2} />
-      <spotLight
-        position={[0, 4, 15]}
-        angle={0.15}
-        penumbra={1}
-        decay={0}
-        intensity={Math.PI / 2}
+      <ambientLight intensity={Math.PI / 2} color="white" />
+
+      <directionalLight
+        color="white"
+        intensity={1}
+        position={[0, 10, 0]}
+        castShadow={false}
       />
 
       <CameraControls />

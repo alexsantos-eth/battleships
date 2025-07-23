@@ -25,7 +25,7 @@ const Cell: React.FC<CellProps> = ({ position, onClick }) => {
     >
       <planeGeometry args={[0.5, 0.5]} />
       <meshStandardMaterial
-        color={clicked ? "#1f78d1" : "white"}
+        color={clicked ? "#248dc5" : "white"}
         opacity={clicked ? 1 : 0}
         transparent
         flatShading
