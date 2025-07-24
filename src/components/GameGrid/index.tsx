@@ -20,7 +20,7 @@ const GameGrid = () => {
           rotation={[-Math.PI / 2, 0, 0]}
           position={[0, 0, 0.21]}
         />
-        <PressGrid />
+        {/* <PressGrid /> */}
         <ShipsPlane />
         <RocksPlane />
         <DockPlane />

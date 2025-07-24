@@ -25,22 +25,40 @@ const Ship: React.FC<ShipProps> = ({
   const groupRef = useRef<Group>(null);
 
   const spacing = 0.5;
-  const posX = coords[0] * spacing - (spacing * 10) / 2 + spacing / 2;
-  const posY = coords[1] * spacing - (spacing * 10) / 2 + spacing / 2;
+  const posX =
+    coords[0] * spacing -
+    (spacing * 10) / 2 +
+    (orientation === "vertical"
+      ? spacing / 2
+      : (spacing * shipConfig.size) / 2);
+  const posY =
+    coords[1] * spacing -
+    (spacing * 10) / 2 +
+    (orientation === "vertical"
+      ? (spacing * shipConfig.size) / 2
+      : spacing / 2);
 
   const rotation =
     orientation === "vertical"
       ? [-Math.PI / 2, -Math.PI / 2, Math.PI]
       : [-Math.PI / 2, 0, -Math.PI];
 
-  const baseOffset = 0.2;
-  const sizeOffset = 0.6;
-  const sizeMultiplier = shipConfig.size * sizeOffset;
   const extraOffset = shipConfig.extraOffset;
   const orientationOffsetY =
-    orientation === "vertical" ? baseOffset * sizeMultiplier + extraOffset : 0;
+    orientation === "vertical" ? -0.1 + extraOffset : 0;
   const orientationOffsetX =
-    orientation === "vertical" ? 0 : baseOffset * sizeMultiplier + extraOffset;
+    orientation === "vertical" ? 0 : -0.1 + extraOffset;
+
+  const planeSize = useMemo(() => {
+    const shipSize = shipConfig.size;
+    const gridSize = shipSize * spacing;
+
+    if (orientation === "horizontal") {
+      return [gridSize, spacing] as [number, number];
+    } else {
+      return [spacing, gridSize] as [number, number];
+    }
+  }, [shipConfig.size, orientation, spacing]);
 
   useFrame(({ clock }) => {
     if (groupRef.current) {
@@ -53,30 +71,31 @@ const Ship: React.FC<ShipProps> = ({
       const waveZ =
         Math.cos(time * frequency * 0.7 + phase) * (amplitude * 0.5);
 
-      groupRef.current.position.y = posY + orientationOffsetY + waveY;
+      groupRef.current.position.y = waveY;
       groupRef.current.position.z = waveZ;
     }
   });
 
   return (
-    <group
-      ref={groupRef}
-      position={[posX + orientationOffsetX, posY + orientationOffsetY, 0]}
-    >
-      <pointLight
-        color="#ffd180"
-        intensity={shipConfig.pointLightIntensity}
-        position={shipConfig.pointLightOffset}
-        distance={2}
-        decay={2}
-      />
+    <group position={[posX, posY, 0.18]}>
+      <mesh rotation={[0, 0, 0]} position={[0, 0, 0.02]}>
+        <planeGeometry args={planeSize} />
+        <meshStandardMaterial
+          color={shipConfig.color}
+          transparent
+          opacity={0.8}
+          flatShading
+        />
+      </mesh>
 
-      <primitive
-        object={clonedScene}
-        position={[0, 0, 0.18]}
-        scale={shipConfig.scale}
-        rotation={rotation}
-      />
+      <group ref={groupRef}>
+        <primitive
+          object={clonedScene}
+          position={[orientationOffsetX, orientationOffsetY, 0]}
+          scale={shipConfig.scale}
+          rotation={rotation}
+        />
+      </group>
     </group>
   );
 };

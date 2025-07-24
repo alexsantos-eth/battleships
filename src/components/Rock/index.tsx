@@ -22,7 +22,7 @@ const Rock: React.FC<RockProps> = ({
 
   const defaultScale = useMemo(() => {
     if (variant >= 6 && variant <= 9) {
-      return [0.2, 0.2, 0.2] as [number, number, number];
+      return [0.3, 0.3, 0.3] as [number, number, number];
     }
 
     return [1, 1, 1] as [number, number, number];

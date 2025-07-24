@@ -57,12 +57,12 @@ export function getRandomShips() {
   }> = [];
 
   const shipDefinitions: Array<{
-    variant: "small" | "large" | "house" | "house2";
+    variant: "small" | "large" | "large2" | "house" | "house2";
     size: number;
   }> = [
     { variant: "small", size: 2 },
     { variant: "large", size: 3 },
-    { variant: "large", size: 3 },
+    { variant: "large2", size: 3 },
     { variant: "house", size: 5 },
     { variant: "house2", size: 4 },
   ];

@@ -1,14 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useMemo, useRef } from "react";
 import { createNoise2D } from "simplex-noise";
-import {
-  BufferAttribute,
-  BufferGeometry,
-  MeshStandardMaterial,
-  TextureLoader,
-} from "three";
-
-import { useLoader } from "@react-three/fiber";
+import { BufferAttribute, BufferGeometry, MeshStandardMaterial } from "three";
 
 import { generateTerrain } from "./utils";
 
@@ -31,24 +24,19 @@ const Terrain = ({
   size = 64,
   height = 0.02,
   levels = 1,
-  scale = 10,
+  scale = 5,
   offset = { x: 0, z: 0 },
 }: TerrainProps) => {
   const simplex = useMemo(() => createNoise2D(), [seed]);
   const ref = useRef<BufferGeometry>(null!);
 
-  const sandTexture = useLoader(
-    TextureLoader,
-    "/assets/textures/sand_texture.jpg"
-  );
-
   const material = useMemo(() => {
     return new MeshStandardMaterial({
-      map: sandTexture,
+      color: 0xf4d03f,
       roughness: 0.8,
       metalness: 0,
     });
-  }, [sandTexture]);
+  }, []);
 
   useEffect(() => {
     const [vertices] = generateTerrain(
