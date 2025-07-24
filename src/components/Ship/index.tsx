@@ -40,14 +40,14 @@ const Ship: React.FC<ShipProps> = ({
 
   const rotation =
     orientation === "vertical"
-      ? [-Math.PI / 2, -Math.PI / 2, Math.PI]
-      : [-Math.PI / 2, 0, -Math.PI];
+      ? [-Math.PI / 2, 0, Math.PI]
+      : [-Math.PI / 2, Math.PI / 2, -Math.PI];
 
   const extraOffset = shipConfig.extraOffset;
   const orientationOffsetY =
-    orientation === "vertical" ? -0.1 + extraOffset : 0;
+    orientation === "vertical" ?  extraOffset : 0;
   const orientationOffsetX =
-    orientation === "vertical" ? 0 : -0.1 + extraOffset;
+    orientation === "vertical" ? 0 :  extraOffset;
 
   const planeSize = useMemo(() => {
     const shipSize = shipConfig.size;
@@ -83,7 +83,7 @@ const Ship: React.FC<ShipProps> = ({
         <meshStandardMaterial
           color={shipConfig.color}
           transparent
-          opacity={0.8}
+          opacity={0.5}
           flatShading
         />
       </mesh>

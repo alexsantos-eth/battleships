@@ -81,8 +81,6 @@ function isTooClose(
   return false;
 }
 
-
-
 export function getRandomShips() {
   const placedShips: Array<{
     coords: [number, number];
@@ -91,23 +89,23 @@ export function getRandomShips() {
   }> = [];
 
   const shipDefinitions: Array<{
-    variant: "small" | "large" | "large2" | "house" | "house2";
+    variant: "small" | "medium" | "large" | "xlarge";
     size: number;
   }> = [
     { variant: "small", size: 2 },
-    { variant: "large", size: 3 },
-    { variant: "large2", size: 3 },
-    { variant: "house", size: 5 },
-    { variant: "house2", size: 4 },
+    { variant: "medium", size: 3 },
+    { variant: "medium", size: 3 },
+    { variant: "large", size: 4 },
+    { variant: "xlarge", size: 5 },
   ];
 
   // Define preferred quadrants for each ship to ensure dispersion
   const quadrantPreferences = [
     [0, 1], // small: top-left or top-right
-    [2, 3], // large: bottom-left or bottom-right
-    [1, 2], // large2: top-right or bottom-left
-    [0, 3], // house: top-left or bottom-right
-    [1, 0], // house2: top-right or top-left
+    [2, 3], // medium 1: bottom-left or bottom-right
+    [1, 2], // medium 2: top-right or bottom-left
+    [0, 3], // large: top-left or bottom-right
+    [1, 0], // xlarge: top-right or top-left
   ];
 
   return shipDefinitions.map((shipDef, index) => {

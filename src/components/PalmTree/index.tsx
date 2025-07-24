@@ -16,7 +16,7 @@ const PalmTree: React.FC<PalmTreeProps> = ({
   variant = 1,
 }) => {
   const { scene } = useGLTF(
-    `/assets/models/Environment_PalmTree_${variant}.gltf`
+    `/assets/models/Tree${variant}.glb`
   );
   const clonedScene = useMemo(() => scene.clone(), [scene]);
 
