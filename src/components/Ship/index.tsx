@@ -78,7 +78,7 @@ const Ship: React.FC<ShipProps> = ({
 
   return (
     <group position={[posX, posY, 0.18]}>
-      <mesh rotation={[0, 0, 0]} position={[0, 0, 0.02]}>
+      <mesh rotation={[0, 0, 0]} position={[0, 0, 0.03]}>
         <planeGeometry args={planeSize} />
         <meshStandardMaterial
           color={shipConfig.color}

@@ -36,6 +36,13 @@ const palmTrees = [
     scale: [0.8, 0.8, 0.8] as [number, number, number],
     variant: 2 as const,
   },
+  {
+    id: "palm-bottom-1",
+    position: [-3.5, 0.2, 2.5] as [number, number, number],
+    rotation: [0, Math.PI / 2, 0] as [number, number, number],
+    scale: [0.8, 0.8, 0.8] as [number, number, number],
+    variant: 2 as const,
+  },
 ];
 
 const PalmPlane = () => {

@@ -38,6 +38,18 @@ const rocks = [
     position: [3.5, 0.05, -0.4] as [number, number, number],
     rotation: [Math.PI / 2, -Math.PI / 2, 0] as [number, number, number],
   },
+  {
+    id: "rock-bottom-1",
+    variant: 9 as const,
+    position: [1.4, -3, -0.4] as [number, number, number],
+    rotation: [Math.PI / 2, -Math.PI / 2, 0] as [number, number, number],
+  },
+  {
+    id: "rock-bottom-2",
+    variant: 8 as const,
+    position: [-2, -3.3, -0.4] as [number, number, number],
+    rotation: [Math.PI / 2, -Math.PI / 2, 0] as [number, number, number],
+  },
 ];
 
 const RocksPlane = () => {
