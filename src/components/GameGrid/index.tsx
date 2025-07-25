@@ -11,8 +11,15 @@ interface GameGridProps {
   position?: [number, number, number];
   rotation?: [number, number, number];
   enablePressGrid?: boolean;
+  isPlayerBoard?: boolean;
 }
-const GameGrid = ({ position, rotation, enablePressGrid }: GameGridProps) => {
+
+const GameGrid = ({ 
+  position, 
+  rotation, 
+  enablePressGrid, 
+  isPlayerBoard = true 
+}: GameGridProps) => {
   const { isPlayerTurn } = useGameStore();
 
   return (
@@ -28,7 +35,7 @@ const GameGrid = ({ position, rotation, enablePressGrid }: GameGridProps) => {
 
         <GridHelper />
         {enablePressGrid && isPlayerTurn && <PressGrid />}
-        <ShipsPlane />
+        <ShipsPlane isPlayerBoard={isPlayerBoard} />
       </group>
     </mesh>
   );

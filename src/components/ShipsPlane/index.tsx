@@ -1,13 +1,29 @@
 import { useMemo } from "react";
-
+import { useGameState } from "../../hooks/useGameState";
+import type { Ship as ShipType } from "../../stores/gameStore";
 import Ship from "../Ship";
-import { getRandomShips } from "./utils";
 
-const ShipsPlane = () => {
-  const ships = useMemo(() => getRandomShips(), []);
+interface ShipsPlaneProps {
+  isPlayerBoard?: boolean;
+}
+
+const ShipsPlane = ({ isPlayerBoard = true }: ShipsPlaneProps) => {
+  const { playerShips, enemyShips, initializeGame } = useGameState();
+  
+  const ships = useMemo(() => {
+    const currentShips = isPlayerBoard ? playerShips : enemyShips;
+    
+    if (currentShips.length === 0) {
+      initializeGame();
+      return [];
+    }
+    
+    return currentShips;
+  }, [isPlayerBoard, playerShips, enemyShips, initializeGame]);
+
   return (
     <group>
-      {ships.map((ship, idx) => (
+      {ships.map((ship: ShipType, idx) => (
         <Ship
           key={idx}
           coords={ship.coords}
