@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 
@@ -48,7 +47,7 @@ export const useCameraEvents = (
 
       setIsShooting(true);
       setShootData(data);
-      setPlayerTurn(); // Set player turn when camera moves to shoot position
+      setPlayerTurn();
 
       if (onShootStart) {
         onShootStart(data);
@@ -82,7 +81,6 @@ export const useCameraEvents = (
   );
 
   const triggerShoot = useCallback(() => {
-    console.log("useCameraEvents: Manual shoot trigger");
   }, []);
 
   useFrame(() => {

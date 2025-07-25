@@ -39,6 +39,6 @@ export const SHIP_VARIANTS = {
     extraOffset: -0.1,
     waveFrequency: 2.0,
     waveAmplitude: 0.035,
-    color: "#00FFFF", // Cyan
+    color: "#00FFFF",
   },
 } as const;

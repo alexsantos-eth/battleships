@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useMemo, useRef } from "react";
 import { createNoise2D } from "simplex-noise";
 import { useLoader } from "@react-three/fiber";
@@ -96,8 +95,7 @@ const Terrain = ({
           vec2 i = floor(p);
           vec2 f = fract(p);
           
-          // Use adjustable smoothness interpolation
-          float fx = pow(f.x, smoothness); // Adjustable smoothness
+          float fx = pow(f.x, smoothness);
           float fy = pow(f.y, smoothness);
           
           float a = noise(i);
@@ -118,11 +116,10 @@ const Terrain = ({
           float t = step(transitionDistance, organicDistance);
           
    
-          vec4 sandTex = texture2D(sandTexture, vUv * 6.0); // Scale texture
+          vec4 sandTex = texture2D(sandTexture, vUv * 6.0);
           vec3 texturedSandColor = sandColor * sandTex.rgb;
           
-          // Sample grass texture
-          vec4 grassTex = texture2D(grassTexture, vUv * 6.0); // Scale texture
+          vec4 grassTex = texture2D(grassTexture, vUv * 6.0);
           vec3 texturedGrassColor = grassColor * grassTex.rgb;
           
           vec3 finalColor = mix(texturedSandColor, texturedGrassColor, t);

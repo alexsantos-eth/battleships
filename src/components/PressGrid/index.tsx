@@ -27,7 +27,6 @@ const PressGrid: React.FC = () => {
 
   useEffect(() => {
     if (currentTurn === "PLAYER_TURN" && lastTurn.current === "ENEMY_TURN") {
-      console.log("Turn changed to PLAYER_TURN, emitting CAMERA_SHOOT_START");
       eventBus.emit(EVENTS.CAMERA_SHOOT_START, { newRotation: 0, targetDistance: 5 });
     }
     lastTurn.current = currentTurn;
@@ -59,14 +58,10 @@ const PressGrid: React.FC = () => {
     if (hit) {
       const shipDestroyed = shipId !== undefined && isShipDestroyed(shipId, true);
       if (shipDestroyed) {
-        console.log("¡Barco destruido! Fin del turno del player");
         setEnemyTurn();
         eventBus.emit(EVENTS.CAMERA_SHOOT_END, { newRotation: 0, targetDistance: 5 });
-      } else {
-        console.log("¡Acierto! Continúa tu turno");
       }
     } else {
-      console.log("¡Fallaste! Fin del turno del player");
       setEnemyTurn();
       eventBus.emit(EVENTS.CAMERA_SHOOT_END, { newRotation: 0, targetDistance: 5 });
     }

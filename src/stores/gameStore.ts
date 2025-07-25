@@ -49,7 +49,6 @@ export const useGameStore = create<GameState>((set, get) => ({
   enemyShots: [],
 
   setPlayerTurn: () => {
-    console.log("Game turn: PLAYER_TURN");
     set({
       currentTurn: "PLAYER_TURN",
       isPlayerTurn: true,
@@ -58,7 +57,6 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   setEnemyTurn: () => {
-    console.log("Game turn: ENEMY_TURN");
     set({
       currentTurn: "ENEMY_TURN",
       isPlayerTurn: false,

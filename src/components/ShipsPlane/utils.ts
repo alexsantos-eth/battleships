@@ -99,35 +99,32 @@ export function getRandomShips() {
     { variant: "xlarge", size: 5 },
   ];
 
-  // Define preferred quadrants for each ship to ensure dispersion
   const quadrantPreferences = [
-    [0, 1], // small: top-left or top-right
-    [2, 3], // medium 1: bottom-left or bottom-right
-    [1, 2], // medium 2: top-right or bottom-left
-    [0, 3], // large: top-left or bottom-right
-    [1, 0], // xlarge: top-right or top-left
+    [0, 1],
+    [2, 3],
+    [1, 2],
+    [0, 3],
+    [1, 0],
   ];
 
   return shipDefinitions.map((shipDef, index) => {
     let x, y;
     let attempts = 0;
-    const maxAttempts = 200; // Increased attempts for better distribution
+    const maxAttempts = 200;
     const preferredQuadrants = quadrantPreferences[index];
 
     const orientation: "horizontal" | "vertical" =
       Math.random() < 0.5 ? "horizontal" : "vertical";
 
     do {
-      // 70% chance to use preferred quadrants, 30% chance for random placement
       if (Math.random() < 0.7 && placedShips.length > 0) {
         const targetQuadrant = preferredQuadrants[Math.floor(Math.random() * preferredQuadrants.length)];
         
-        // Define bounds for each quadrant
         const quadrantBounds = [
-          { xMin: 0, xMax: Math.floor(GRID_SIZE / 2) - 1, yMin: 0, yMax: Math.floor(GRID_SIZE / 2) - 1 }, // 0: top-left
-          { xMin: Math.floor(GRID_SIZE / 2), xMax: GRID_SIZE - 1, yMin: 0, yMax: Math.floor(GRID_SIZE / 2) - 1 }, // 1: top-right
-          { xMin: 0, xMax: Math.floor(GRID_SIZE / 2) - 1, yMin: Math.floor(GRID_SIZE / 2), yMax: GRID_SIZE - 1 }, // 2: bottom-left
-          { xMin: Math.floor(GRID_SIZE / 2), xMax: GRID_SIZE - 1, yMin: Math.floor(GRID_SIZE / 2), yMax: GRID_SIZE - 1 }, // 3: bottom-right
+          { xMin: 0, xMax: Math.floor(GRID_SIZE / 2) - 1, yMin: 0, yMax: Math.floor(GRID_SIZE / 2) - 1 },
+          { xMin: Math.floor(GRID_SIZE / 2), xMax: GRID_SIZE - 1, yMin: 0, yMax: Math.floor(GRID_SIZE / 2) - 1 },
+          { xMin: 0, xMax: Math.floor(GRID_SIZE / 2) - 1, yMin: Math.floor(GRID_SIZE / 2), yMax: GRID_SIZE - 1 },
+          { xMin: Math.floor(GRID_SIZE / 2), xMax: GRID_SIZE - 1, yMin: Math.floor(GRID_SIZE / 2), yMax: GRID_SIZE - 1 },
         ];
         
         const bounds = quadrantBounds[targetQuadrant];
@@ -140,7 +137,6 @@ export function getRandomShips() {
           y = getRandomInt(bounds.yMin, Math.min(bounds.yMax, GRID_SIZE - shipDef.size));
         }
       } else {
-        // Random placement across the entire grid
         if (orientation === "horizontal") {
           x = getRandomInt(0, GRID_SIZE - shipDef.size);
           y = getRandomInt(0, GRID_SIZE - 1);
@@ -152,7 +148,7 @@ export function getRandomShips() {
 
       const newShipCells = getShipCells(x, y, shipDef.size, orientation);
       const hasConflict = hasOverlap(newShipCells, placedShips);
-      const tooClose = isTooClose(newShipCells, placedShips, 1); // Minimum 1 cell distance
+      const tooClose = isTooClose(newShipCells, placedShips, 1);
 
       if (!hasConflict && !tooClose) {
         placedShips.push({
@@ -166,7 +162,6 @@ export function getRandomShips() {
       attempts++;
     } while (attempts < maxAttempts);
 
-    // Fallback: if we can't find a good position, just place it anywhere without overlap
     if (attempts >= maxAttempts) {
       let fallbackAttempts = 0;
       const maxFallbackAttempts = 50;
