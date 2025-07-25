@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import { useGameStore } from "../stores/gameStore";
 import { eventBus, EVENTS } from "../utils/eventBus";
+import { COLORS } from "../config/colors";
 
 const UIBox: React.FC = () => {
   const [isShooting, setIsShooting] = useState(false);
@@ -26,7 +27,7 @@ const UIBox: React.FC = () => {
             left: "20px",
             zIndex: 1000,
             padding: "10px 20px",
-            backgroundColor: isPlayerTurn ? "#28a745" : "#dc3545",
+            backgroundColor: isPlayerTurn ? COLORS.ui.success : COLORS.ui.danger,
             color: "white",
             border: "none",
             borderRadius: "5px",
@@ -45,7 +46,7 @@ const UIBox: React.FC = () => {
             right: "20px",
             zIndex: 1000,
             padding: "10px 20px",
-            backgroundColor: isShooting ? "#dc3545" : "#007bff",
+            backgroundColor: isShooting ? COLORS.ui.danger : COLORS.ui.primary,
             color: "white",
             border: "none",
             borderRadius: "5px",
@@ -63,7 +64,7 @@ const UIBox: React.FC = () => {
           right: "140px",
           zIndex: 1000,
           padding: "10px 20px",
-          backgroundColor: "#28a745",
+          backgroundColor: COLORS.ui.success,
           color: "white",
           border: "none",
           borderRadius: "5px",

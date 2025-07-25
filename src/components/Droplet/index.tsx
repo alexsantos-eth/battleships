@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { Mesh } from "three";
 
 import { a, useSpring } from "@react-spring/three";
+import { COLORS } from "../../config/colors";
 
 interface DropletProps {
   position: [number, number];
@@ -32,7 +33,7 @@ export const Droplet: React.FC<DropletProps> = ({ position, dir, onDone }) => {
   return (
     <a.mesh ref={mesh} position={pos}>
       <sphereGeometry args={[0.03, 8, 8]} />
-      <a.meshStandardMaterial color="#bbf0ff" transparent opacity={opacity} />
+      <a.meshStandardMaterial color={COLORS.water.droplet} transparent opacity={opacity} />
     </a.mesh>
   );
 };

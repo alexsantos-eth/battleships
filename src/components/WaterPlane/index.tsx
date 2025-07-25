@@ -4,6 +4,7 @@ import { createNoise2D } from "simplex-noise";
 import { useFrame } from "@react-three/fiber";
 
 import type { Mesh } from "three";
+import { COLORS } from "../../config/colors";
 
 const noise = createNoise2D();
 
@@ -37,7 +38,7 @@ const WaterPlane = () => {
     <mesh ref={meshRef} rotation={[0, 0, 0]} position={[0, 0, 0.1]}>
       <planeGeometry args={[7, 7, 30, 30]} />
       <meshStandardMaterial
-        color="#4aceff"
+        color={COLORS.water.primary}
         roughness={0.8}
         metalness={0.2}
         flatShading

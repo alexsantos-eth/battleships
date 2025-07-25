@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { useCursor } from "@react-three/drei";
+import { COLORS } from "../../config/colors";
 
 interface CellProps {
   position: [number, number, number];
@@ -16,7 +17,7 @@ const Cell: React.FC<CellProps> = ({ position, onClick, isShot = false, isHit = 
 
   const getColor = () => {
     if (!isShot) return "white";
-    return isHit ? "#ff4444" : "#248dc5";
+    return isHit ? COLORS.cells.hit : COLORS.cells.miss;
   };
 
   const getOpacity = () => {

@@ -11,6 +11,7 @@ import {
 } from "three";
 
 import { generateTerrain } from "./utils";
+import { getTerrainColor } from "../../config/colors";
 
 interface TerrainOffset {
   x: number;
@@ -55,8 +56,8 @@ const Terrain = ({
   const material = useMemo(() => {
     return new ShaderMaterial({
       uniforms: {
-        sandColor: { value: new Vector3(1.0, 0.95, 0.8) }, 
-        grassColor: { value: new Vector3(0.7, 0.9, 0.4) }, 
+        sandColor: { value: new Vector3(...getTerrainColor('sand')) }, 
+        grassColor: { value: new Vector3(...getTerrainColor('grass')) }, 
         transitionDistance: { value: 0.42 },
         transitionWidth: { value: 0.2 },
         noiseSeed: { value: Math.random() * 1000.0 },

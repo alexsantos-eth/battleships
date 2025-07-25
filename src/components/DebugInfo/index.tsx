@@ -1,5 +1,6 @@
 import { useGameState } from "../../hooks/useGameState";
 import type { Ship } from "../../stores/gameStore";
+import { COLORS } from "../../config/colors";
 
 export const DebugInfo = () => {
   const {
@@ -18,7 +19,7 @@ export const DebugInfo = () => {
         const size = getShipSize(ship.variant);
         const cells = getShipCells(ship.coords[0], ship.coords[1], size, ship.orientation);
         return (
-          <div key={index} style={{ marginBottom: "10px", padding: "5px", border: "1px solid #ccc" }}>
+          <div key={index} style={{ marginBottom: "10px", padding: "5px", border: `1px solid ${COLORS.ui.debug.border}` }}>
             <div>Barco {index + 1}: {ship.variant} (tamaño: {size})</div>
             <div>Posición: [{ship.coords[0]}, {ship.coords[1]}]</div>
             <div>Orientación: {ship.orientation}</div>
@@ -35,7 +36,7 @@ export const DebugInfo = () => {
         position: "fixed",
         top: "10px",
         right: "10px",
-        background: "rgba(0, 0, 0, 0.8)",
+        background: COLORS.ui.debug.background,
         color: "white",
         padding: "20px",
         borderRadius: "8px",
@@ -54,7 +55,7 @@ export const DebugInfo = () => {
       <button
         onClick={initializeGame}
         style={{
-          background: "#4CAF50",
+          background: COLORS.ui.debug.button,
           color: "white",
           border: "none",
           padding: "8px 16px",
