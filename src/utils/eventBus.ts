@@ -17,9 +17,6 @@ class EventBus {
 
   emit(event: string, ...args: unknown[]): void {
     if (!this.events[event]) return;
-    console.log(
-      `EventBus: Emitting ${event} to ${this.events[event].length} listeners`
-    );
     this.events[event].forEach((callback) => callback(...args));
   }
 

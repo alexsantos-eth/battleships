@@ -149,7 +149,7 @@ const Terrain = ({
 
   return (
     <group
-      scale={10 / scale}
+      scale={11 / scale}
       position={[-offset.x, 0, 0.1]}
       rotation={[Math.PI / 2, 0, 0]}
     >

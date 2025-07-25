@@ -1,4 +1,10 @@
-import { useEffect, useState, useCallback } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useCallback, useEffect, useRef, useState } from "react";
+import * as THREE from "three";
+
+import { useFrame, useThree } from "@react-three/fiber";
+
+import { PLAYER_CAMERA_POSITION } from "../utils/camera";
 import { eventBus, EVENTS } from "../utils/eventBus";
 
 interface CameraEventData {
@@ -9,8 +15,7 @@ interface CameraEventData {
 interface UseCameraEventsOptions {
   onShootStart?: (data: CameraEventData) => void;
   onShootEnd?: (data: CameraEventData) => void;
-  autoReset?: boolean;
-  resetDelay?: number;
+  animationSpeed?: number;
 }
 
 interface UseCameraEventsReturn {
@@ -19,48 +24,101 @@ interface UseCameraEventsReturn {
   triggerShoot: () => void;
 }
 
-export const useCameraEvents = (options: UseCameraEventsOptions = {}): UseCameraEventsReturn => {
-  const {
-    onShootStart,
-    onShootEnd,
-    autoReset = true,
-    resetDelay = 2000
-  } = options;
+export const useCameraEvents = (
+  options: UseCameraEventsOptions = {}
+): UseCameraEventsReturn => {
+  const { onShootStart, onShootEnd, animationSpeed = 0.08 } = options;
 
+  const { camera } = useThree();
+  const targetPosition = useRef(camera.position.clone());
+  const targetRotation = useRef(camera.rotation.clone());
+  const isAnimating = useRef(false);
   const [isShooting, setIsShooting] = useState(false);
   const [shootData, setShootData] = useState<CameraEventData | null>(null);
 
-  const handleShootStart = useCallback((...args: unknown[]) => {
-    const data = args[0] as CameraEventData;
-    console.log("useCameraEvents: Camera shoot started", data);
-    
-    setIsShooting(true);
-    setShootData(data);
-    
-    if (onShootStart) {
-      onShootStart(data);
-    }
-  }, [onShootStart]);
+  const handleShootStart = useCallback(
+    (...args: unknown[]) => {
+      const data = args[0] as CameraEventData;
 
-  const handleShootEnd = useCallback((...args: unknown[]) => {
-    const data = args[0] as CameraEventData;
-    console.log("useCameraEvents: Camera shoot ended", data);
-    
-    if (onShootEnd) {
-      onShootEnd(data);
-    }
+      targetPosition.current.set(0, 9, 5);
+      targetRotation.current.set(0, 0, 0);
+      isAnimating.current = true;
 
-    if (autoReset) {
-      setTimeout(() => {
-        setIsShooting(false);
-        setShootData(null);
-      }, resetDelay);
-    }
-  }, [onShootEnd, autoReset, resetDelay]);
+      setIsShooting(true);
+      setShootData(data);
+
+      if (onShootStart) {
+        onShootStart(data);
+      }
+    },
+    [onShootStart, camera]
+  );
+
+  const handleShootEnd = useCallback(
+    (...args: unknown[]) => {
+      const data = args[0] as CameraEventData;
+      targetPosition.current.set(
+        PLAYER_CAMERA_POSITION.position[0],
+        PLAYER_CAMERA_POSITION.position[1],
+        PLAYER_CAMERA_POSITION.position[2]
+      );
+
+      targetRotation.current.set(
+        PLAYER_CAMERA_POSITION.rotation[0],
+        PLAYER_CAMERA_POSITION.rotation[1],
+        PLAYER_CAMERA_POSITION.rotation[2]
+      );
+      isAnimating.current = true;
+
+      if (onShootEnd) {
+        onShootEnd(data);
+      }
+    },
+    [onShootEnd, camera]
+  );
 
   const triggerShoot = useCallback(() => {
     console.log("useCameraEvents: Manual shoot trigger");
   }, []);
+
+  useFrame(() => {
+    if (isAnimating.current) {
+      const currentPos = camera.position;
+      const currentRot = camera.rotation;
+      const targetPos = targetPosition.current;
+      const targetRot = targetRotation.current;
+
+      currentPos.lerp(targetPos, animationSpeed);
+
+      currentRot.x = THREE.MathUtils.lerp(
+        currentRot.x,
+        targetRot.x,
+        animationSpeed
+      );
+      currentRot.y = THREE.MathUtils.lerp(
+        currentRot.y,
+        targetRot.y,
+        animationSpeed
+      );
+      currentRot.z = THREE.MathUtils.lerp(
+        currentRot.z,
+        targetRot.z,
+        animationSpeed
+      );
+
+      const posDistance = currentPos.distanceTo(targetPos);
+      const rotDistance =
+        Math.abs(currentRot.x - targetRot.x) +
+        Math.abs(currentRot.y - targetRot.y) +
+        Math.abs(currentRot.z - targetRot.z);
+
+      if (posDistance < 0.01 && rotDistance < 0.01) {
+        currentPos.copy(targetPos);
+        currentRot.copy(targetRot);
+        isAnimating.current = false;
+      }
+    }
+  });
 
   useEffect(() => {
     eventBus.on(EVENTS.CAMERA_SHOOT_START, handleShootStart);
@@ -75,7 +133,7 @@ export const useCameraEvents = (options: UseCameraEventsOptions = {}): UseCamera
   return {
     isShooting,
     shootData,
-    triggerShoot
+    triggerShoot,
   };
 };
 
@@ -83,16 +141,18 @@ export const useCameraShoot = () => {
   return useCameraEvents();
 };
 
-export const useCameraShootStart = (callback?: (data: CameraEventData) => void) => {
+export const useCameraShootStart = (
+  callback?: (data: CameraEventData) => void
+) => {
   return useCameraEvents({
     onShootStart: callback,
-    autoReset: false
   });
 };
 
-export const useCameraShootEnd = (callback?: (data: CameraEventData) => void) => {
+export const useCameraShootEnd = (
+  callback?: (data: CameraEventData) => void
+) => {
   return useCameraEvents({
     onShootEnd: callback,
-    autoReset: false
   });
-}; 
+};
