@@ -1,11 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 
-import { useFrame, useThree } from "@react-three/fiber";
-
+import { useGameStore } from "@/stores/gameStore";
 import { PLAYER_CAMERA_POSITION } from "@/utils/camera";
 import { eventBus, EVENTS } from "@/utils/eventBus";
-import { useGameStore } from "@/stores/gameStore";
+import { useFrame, useThree } from "@react-three/fiber";
 
 interface CameraEventData {
   newRotation: number;
@@ -80,8 +79,7 @@ export const useCameraEvents = (
     [onShootEnd, camera, setEnemyTurn]
   );
 
-  const triggerShoot = useCallback(() => {
-  }, []);
+  const triggerShoot = useCallback(() => {}, []);
 
   useFrame(() => {
     if (isAnimating.current) {

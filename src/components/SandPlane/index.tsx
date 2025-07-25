@@ -1,17 +1,18 @@
 import { useEffect, useMemo, useRef } from "react";
 import { createNoise2D } from "simplex-noise";
-import { useLoader } from "@react-three/fiber";
 import {
   BufferAttribute,
   BufferGeometry,
-  ShaderMaterial,
-  Vector3,
-  TextureLoader,
   RepeatWrapping,
+  ShaderMaterial,
+  TextureLoader,
+  Vector3,
 } from "three";
 
-import { generateTerrain } from "./utils";
 import { getTerrainColor } from "@/config/colors";
+import { useLoader } from "@react-three/fiber";
+
+import { generateTerrain } from "./utils";
 
 interface TerrainOffset {
   x: number;
@@ -42,7 +43,7 @@ const Terrain = ({
     TextureLoader,
     "/assets/textures/low_texture.jpg"
   );
-  
+
   const grassTexture = useLoader(
     TextureLoader,
     "/assets/textures/low_texture.jpg"
@@ -56,12 +57,12 @@ const Terrain = ({
   const material = useMemo(() => {
     return new ShaderMaterial({
       uniforms: {
-        sandColor: { value: new Vector3(...getTerrainColor('sand')) }, 
-        grassColor: { value: new Vector3(...getTerrainColor('grass')) }, 
+        sandColor: { value: new Vector3(...getTerrainColor("sand")) },
+        grassColor: { value: new Vector3(...getTerrainColor("grass")) },
         transitionDistance: { value: 0.42 },
         transitionWidth: { value: 0.2 },
         noiseSeed: { value: Math.random() * 1000.0 },
-        smoothness: { value: 1.0 }, 
+        smoothness: { value: 1.0 },
         sandTexture: { value: sandTexture },
         grassTexture: { value: grassTexture },
       },

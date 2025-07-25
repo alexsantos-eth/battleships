@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import { useCursor } from "@react-three/drei";
 import { COLORS } from "@/config/colors";
+import { useCursor } from "@react-three/drei";
 
 interface CellProps {
   position: [number, number, number];
@@ -10,7 +10,12 @@ interface CellProps {
   isHit?: boolean;
 }
 
-const Cell: React.FC<CellProps> = ({ position, onClick, isShot = false, isHit = false }) => {
+const Cell: React.FC<CellProps> = ({
+  position,
+  onClick,
+  isShot = false,
+  isHit = false,
+}) => {
   const [hovered, setHovered] = useState(false);
 
   useCursor(hovered);

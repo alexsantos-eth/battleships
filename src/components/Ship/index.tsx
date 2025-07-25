@@ -44,10 +44,8 @@ const Ship: React.FC<ShipProps> = ({
       : [-Math.PI / 2, Math.PI / 2, -Math.PI];
 
   const extraOffset = shipConfig.extraOffset;
-  const orientationOffsetY =
-    orientation === "vertical" ?  extraOffset : 0;
-  const orientationOffsetX =
-    orientation === "vertical" ? 0 :  extraOffset;
+  const orientationOffsetY = orientation === "vertical" ? extraOffset : 0;
+  const orientationOffsetX = orientation === "vertical" ? 0 : extraOffset;
 
   const planeSize = useMemo(() => {
     const shipSize = shipConfig.size;

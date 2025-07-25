@@ -39,7 +39,6 @@ const rocks = [
     rotation: [0, Math.PI / 2, 0] as [number, number, number],
   },
 
-
   {
     id: "rock-bottom-3",
     variant: 4 as const,
@@ -47,7 +46,6 @@ const rocks = [
     rotation: [0, Math.PI / 2, 0] as [number, number, number],
   },
 
- 
   {
     id: "rock-right-1",
     variant: 7 as const,

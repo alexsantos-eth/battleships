@@ -1,7 +1,7 @@
-import { useGameState } from "@/hooks/useGameState";
-import type { Ship } from "@/stores/gameStore";
 import { COLORS } from "@/config/colors";
+import { useGameState } from "@/hooks/useGameState";
 
+import type { Ship } from "@/stores/gameStore";
 export const DebugInfo = () => {
   const {
     currentTurn,
@@ -17,11 +17,27 @@ export const DebugInfo = () => {
       <h3>{title}</h3>
       {ships.map((ship, index) => {
         const size = getShipSize(ship.variant);
-        const cells = getShipCells(ship.coords[0], ship.coords[1], size, ship.orientation);
+        const cells = getShipCells(
+          ship.coords[0],
+          ship.coords[1],
+          size,
+          ship.orientation
+        );
         return (
-          <div key={index} style={{ marginBottom: "10px", padding: "5px", border: `1px solid ${COLORS.ui.debug.border}` }}>
-            <div>Barco {index + 1}: {ship.variant} (tamaño: {size})</div>
-            <div>Posición: [{ship.coords[0]}, {ship.coords[1]}]</div>
+          <div
+            key={index}
+            style={{
+              marginBottom: "10px",
+              padding: "5px",
+              border: `1px solid ${COLORS.ui.debug.border}`,
+            }}
+          >
+            <div>
+              Barco {index + 1}: {ship.variant} (tamaño: {size})
+            </div>
+            <div>
+              Posición: [{ship.coords[0]}, {ship.coords[1]}]
+            </div>
             <div>Orientación: {ship.orientation}</div>
             <div>Celdas: {cells.map(([x, y]) => `[${x},${y}]`).join(", ")}</div>
           </div>
@@ -51,7 +67,7 @@ export const DebugInfo = () => {
       <div style={{ marginBottom: "10px" }}>
         <strong>Turno actual:</strong> {currentTurn}
       </div>
-      
+
       <button
         onClick={initializeGame}
         style={{
@@ -71,4 +87,4 @@ export const DebugInfo = () => {
       {renderShipInfo(enemyShips, "Barcos del Enemigo")}
     </div>
   );
-}; 
+};

@@ -1,11 +1,10 @@
 import { useRef } from "react";
 import { createNoise2D } from "simplex-noise";
 
+import { COLORS } from "@/config/colors";
 import { useFrame } from "@react-three/fiber";
 
 import type { Mesh } from "three";
-import { COLORS } from "@/config/colors";
-
 const noise = createNoise2D();
 
 const WaterPlane = () => {

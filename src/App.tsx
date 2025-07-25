@@ -1,6 +1,6 @@
+import { DebugInfo } from "@/components/DebugInfo";
 import GameGrid from "@/components/GameGrid";
 import EnvironmentBox from "@/env";
-import { DebugInfo } from "@/components/DebugInfo";
 
 const App = () => {
   return (

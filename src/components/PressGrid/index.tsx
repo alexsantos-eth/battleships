@@ -1,9 +1,9 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
-import { useGameStore } from "@/stores/gameStore";
-import { eventBus, EVENTS } from "@/utils/eventBus";
 import Cell from "@/components/Cell";
 import WaterExplosion from "@/components/WaterExplosion";
+import { useGameStore } from "@/stores/gameStore";
+import { eventBus, EVENTS } from "@/utils/eventBus";
 
 interface Explosion {
   id: number;
@@ -14,20 +14,23 @@ const PressGrid: React.FC = () => {
   const spacing = 0.5;
   const [explosions, setExplosions] = useState<Explosion[]>([]);
   const lastTurn = useRef<string>("");
-  
-  const { 
+
+  const {
     currentTurn,
-    isPlayerTurn, 
-    checkShot, 
-    addPlayerShot, 
-    isCellShot, 
+    isPlayerTurn,
+    checkShot,
+    addPlayerShot,
+    isCellShot,
     isShipDestroyed,
-    setEnemyTurn 
+    setEnemyTurn,
   } = useGameStore();
 
   useEffect(() => {
     if (currentTurn === "PLAYER_TURN" && lastTurn.current === "ENEMY_TURN") {
-      eventBus.emit(EVENTS.CAMERA_SHOOT_START, { newRotation: 0, targetDistance: 5 });
+      eventBus.emit(EVENTS.CAMERA_SHOOT_START, {
+        newRotation: 0,
+        targetDistance: 5,
+      });
     }
     lastTurn.current = currentTurn;
   }, [currentTurn]);
@@ -35,35 +38,46 @@ const PressGrid: React.FC = () => {
   const handleClick = (pos: [number, number, number]) => {
     if (!isPlayerTurn) return;
 
-    const gridX = Math.round((pos[0] + (spacing * 10) / 2 - spacing / 2) / spacing);
-    const gridY = Math.round((pos[1] + (spacing * 10) / 2 - spacing / 2) / spacing);
+    const gridX = Math.round(
+      (pos[0] + (spacing * 10) / 2 - spacing / 2) / spacing
+    );
+    const gridY = Math.round(
+      (pos[1] + (spacing * 10) / 2 - spacing / 2) / spacing
+    );
 
     if (gridX < 0 || gridX >= 10 || gridY < 0 || gridY >= 10) return;
     if (isCellShot(gridX, gridY, true)) return;
 
     const { hit, shipId } = checkShot(gridX, gridY, true);
-    
+
     const shot = {
       x: gridX,
       y: gridY,
       hit,
-      shipId
+      shipId,
     };
-    
+
     addPlayerShot(shot);
 
     const id = Date.now();
     setExplosions((prev) => [...prev, { id, pos }]);
 
     if (hit) {
-      const shipDestroyed = shipId !== undefined && isShipDestroyed(shipId, true);
+      const shipDestroyed =
+        shipId !== undefined && isShipDestroyed(shipId, true);
       if (shipDestroyed) {
         setEnemyTurn();
-        eventBus.emit(EVENTS.CAMERA_SHOOT_END, { newRotation: 0, targetDistance: 5 });
+        eventBus.emit(EVENTS.CAMERA_SHOOT_END, {
+          newRotation: 0,
+          targetDistance: 5,
+        });
       }
     } else {
       setEnemyTurn();
-      eventBus.emit(EVENTS.CAMERA_SHOOT_END, { newRotation: 0, targetDistance: 5 });
+      eventBus.emit(EVENTS.CAMERA_SHOOT_END, {
+        newRotation: 0,
+        targetDistance: 5,
+      });
     }
   };
 
@@ -74,7 +88,9 @@ const PressGrid: React.FC = () => {
       const posY = y * spacing - (spacing * 10) / 2 + spacing / 2;
 
       const isShot = isCellShot(x, y, true);
-      const shot = useGameStore.getState().playerShots.find(s => s.x === x && s.y === y);
+      const shot = useGameStore
+        .getState()
+        .playerShots.find((s) => s.x === x && s.y === y);
       const isHit = shot?.hit || false;
 
       cells.push(

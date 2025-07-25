@@ -1,7 +1,8 @@
 import { useRef } from "react";
-import { a, useSpring } from "@react-spring/three";
 import { Mesh } from "three";
+
 import { COLORS } from "@/config/colors";
+import { a, useSpring } from "@react-spring/three";
 
 interface SplashRingProps {
   position: [number, number];
@@ -26,7 +27,11 @@ const SplashRing: React.FC<SplashRingProps> = ({ position, onDone }) => {
       scale={scale}
     >
       <ringGeometry args={[0.2, 0.25, 32]} />
-      <a.meshBasicMaterial color={COLORS.water.splash} transparent opacity={opacity} />
+      <a.meshBasicMaterial
+        color={COLORS.water.splash}
+        transparent
+        opacity={opacity}
+      />
     </a.mesh>
   );
 };
