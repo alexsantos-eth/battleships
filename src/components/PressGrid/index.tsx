@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import { useGameStore } from "../../stores/gameStore";
+import { eventBus, EVENTS } from "../../utils/eventBus";
 import Cell from "../Cell";
 import WaterExplosion from "../WaterExplosion";
 
@@ -12,8 +13,10 @@ interface Explosion {
 const PressGrid: React.FC = () => {
   const spacing = 0.5;
   const [explosions, setExplosions] = useState<Explosion[]>([]);
+  const lastTurn = useRef<string>("");
   
   const { 
+    currentTurn,
     isPlayerTurn, 
     checkShot, 
     addPlayerShot, 
@@ -21,6 +24,14 @@ const PressGrid: React.FC = () => {
     isShipDestroyed,
     setEnemyTurn 
   } = useGameStore();
+
+  useEffect(() => {
+    if (currentTurn === "PLAYER_TURN" && lastTurn.current === "ENEMY_TURN") {
+      console.log("Turn changed to PLAYER_TURN, emitting CAMERA_SHOOT_START");
+      eventBus.emit(EVENTS.CAMERA_SHOOT_START, { newRotation: 0, targetDistance: 5 });
+    }
+    lastTurn.current = currentTurn;
+  }, [currentTurn]);
 
   const handleClick = (pos: [number, number, number]) => {
     if (!isPlayerTurn) return;
@@ -50,12 +61,14 @@ const PressGrid: React.FC = () => {
       if (shipDestroyed) {
         console.log("¡Barco destruido! Fin del turno del player");
         setEnemyTurn();
+        eventBus.emit(EVENTS.CAMERA_SHOOT_END, { newRotation: 0, targetDistance: 5 });
       } else {
         console.log("¡Acierto! Continúa tu turno");
       }
     } else {
       console.log("¡Fallaste! Fin del turno del player");
       setEnemyTurn();
+      eventBus.emit(EVENTS.CAMERA_SHOOT_END, { newRotation: 0, targetDistance: 5 });
     }
   };
 
