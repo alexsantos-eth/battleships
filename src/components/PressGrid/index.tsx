@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import { useGameStore } from "../../stores/gameStore";
 import Cell from "../Cell";
 import WaterExplosion from "../WaterExplosion";
 
@@ -11,10 +12,51 @@ interface Explosion {
 const PressGrid: React.FC = () => {
   const spacing = 0.5;
   const [explosions, setExplosions] = useState<Explosion[]>([]);
+  
+  const { 
+    isPlayerTurn, 
+    checkShot, 
+    addPlayerShot, 
+    isCellShot, 
+    isShipDestroyed,
+    setEnemyTurn 
+  } = useGameStore();
 
   const handleClick = (pos: [number, number, number]) => {
+    if (!isPlayerTurn) return;
+
+    const gridX = Math.round((pos[0] + (spacing * 10) / 2 - spacing / 2) / spacing);
+    const gridY = Math.round((pos[1] + (spacing * 10) / 2 - spacing / 2) / spacing);
+
+    if (gridX < 0 || gridX >= 10 || gridY < 0 || gridY >= 10) return;
+    if (isCellShot(gridX, gridY, true)) return;
+
+    const { hit, shipId } = checkShot(gridX, gridY, true);
+    
+    const shot = {
+      x: gridX,
+      y: gridY,
+      hit,
+      shipId
+    };
+    
+    addPlayerShot(shot);
+
     const id = Date.now();
     setExplosions((prev) => [...prev, { id, pos }]);
+
+    if (hit) {
+      const shipDestroyed = shipId !== undefined && isShipDestroyed(shipId, true);
+      if (shipDestroyed) {
+        console.log("¡Barco destruido! Fin del turno del player");
+        setEnemyTurn();
+      } else {
+        console.log("¡Acierto! Continúa tu turno");
+      }
+    } else {
+      console.log("¡Fallaste! Fin del turno del player");
+      setEnemyTurn();
+    }
   };
 
   const cells = [];
@@ -23,11 +65,17 @@ const PressGrid: React.FC = () => {
       const posX = x * spacing - (spacing * 10) / 2 + spacing / 2;
       const posY = y * spacing - (spacing * 10) / 2 + spacing / 2;
 
+      const isShot = isCellShot(x, y, true);
+      const shot = useGameStore.getState().playerShots.find(s => s.x === x && s.y === y);
+      const isHit = shot?.hit || false;
+
       cells.push(
         <Cell
           key={`${x}-${y}`}
           position={[posX, posY, 0]}
-          onClick={() => handleClick([posX, posY, 0.15])}
+          onClick={handleClick}
+          isShot={isShot}
+          isHit={isHit}
         />
       );
     }

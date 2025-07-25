@@ -11,18 +11,32 @@ export interface Ship {
   orientation: "horizontal" | "vertical";
 }
 
+export interface Shot {
+  x: number;
+  y: number;
+  hit: boolean;
+  shipId?: number;
+}
+
 export interface GameState {
   currentTurn: GameTurn;
   isPlayerTurn: boolean;
   isEnemyTurn: boolean;
   playerShips: Ship[];
   enemyShips: Ship[];
+  playerShots: Shot[];
+  enemyShots: Shot[];
   setPlayerTurn: () => void;
   setEnemyTurn: () => void;
   toggleTurn: () => void;
   setPlayerShips: (ships: Ship[]) => void;
   setEnemyShips: (ships: Ship[]) => void;
+  addPlayerShot: (shot: Shot) => void;
+  addEnemyShot: (shot: Shot) => void;
   initializeGame: () => void;
+  checkShot: (x: number, y: number, isPlayerShot: boolean) => { hit: boolean; shipId?: number };
+  isCellShot: (x: number, y: number, isPlayerShot: boolean) => boolean;
+  isShipDestroyed: (shipId: number, isPlayerShot: boolean) => boolean;
 }
 
 export const useGameStore = create<GameState>((set, get) => ({
@@ -31,6 +45,8 @@ export const useGameStore = create<GameState>((set, get) => ({
   isEnemyTurn: false,
   playerShips: [],
   enemyShips: [],
+  playerShots: [],
+  enemyShots: [],
 
   setPlayerTurn: () => {
     console.log("Game turn: PLAYER_TURN");
@@ -65,6 +81,79 @@ export const useGameStore = create<GameState>((set, get) => ({
 
   setEnemyShips: (ships: Ship[]) => {
     set({ enemyShips: ships });
+  },
+
+  addPlayerShot: (shot: Shot) => {
+    set((state) => ({
+      playerShots: [...state.playerShots, shot]
+    }));
+  },
+
+  addEnemyShot: (shot: Shot) => {
+    set((state) => ({
+      enemyShots: [...state.enemyShots, shot]
+    }));
+  },
+
+  checkShot: (x: number, y: number, isPlayerShot: boolean) => {
+    const ships = isPlayerShot ? get().enemyShips : get().playerShips;
+    
+    for (let i = 0; i < ships.length; i++) {
+      const ship = ships[i];
+      const shipSize = ship.variant === "small" ? 2 : 
+                      ship.variant === "medium" ? 3 : 
+                      ship.variant === "large" ? 4 : 5;
+      
+      const shipCells: [number, number][] = [];
+      if (ship.orientation === "horizontal") {
+        for (let j = 0; j < shipSize; j++) {
+          shipCells.push([ship.coords[0] + j, ship.coords[1]]);
+        }
+      } else {
+        for (let j = 0; j < shipSize; j++) {
+          shipCells.push([ship.coords[0], ship.coords[1] + j]);
+        }
+      }
+      
+      for (const cell of shipCells) {
+        if (cell[0] === x && cell[1] === y) {
+          return { hit: true, shipId: i };
+        }
+      }
+    }
+    
+    return { hit: false };
+  },
+
+  isCellShot: (x: number, y: number, isPlayerShot: boolean) => {
+    const shots = isPlayerShot ? get().playerShots : get().enemyShots;
+    return shots.some(shot => shot.x === x && shot.y === y);
+  },
+
+  isShipDestroyed: (shipId: number, isPlayerShot: boolean) => {
+    const ships = isPlayerShot ? get().enemyShips : get().playerShips;
+    const shots = isPlayerShot ? get().playerShots : get().enemyShots;
+    
+    if (shipId >= ships.length) return false;
+    
+    const ship = ships[shipId];
+    const shipSize = ship.variant === "small" ? 2 : 
+                    ship.variant === "medium" ? 3 : 
+                    ship.variant === "large" ? 4 : 5;
+    
+    const shipCells: [number, number][] = [];
+    if (ship.orientation === "horizontal") {
+      for (let j = 0; j < shipSize; j++) {
+        shipCells.push([ship.coords[0] + j, ship.coords[1]]);
+      }
+    } else {
+      for (let j = 0; j < shipSize; j++) {
+        shipCells.push([ship.coords[0], ship.coords[1] + j]);
+      }
+    }
+    
+    const hitCells = shots.filter(shot => shot.hit && shot.shipId === shipId);
+    return hitCells.length === shipCells.length;
   },
 
   initializeGame: () => {
