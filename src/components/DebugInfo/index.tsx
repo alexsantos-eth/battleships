@@ -1,6 +1,6 @@
-import { useGameState } from "../../hooks/useGameState";
-import type { Ship } from "../../stores/gameStore";
-import { COLORS } from "../../config/colors";
+import { useGameState } from "@/hooks/useGameState";
+import type { Ship } from "@/stores/gameStore";
+import { COLORS } from "@/config/colors";
 
 export const DebugInfo = () => {
   const {

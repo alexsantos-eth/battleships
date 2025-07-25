@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
-import { Droplet } from "../Droplet";
-import SplashRing from "../SplashRing";
+import { Droplet } from "@/components/Droplet";
+import SplashRing from "@/components/SplashRing";
 
 interface WaterExplosionProps {
   position: [number, number];

@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { useCursor } from "@react-three/drei";
-import { COLORS } from "../../config/colors";
+import { COLORS } from "@/config/colors";
 
 interface CellProps {
   position: [number, number, number];

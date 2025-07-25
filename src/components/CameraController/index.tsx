@@ -1,4 +1,4 @@
-import { useCameraEvents } from "../../hooks/useCameraEvents";
+import { useCameraEvents } from "@/hooks/useCameraEvents";
 
 const CameraController = () => {
   useCameraEvents({

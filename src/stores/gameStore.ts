@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { getRandomShips } from "../components/ShipsPlane/utils";
+import { getRandomShips } from "@/components/ShipsPlane/utils";
 
 export type GameTurn = "PLAYER_TURN" | "ENEMY_TURN";
 

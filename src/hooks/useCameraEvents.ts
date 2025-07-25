@@ -3,9 +3,9 @@ import * as THREE from "three";
 
 import { useFrame, useThree } from "@react-three/fiber";
 
-import { PLAYER_CAMERA_POSITION } from "../utils/camera";
-import { eventBus, EVENTS } from "../utils/eventBus";
-import { useGameStore } from "../stores/gameStore";
+import { PLAYER_CAMERA_POSITION } from "@/utils/camera";
+import { eventBus, EVENTS } from "@/utils/eventBus";
+import { useGameStore } from "@/stores/gameStore";
 
 interface CameraEventData {
   newRotation: number;

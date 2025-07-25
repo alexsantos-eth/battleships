@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { a, useSpring } from "@react-spring/three";
 import { Mesh } from "three";
-import { COLORS } from "../../config/colors";
+import { COLORS } from "@/config/colors";
 
 interface SplashRingProps {
   position: [number, number];

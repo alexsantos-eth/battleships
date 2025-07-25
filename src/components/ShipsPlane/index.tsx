@@ -1,7 +1,7 @@
 import { useMemo } from "react";
-import { useGameState } from "../../hooks/useGameState";
-import type { Ship as ShipType } from "../../stores/gameStore";
-import Ship from "../Ship";
+import { useGameState } from "@/hooks/useGameState";
+import type { Ship as ShipType } from "@/stores/gameStore";
+import Ship from "@/components/Ship";
 
 interface ShipsPlaneProps {
   isPlayerBoard?: boolean;

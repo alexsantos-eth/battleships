@@ -11,7 +11,7 @@ import {
 } from "three";
 
 import { generateTerrain } from "./utils";
-import { getTerrainColor } from "../../config/colors";
+import { getTerrainColor } from "@/config/colors";
 
 interface TerrainOffset {
   x: number;

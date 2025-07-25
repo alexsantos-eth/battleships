@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { Mesh } from "three";
 
 import { a, useSpring } from "@react-spring/three";
-import { COLORS } from "../../config/colors";
+import { COLORS } from "@/config/colors";
 
 interface DropletProps {
   position: [number, number];

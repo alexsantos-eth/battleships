@@ -1,11 +1,11 @@
-import { useGameStore } from "../../stores/gameStore";
-import GridHelper from "../GridHelper";
-import PressGrid from "../PressGrid";
-import RocksPlane from "../RocksPlane";
-import SandPlane from "../SandPlane";
-import ShipsPlane from "../ShipsPlane";
-import TreePlane from "../TreePlane";
-import WaterPlane from "../WaterPlane";
+import { useGameStore } from "@/stores/gameStore";
+import GridHelper from "@/components/GridHelper";
+import PressGrid from "@/components/PressGrid";
+import RocksPlane from "@/components/RocksPlane";
+import SandPlane from "@/components/SandPlane";
+import ShipsPlane from "@/components/ShipsPlane";
+import TreePlane from "@/components/TreePlane";
+import WaterPlane from "@/components/WaterPlane";
 
 interface GameGridProps {
   position?: [number, number, number];

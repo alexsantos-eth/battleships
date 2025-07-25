@@ -4,7 +4,7 @@ import { createNoise2D } from "simplex-noise";
 import { useFrame } from "@react-three/fiber";
 
 import type { Mesh } from "three";
-import { COLORS } from "../../config/colors";
+import { COLORS } from "@/config/colors";
 
 const noise = createNoise2D();
 

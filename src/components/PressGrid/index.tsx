@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 
-import { useGameStore } from "../../stores/gameStore";
-import { eventBus, EVENTS } from "../../utils/eventBus";
-import Cell from "../Cell";
-import WaterExplosion from "../WaterExplosion";
+import { useGameStore } from "@/stores/gameStore";
+import { eventBus, EVENTS } from "@/utils/eventBus";
+import Cell from "@/components/Cell";
+import WaterExplosion from "@/components/WaterExplosion";
 
 interface Explosion {
   id: number;

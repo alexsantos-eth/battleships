@@ -4,8 +4,8 @@ import {
   cameraProps,
   isMobile as mobileBreakpoint,
   PLAYER_CAMERA_POSITION,
-} from "../utils/camera";
-import { DEBUG_CONFIG } from "../utils/debug";
+} from "@/utils/camera";
+import { DEBUG_CONFIG } from "@/utils/debug";
 
 import type { CanvasProps } from "@react-three/fiber";
 

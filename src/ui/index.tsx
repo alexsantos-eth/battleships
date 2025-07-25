@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-import { useGameStore } from "../stores/gameStore";
-import { eventBus, EVENTS } from "../utils/eventBus";
-import { COLORS } from "../config/colors";
+import { useGameStore } from "@/stores/gameStore";
+import { eventBus, EVENTS } from "@/utils/eventBus";
+import { COLORS } from "@/config/colors";
 
 const UIBox: React.FC = () => {
   const [isShooting, setIsShooting] = useState(false);

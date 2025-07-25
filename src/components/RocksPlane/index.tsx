@@ -1,4 +1,4 @@
-import Rock from "../Rock";
+import Rock from "@/components/Rock";
 
 const rocks = [
   {

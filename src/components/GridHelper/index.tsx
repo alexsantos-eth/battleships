@@ -1,4 +1,4 @@
-import { COLORS } from "../../config/colors";
+import { COLORS } from "@/config/colors";
 
 const GridHelper: React.FC = () => {
   return (

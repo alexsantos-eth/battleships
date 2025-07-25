@@ -1,5 +1,5 @@
-import { useGameStore } from "../stores/gameStore";
-import type { Ship, ShipVariant } from "../stores/gameStore";
+import { useGameStore } from "@/stores/gameStore";
+import type { Ship, ShipVariant } from "@/stores/gameStore";
 
 export const useGameState = () => {
   const {
