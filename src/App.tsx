@@ -1,4 +1,3 @@
-import { DebugInfo } from "@/components/DebugInfo";
 import GameGrid from "@/components/GameGrid";
 import EnvironmentBox from "@/env";
 
@@ -14,7 +13,6 @@ const App = () => {
           position={[0, 9, 0]}
         />
       </EnvironmentBox>
-      <DebugInfo />
     </>
   );
 };

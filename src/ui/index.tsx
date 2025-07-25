@@ -56,24 +56,6 @@ const UIBox: React.FC = () => {
       >
         {isShooting ? "Volver" : "Disparar"}
       </button>
-
-      <button
-        style={{
-          position: "absolute",
-          bottom: "20px",
-          right: "140px",
-          zIndex: 1000,
-          padding: "10px 20px",
-          backgroundColor: COLORS.ui.success,
-          color: "white",
-          border: "none",
-          borderRadius: "5px",
-          cursor: "pointer",
-          fontSize: "16px",
-        }}
-      >
-        "Izquierda Cámara"
-      </button>
     </>
   );
 };
