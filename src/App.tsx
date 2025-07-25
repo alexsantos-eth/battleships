@@ -5,7 +5,11 @@ const App = () => {
   return (
     <EnvironmentBox>
       <GameGrid />
-      <GameGrid rotation={[0, 0, Math.PI]} position={[0, 9, 0]} />
+      <GameGrid
+        enablePressGrid
+        rotation={[0, 0, Math.PI]}
+        position={[0, 9, 0]}
+      />
     </EnvironmentBox>
   );
 };

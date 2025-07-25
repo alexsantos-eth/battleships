@@ -28,7 +28,6 @@ class EventBus {
 export const eventBus = new EventBus();
 
 export const EVENTS = {
-  CAMERA_SHOOT: "camera_shoot",
   CAMERA_SHOOT_START: "camera_shoot_start",
   CAMERA_SHOOT_END: "camera_shoot_end",
 } as const;

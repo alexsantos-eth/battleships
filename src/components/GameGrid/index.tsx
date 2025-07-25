@@ -1,3 +1,4 @@
+import { useGameStore } from "../../stores/gameStore";
 import GridHelper from "../GridHelper";
 import PressGrid from "../PressGrid";
 import RocksPlane from "../RocksPlane";
@@ -9,8 +10,11 @@ import WaterPlane from "../WaterPlane";
 interface GameGridProps {
   position?: [number, number, number];
   rotation?: [number, number, number];
+  enablePressGrid?: boolean;
 }
-const GameGrid = ({ position, rotation }: GameGridProps) => {
+const GameGrid = ({ position, rotation, enablePressGrid }: GameGridProps) => {
+  const { isPlayerTurn } = useGameStore();
+
   return (
     <mesh rotation={rotation} position={position}>
       <planeGeometry args={[5, 5, 10, 10]} />
@@ -23,7 +27,7 @@ const GameGrid = ({ position, rotation }: GameGridProps) => {
         <TreePlane />
 
         <GridHelper />
-        <PressGrid />
+        {enablePressGrid && isPlayerTurn && <PressGrid />}
         <ShipsPlane />
       </group>
     </mesh>

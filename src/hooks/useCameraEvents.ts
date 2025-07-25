@@ -6,6 +6,7 @@ import { useFrame, useThree } from "@react-three/fiber";
 
 import { PLAYER_CAMERA_POSITION } from "../utils/camera";
 import { eventBus, EVENTS } from "../utils/eventBus";
+import { useGameStore } from "../stores/gameStore";
 
 interface CameraEventData {
   newRotation: number;
@@ -30,6 +31,7 @@ export const useCameraEvents = (
   const { onShootStart, onShootEnd, animationSpeed = 0.08 } = options;
 
   const { camera } = useThree();
+  const { setPlayerTurn, setEnemyTurn } = useGameStore();
   const targetPosition = useRef(camera.position.clone());
   const targetRotation = useRef(camera.rotation.clone());
   const isAnimating = useRef(false);
@@ -46,12 +48,13 @@ export const useCameraEvents = (
 
       setIsShooting(true);
       setShootData(data);
+      setPlayerTurn(); // Set player turn when camera moves to shoot position
 
       if (onShootStart) {
         onShootStart(data);
       }
     },
-    [onShootStart, camera]
+    [onShootStart, camera, setPlayerTurn]
   );
 
   const handleShootEnd = useCallback(
@@ -69,12 +72,13 @@ export const useCameraEvents = (
         PLAYER_CAMERA_POSITION.rotation[2]
       );
       isAnimating.current = true;
+      setEnemyTurn();
 
       if (onShootEnd) {
         onShootEnd(data);
       }
     },
-    [onShootEnd, camera]
+    [onShootEnd, camera, setEnemyTurn]
   );
 
   const triggerShoot = useCallback(() => {

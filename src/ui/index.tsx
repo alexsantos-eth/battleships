@@ -1,9 +1,11 @@
 import { useState } from "react";
 
+import { useGameStore } from "../stores/gameStore";
 import { eventBus, EVENTS } from "../utils/eventBus";
 
 const UIBox: React.FC = () => {
   const [isShooting, setIsShooting] = useState(false);
+  const { currentTurn, isPlayerTurn } = useGameStore();
 
   const handleShoot = () => {
     if (isShooting) {
@@ -17,24 +19,42 @@ const UIBox: React.FC = () => {
 
   return (
     <>
-      <button
-        onClick={handleShoot}
-        style={{
-          position: "absolute",
-          bottom: "20px",
-          right: "20px",
-          zIndex: 1000,
-          padding: "10px 20px",
-          backgroundColor: isShooting ? "#dc3545" : "#007bff",
-          color: "white",
-          border: "none",
-          borderRadius: "5px",
-          cursor: "pointer",
-          fontSize: "16px",
-        }}
-      >
-        {isShooting ? "Volver" : "Disparar"}
-      </button>
+              <div
+          style={{
+            position: "absolute",
+            top: "20px",
+            left: "20px",
+            zIndex: 1000,
+            padding: "10px 20px",
+            backgroundColor: isPlayerTurn ? "#28a745" : "#dc3545",
+            color: "white",
+            border: "none",
+            borderRadius: "5px",
+            fontSize: "16px",
+            fontWeight: "bold",
+          }}
+        >
+          {currentTurn}
+        </div>
+
+        <button
+          onClick={handleShoot}
+          style={{
+            position: "absolute",
+            bottom: "20px",
+            right: "20px",
+            zIndex: 1000,
+            padding: "10px 20px",
+            backgroundColor: isShooting ? "#dc3545" : "#007bff",
+            color: "white",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+            fontSize: "16px",
+          }}
+        >
+          {isShooting ? "Volver" : "Disparar"}
+        </button>
 
       <button
         style={{
