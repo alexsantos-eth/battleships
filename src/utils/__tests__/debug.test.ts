@@ -154,6 +154,16 @@ describe('DEBUG_CONFIG', () => {
       expect(typeof DEBUG_CONFIG.SHOW_GAME_INFO_SECTION).toBe('boolean');
     });
 
+    it('should have SHOW_SYSTEM_METRICS property', () => {
+      expect(DEBUG_CONFIG).toHaveProperty('SHOW_SYSTEM_METRICS');
+      expect(typeof DEBUG_CONFIG.SHOW_SYSTEM_METRICS).toBe('boolean');
+    });
+
+    it('should have SYSTEM_METRICS_SHOW_DETAILS property', () => {
+      expect(DEBUG_CONFIG).toHaveProperty('SYSTEM_METRICS_SHOW_DETAILS');
+      expect(typeof DEBUG_CONFIG.SYSTEM_METRICS_SHOW_DETAILS).toBe('boolean');
+    });
+
     it('should have reasonable DEBUG_PANEL_MAX_WIDTH value', () => {
       expect(DEBUG_CONFIG.DEBUG_PANEL_MAX_WIDTH).toBeGreaterThan(0);
       expect(DEBUG_CONFIG.DEBUG_PANEL_MAX_WIDTH).toBeLessThanOrEqual(1200);
@@ -195,7 +205,9 @@ describe('DEBUG_CONFIG', () => {
         'DEBUG_PANEL_MAX_WIDTH',
         'DEBUG_PANEL_MAX_HEIGHT',
         'SHOW_PERFORMANCE_SECTION',
-        'SHOW_GAME_INFO_SECTION'
+        'SHOW_GAME_INFO_SECTION',
+        'SHOW_SYSTEM_METRICS',
+        'SYSTEM_METRICS_SHOW_DETAILS'
       ];
 
       requiredProperties.forEach(prop => {
@@ -226,6 +238,8 @@ describe('DEBUG_CONFIG', () => {
       expect(typeof DEBUG_CONFIG.DEBUG_PANEL_MAX_HEIGHT).toBe('string');
       expect(typeof DEBUG_CONFIG.SHOW_PERFORMANCE_SECTION).toBe('boolean');
       expect(typeof DEBUG_CONFIG.SHOW_GAME_INFO_SECTION).toBe('boolean');
+      expect(typeof DEBUG_CONFIG.SHOW_SYSTEM_METRICS).toBe('boolean');
+      expect(typeof DEBUG_CONFIG.SYSTEM_METRICS_SHOW_DETAILS).toBe('boolean');
     });
   });
 

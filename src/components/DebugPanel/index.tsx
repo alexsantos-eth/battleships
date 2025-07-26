@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { PerformanceContent } from '../PerformanceDashboard/PerformanceContent';
 import { DebugInfoContent } from '../DebugInfo/DebugInfoContent';
+import { SystemMetrics } from '../SystemMetrics';
 import { DEBUG_CONFIG } from '@/utils/debug';
 import { COLORS } from '@/config/colors';
 
@@ -86,6 +87,16 @@ export const DebugPanel = () => {
               enabled={DEBUG_CONFIG.ENABLE_PERFORMANCE_MONITOR}
               showAdvanced={DEBUG_CONFIG.SHOW_ADVANCED_METRICS}
               onPerformanceWarning={(message: string) => console.warn(message)}
+            />
+          </div>
+        )}
+
+        {DEBUG_CONFIG.SHOW_SYSTEM_METRICS && (
+          <div>
+            <h3 style={{ margin: '0 0 10px 0', fontSize: '14px' }}>System</h3>
+            <SystemMetrics 
+              enabled={true}
+              showDetails={DEBUG_CONFIG.SYSTEM_METRICS_SHOW_DETAILS}
             />
           </div>
         )}
