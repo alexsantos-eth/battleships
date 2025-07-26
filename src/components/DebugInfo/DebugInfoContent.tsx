@@ -3,7 +3,8 @@ import { useGameState } from "@/hooks/useGameState";
 import { DEBUG_CONFIG } from "@/utils/debug";
 
 import type { Ship } from "@/stores/gameStore";
-export const DebugInfo = () => {
+
+export const DebugInfoContent = () => {
   const {
     currentTurn,
     playerShips,
@@ -15,7 +16,7 @@ export const DebugInfo = () => {
 
   const renderShipInfo = (ships: Ship[], title: string) => (
     <div style={{ marginBottom: "20px" }}>
-      <h3>{title}</h3>
+      <h4 style={{ margin: "0 0 10px 0", fontSize: "13px" }}>{title}</h4>
       {ships.map((ship, index) => {
         const size = getShipSize(ship.variant);
         const cells = getShipCells(
@@ -28,9 +29,10 @@ export const DebugInfo = () => {
           <div
             key={index}
             style={{
-              marginBottom: "10px",
-              padding: "5px",
+              marginBottom: "8px",
+              padding: "4px",
               border: `1px solid ${COLORS.ui.debug.border}`,
+              fontSize: "10px",
             }}
           >
             {DEBUG_CONFIG.SHOW_SHIP_DETAILS && (
@@ -51,41 +53,8 @@ export const DebugInfo = () => {
     </div>
   );
 
-  // Don't render if debug info is disabled
-  if (!DEBUG_CONFIG.ENABLE_DEBUG_INFO) {
-    return null;
-  }
-
-  const getPositionStyles = () => {
-    const baseStyles = {
-      position: "fixed" as const,
-      background: COLORS.ui.debug.background,
-      color: "white",
-      padding: "20px",
-      borderRadius: "8px",
-      maxWidth: `${DEBUG_CONFIG.DEBUG_INFO_MAX_WIDTH}px`,
-      maxHeight: DEBUG_CONFIG.DEBUG_INFO_MAX_HEIGHT,
-      overflow: "auto" as const,
-      zIndex: 1000,
-      fontSize: "12px",
-    };
-
-    const position = DEBUG_CONFIG.DEBUG_INFO_POSITION;
-    
-    const positionStyles = {
-      'top-left': { top: "10px", left: "10px" },
-      'top-right': { top: "10px", right: "10px" },
-      'bottom-left': { bottom: "10px", left: "10px" },
-      'bottom-right': { bottom: "10px", right: "10px" },
-    };
-    
-    return { ...baseStyles, ...positionStyles[position as keyof typeof positionStyles] };
-  };
-
   return (
-    <div style={getPositionStyles()}>
-      <h2>Debug Info</h2>
-      
+    <div>
       {DEBUG_CONFIG.SHOW_GAME_STATE && (
         <div style={{ marginBottom: "10px" }}>
           <strong>Turno actual:</strong> {currentTurn}
@@ -98,10 +67,11 @@ export const DebugInfo = () => {
           background: COLORS.ui.debug.button,
           color: "white",
           border: "none",
-          padding: "8px 16px",
+          padding: "6px 12px",
           borderRadius: "4px",
           cursor: "pointer",
           marginBottom: "15px",
+          fontSize: "10px",
         }}
       >
         Inicializar Juego
@@ -111,4 +81,4 @@ export const DebugInfo = () => {
       {renderShipInfo(enemyShips, "Barcos del Enemigo")}
     </div>
   );
-};
+}; 

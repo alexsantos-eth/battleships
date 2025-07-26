@@ -118,6 +118,52 @@ describe('DEBUG_CONFIG', () => {
     });
   });
 
+  describe('Debug Panel Configuration', () => {
+    it('should have ENABLE_DEBUG_PANEL property', () => {
+      expect(DEBUG_CONFIG).toHaveProperty('ENABLE_DEBUG_PANEL');
+      expect(typeof DEBUG_CONFIG.ENABLE_DEBUG_PANEL).toBe('boolean');
+    });
+
+    it('should have DEBUG_PANEL_POSITION property', () => {
+      expect(DEBUG_CONFIG).toHaveProperty('DEBUG_PANEL_POSITION');
+      expect(typeof DEBUG_CONFIG.DEBUG_PANEL_POSITION).toBe('string');
+    });
+
+    it('should have valid DEBUG_PANEL_POSITION value', () => {
+      const validPositions = ['top-left', 'top-right', 'bottom-left', 'bottom-right'];
+      expect(validPositions).toContain(DEBUG_CONFIG.DEBUG_PANEL_POSITION);
+    });
+
+    it('should have DEBUG_PANEL_MAX_WIDTH property', () => {
+      expect(DEBUG_CONFIG).toHaveProperty('DEBUG_PANEL_MAX_WIDTH');
+      expect(typeof DEBUG_CONFIG.DEBUG_PANEL_MAX_WIDTH).toBe('number');
+    });
+
+    it('should have DEBUG_PANEL_MAX_HEIGHT property', () => {
+      expect(DEBUG_CONFIG).toHaveProperty('DEBUG_PANEL_MAX_HEIGHT');
+      expect(typeof DEBUG_CONFIG.DEBUG_PANEL_MAX_HEIGHT).toBe('string');
+    });
+
+    it('should have SHOW_PERFORMANCE_SECTION property', () => {
+      expect(DEBUG_CONFIG).toHaveProperty('SHOW_PERFORMANCE_SECTION');
+      expect(typeof DEBUG_CONFIG.SHOW_PERFORMANCE_SECTION).toBe('boolean');
+    });
+
+    it('should have SHOW_GAME_INFO_SECTION property', () => {
+      expect(DEBUG_CONFIG).toHaveProperty('SHOW_GAME_INFO_SECTION');
+      expect(typeof DEBUG_CONFIG.SHOW_GAME_INFO_SECTION).toBe('boolean');
+    });
+
+    it('should have reasonable DEBUG_PANEL_MAX_WIDTH value', () => {
+      expect(DEBUG_CONFIG.DEBUG_PANEL_MAX_WIDTH).toBeGreaterThan(0);
+      expect(DEBUG_CONFIG.DEBUG_PANEL_MAX_WIDTH).toBeLessThanOrEqual(1200);
+    });
+
+    it('should have valid DEBUG_PANEL_MAX_HEIGHT value', () => {
+      expect(DEBUG_CONFIG.DEBUG_PANEL_MAX_HEIGHT).toMatch(/^\d+vh$/);
+    });
+  });
+
   describe('Configuration Structure', () => {
     it('should have consistent property values', () => {
       // Check that properties have expected values
@@ -143,7 +189,13 @@ describe('DEBUG_CONFIG', () => {
         'SHOW_CELL_COORDINATES',
         'SHOW_GAME_STATE',
         'DEBUG_INFO_MAX_WIDTH',
-        'DEBUG_INFO_MAX_HEIGHT'
+        'DEBUG_INFO_MAX_HEIGHT',
+        'ENABLE_DEBUG_PANEL',
+        'DEBUG_PANEL_POSITION',
+        'DEBUG_PANEL_MAX_WIDTH',
+        'DEBUG_PANEL_MAX_HEIGHT',
+        'SHOW_PERFORMANCE_SECTION',
+        'SHOW_GAME_INFO_SECTION'
       ];
 
       requiredProperties.forEach(prop => {
@@ -168,6 +220,12 @@ describe('DEBUG_CONFIG', () => {
       expect(typeof DEBUG_CONFIG.SHOW_GAME_STATE).toBe('boolean');
       expect(typeof DEBUG_CONFIG.DEBUG_INFO_MAX_WIDTH).toBe('number');
       expect(typeof DEBUG_CONFIG.DEBUG_INFO_MAX_HEIGHT).toBe('string');
+      expect(typeof DEBUG_CONFIG.ENABLE_DEBUG_PANEL).toBe('boolean');
+      expect(typeof DEBUG_CONFIG.DEBUG_PANEL_POSITION).toBe('string');
+      expect(typeof DEBUG_CONFIG.DEBUG_PANEL_MAX_WIDTH).toBe('number');
+      expect(typeof DEBUG_CONFIG.DEBUG_PANEL_MAX_HEIGHT).toBe('string');
+      expect(typeof DEBUG_CONFIG.SHOW_PERFORMANCE_SECTION).toBe('boolean');
+      expect(typeof DEBUG_CONFIG.SHOW_GAME_INFO_SECTION).toBe('boolean');
     });
   });
 
