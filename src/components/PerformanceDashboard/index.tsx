@@ -73,7 +73,7 @@ export const PerformanceDashboard = ({
         bottom: position.includes('bottom') ? '10px' : 'auto',
         left: position.includes('left') ? '10px' : 'auto',
         right: position.includes('right') ? '10px' : 'auto',
-        zIndex: 1001,
+        zIndex: 999,
         pointerEvents: 'auto'
       }}
     >

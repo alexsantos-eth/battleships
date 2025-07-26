@@ -7,17 +7,23 @@ import { COLORS } from '@/config/colors';
 
 export const DebugPanel = () => {
   const [isVisible, setIsVisible] = useState<boolean>(DEBUG_CONFIG.ENABLE_DEBUG_PANEL);
+  const [isManuallyClosed, setIsManuallyClosed] = useState<boolean>(false);
 
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
       if (event.key.toLowerCase() === 'p') {
-        setIsVisible((prev: boolean) => !prev);
+        if (isManuallyClosed) {
+          setIsManuallyClosed(false);
+          setIsVisible(true);
+        } else {
+          setIsVisible((prev: boolean) => !prev);
+        }
       }
     };
 
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, []);
+  }, [isManuallyClosed]);
 
   if (!isVisible) {
     return null;
@@ -33,7 +39,7 @@ export const DebugPanel = () => {
       maxWidth: `${DEBUG_CONFIG.DEBUG_PANEL_MAX_WIDTH}px`,
       maxHeight: DEBUG_CONFIG.DEBUG_PANEL_MAX_HEIGHT,
       overflow: 'auto' as const,
-      zIndex: 1000,
+      zIndex: 1002,
       fontSize: '12px',
       boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
       border: `1px solid ${COLORS.ui.debug.border}`,
@@ -63,7 +69,10 @@ export const DebugPanel = () => {
       }}>
         <h2 style={{ margin: 0, fontSize: '16px' }}>Debug Panel</h2>
         <button
-          onClick={() => setIsVisible(false)}
+          onClick={() => {
+            setIsVisible(false);
+            setIsManuallyClosed(true);
+          }}
           style={{
             background: 'transparent',
             color: 'white',
