@@ -29,7 +29,7 @@ export const useCameraEvents = (
   const { onShootStart, onShootEnd, animationSpeed = 0.08 } = options;
 
   const { camera } = useThree();
-  const { setPlayerTurn, setEnemyTurn } = useGameStore();
+  const { setPlayerTurn, setEnemyTurn, isPlayerTurn } = useGameStore();
   const targetPosition = useRef(camera.position.clone());
   const targetRotation = useRef(camera.rotation.clone());
   const isAnimating = useRef(false);
@@ -129,6 +129,14 @@ export const useCameraEvents = (
       eventBus.off(EVENTS.CAMERA_SHOOT_END, handleShootEnd);
     };
   }, [handleShootStart, handleShootEnd]);
+
+  useEffect(() => {
+    if (isPlayerTurn) {
+      eventBus.emit(EVENTS.CAMERA_SHOOT_START);
+    } else {
+      eventBus.emit(EVENTS.CAMERA_SHOOT_END);
+    }
+  }, [isPlayerTurn]);
 
   return {
     isShooting,

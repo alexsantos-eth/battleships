@@ -1,7 +1,17 @@
+import { useEffect } from "react";
+
 import GameGrid from "@/components/GameGrid";
 import EnvironmentBox from "@/env";
+import { useGameStore } from "@/stores/gameStore";
+import UIBox from "@/ui";
 
 const App = () => {
+  const { initializeGame } = useGameStore();
+
+  useEffect(() => {
+    initializeGame();
+  }, [initializeGame]);
+
   return (
     <>
       <EnvironmentBox>
@@ -13,6 +23,7 @@ const App = () => {
           position={[0, 9, 0]}
         />
       </EnvironmentBox>
+      <UIBox />
     </>
   );
 };

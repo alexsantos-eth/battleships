@@ -1,6 +1,7 @@
 import { create } from "zustand";
 
 import { getRandomShips } from "@/components/ShipsPlane/utils";
+import { eventBus, EVENTS } from "@/utils/eventBus";
 
 export type GameTurn = "PLAYER_TURN" | "ENEMY_TURN";
 
@@ -35,6 +36,7 @@ export interface GameState {
   addPlayerShot: (shot: Shot) => void;
   addEnemyShot: (shot: Shot) => void;
   initializeGame: () => void;
+  initializeRandomTurn: () => void;
   checkShot: (
     x: number,
     y: number,
@@ -73,8 +75,10 @@ export const useGameStore = create<GameState>((set, get) => ({
     const { currentTurn } = get();
     if (currentTurn === "PLAYER_TURN") {
       get().setEnemyTurn();
+      eventBus.emit(EVENTS.CAMERA_SHOOT_END);
     } else {
       get().setPlayerTurn();
+      eventBus.emit(EVENTS.CAMERA_SHOOT_START);
     }
   },
 
@@ -96,6 +100,16 @@ export const useGameStore = create<GameState>((set, get) => ({
     set((state) => ({
       enemyShots: [...state.enemyShots, shot],
     }));
+  },
+
+  initializeRandomTurn: () => {
+    const randomTurn = Math.random() < 0.5 ? "PLAYER_TURN" : "ENEMY_TURN";
+
+    set({
+      currentTurn: randomTurn,
+      isPlayerTurn: randomTurn === "PLAYER_TURN",
+      isEnemyTurn: randomTurn === "ENEMY_TURN",
+    });
   },
 
   checkShot: (x: number, y: number, isPlayerShot: boolean) => {
@@ -179,5 +193,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       const enemyShips = getRandomShips();
       set({ enemyShips });
     }
+
+    get().initializeRandomTurn();
   },
 }));

@@ -1,22 +1,8 @@
-import { useState } from "react";
-
 import { COLORS } from "@/config/colors";
 import { useGameStore } from "@/stores/gameStore";
-import { eventBus, EVENTS } from "@/utils/eventBus";
 
 const UIBox: React.FC = () => {
-  const [isShooting, setIsShooting] = useState(false);
-  const { currentTurn, isPlayerTurn } = useGameStore();
-
-  const handleShoot = () => {
-    if (isShooting) {
-      eventBus.emit(EVENTS.CAMERA_SHOOT_END);
-      setIsShooting(false);
-    } else {
-      eventBus.emit(EVENTS.CAMERA_SHOOT_START);
-      setIsShooting(true);
-    }
-  };
+  const { currentTurn, isPlayerTurn, toggleTurn } = useGameStore();
 
   return (
     <>
@@ -39,22 +25,22 @@ const UIBox: React.FC = () => {
       </div>
 
       <button
-        onClick={handleShoot}
+        onClick={toggleTurn}
         style={{
-          position: "absolute",
-          bottom: "20px",
           right: "20px",
           zIndex: 1000,
-          padding: "10px 20px",
-          backgroundColor: isShooting ? COLORS.ui.danger : COLORS.ui.primary,
+          bottom: "20px",
           color: "white",
           border: "none",
-          borderRadius: "5px",
           cursor: "pointer",
           fontSize: "16px",
+          position: "absolute",
+          borderRadius: "5px",
+          padding: "10px 20px",
+          backgroundColor: COLORS.ui.primary,
         }}
       >
-        {isShooting ? "Volver" : "Disparar"}
+        Cambiar Turno
       </button>
     </>
   );
