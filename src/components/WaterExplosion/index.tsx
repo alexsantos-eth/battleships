@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import { Droplet } from "@/components/Droplet";
 import SplashRing from "@/components/SplashRing";
+import { generateExplosionPattern } from "./calculations";
 
 interface WaterExplosionProps {
   position: [number, number];
@@ -18,16 +19,9 @@ const WaterExplosion: React.FC<WaterExplosionProps> = ({
   );
 
   useEffect(() => {
-    const timestamp = Date.now();
-    setRings([timestamp]);
-    const dirs = Array.from({ length: 10 }, (_, i) => {
-      const angle = Math.random() * Math.PI * 2;
-      return {
-        id: i,
-        dir: [Math.cos(angle), Math.sin(angle)] as [number, number],
-      };
-    });
-    setDrops(dirs);
+    const pattern = generateExplosionPattern();
+    setRings(pattern.rings);
+    setDrops(pattern.drops);
   }, [position]);
 
   return (

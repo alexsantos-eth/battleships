@@ -5,6 +5,13 @@ import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 
 import { SHIP_VARIANTS, type ShipProps } from "./utils";
+import {
+  calculateShipPosition,
+  calculateShipRotation,
+  calculateShipPlaneSize,
+  calculateWaveAnimation,
+  calculateOrientationOffset,
+} from "./calculations";
 
 const Ship: React.FC<ShipProps> = ({
   coords,
@@ -24,58 +31,42 @@ const Ship: React.FC<ShipProps> = ({
 
   const groupRef = useRef<Group>(null);
 
-  const spacing = 0.5;
-  const posX =
-    coords[0] * spacing -
-    (spacing * 10) / 2 +
-    (orientation === "vertical"
-      ? spacing / 2
-      : (spacing * shipConfig.size) / 2);
-  const posY =
-    coords[1] * spacing -
-    (spacing * 10) / 2 +
-    (orientation === "vertical"
-      ? (spacing * shipConfig.size) / 2
-      : spacing / 2);
+  const position = calculateShipPosition(
+    coords,
+    orientation,
+    shipConfig.size,
+    shipConfig.extraOffset
+  );
 
-  const rotation =
-    orientation === "vertical"
-      ? [-Math.PI / 2, 0, Math.PI]
-      : [-Math.PI / 2, Math.PI / 2, -Math.PI];
+  const rotation = calculateShipRotation(orientation);
 
-  const extraOffset = shipConfig.extraOffset;
-  const orientationOffsetY = orientation === "vertical" ? extraOffset : 0;
-  const orientationOffsetX = orientation === "vertical" ? 0 : extraOffset;
+  const orientationOffset = calculateOrientationOffset(
+    orientation,
+    shipConfig.extraOffset
+  );
 
   const planeSize = useMemo(() => {
-    const shipSize = shipConfig.size;
-    const gridSize = shipSize * spacing;
-
-    if (orientation === "horizontal") {
-      return [gridSize, spacing] as [number, number];
-    } else {
-      return [spacing, gridSize] as [number, number];
-    }
-  }, [shipConfig.size, orientation, spacing]);
+    const size = calculateShipPlaneSize(shipConfig.size, orientation);
+    return [size.width, size.height] as [number, number];
+  }, [shipConfig.size, orientation]);
 
   useFrame(({ clock }) => {
     if (groupRef.current) {
       const time = clock.getElapsedTime();
-      const frequency = shipConfig.waveFrequency;
-      const amplitude = shipConfig.waveAmplitude;
-      const phase = (coords[0] + coords[1]) * 0.5;
+      const waveAnimation = calculateWaveAnimation(
+        time,
+        shipConfig.waveFrequency,
+        shipConfig.waveAmplitude,
+        coords
+      );
 
-      const waveY = Math.sin(time * frequency + phase) * amplitude;
-      const waveZ =
-        Math.cos(time * frequency * 0.7 + phase) * (amplitude * 0.5);
-
-      groupRef.current.position.y = waveY;
-      groupRef.current.position.z = waveZ;
+      groupRef.current.position.y = waveAnimation.y;
+      groupRef.current.position.z = waveAnimation.z;
     }
   });
 
   return (
-    <group position={[posX, posY, 0.18]}>
+    <group position={[position.x, position.y, position.z]}>
       <mesh rotation={[0, 0, 0]} position={[0, 0, 0.03]}>
         <planeGeometry args={planeSize} />
         <meshStandardMaterial
@@ -89,9 +80,9 @@ const Ship: React.FC<ShipProps> = ({
       <group ref={groupRef}>
         <primitive
           object={clonedScene}
-          position={[orientationOffsetX, orientationOffsetY, 0]}
+          position={[orientationOffset.x, orientationOffset.y, 0]}
           scale={shipConfig.scale}
-          rotation={rotation}
+          rotation={[rotation.x, rotation.y, rotation.z]}
         />
       </group>
     </group>

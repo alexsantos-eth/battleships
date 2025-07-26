@@ -3,6 +3,10 @@ import { Mesh } from "three";
 
 import { COLORS } from "@/config/colors";
 import { a, useSpring } from "@react-spring/three";
+import {
+  calculateDropletAnimation,
+  DROPLET_ANIMATION_DURATION,
+} from "./calculations";
 
 interface DropletProps {
   position: [number, number];
@@ -13,20 +17,17 @@ interface DropletProps {
 export const Droplet: React.FC<DropletProps> = ({ position, dir, onDone }) => {
   const mesh = useRef<Mesh>(null!);
 
+  const animation = calculateDropletAnimation(position, dir);
   const { pos, opacity } = useSpring({
     from: {
-      pos: [position[0], position[1], 0.15] as [number, number, number],
-      opacity: 1,
+      pos: [animation.from.x, animation.from.y, animation.from.z] as [number, number, number],
+      opacity: animation.opacity.from,
     },
     to: {
-      pos: [position[0] + dir[0] * 0.5, position[1] + dir[1] * 0.5, 0.5] as [
-        number,
-        number,
-        number
-      ],
-      opacity: 0,
+      pos: [animation.to.x, animation.to.y, animation.to.z] as [number, number, number],
+      opacity: animation.opacity.to,
     },
-    config: { duration: 400 },
+    config: { duration: DROPLET_ANIMATION_DURATION },
     onRest: onDone,
   });
 
