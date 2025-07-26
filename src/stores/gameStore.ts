@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
-import { getFewShips } from "@/components/ShipsPlane/utils";
 import { eventBus, EVENTS } from "@/utils/eventBus";
+import { GameInitializer } from "@/game/logic/gameInitializer";
 
 export type GameTurn = "PLAYER_TURN" | "ENEMY_TURN";
 
@@ -238,13 +238,14 @@ export const useGameStore = create<GameState>((set, get) => ({
 
   initializeGame: () => {
     if (get().playerShips.length === 0) {
-      const playerShips = getFewShips();
-      set({ playerShips });
-    }
-
-    if (get().enemyShips.length === 0) {
-      const enemyShips = getFewShips();
-      set({ enemyShips });
+      const initializer = new GameInitializer(GameInitializer.createClassicGameConfig());
+      const gameSetup = initializer.initializeGame();
+      set({ 
+        playerShips: gameSetup.playerShips,
+        enemyShips: gameSetup.enemyShips,
+        boardWidth: gameSetup.config.boardWidth,
+        boardHeight: gameSetup.config.boardHeight
+      });
     }
 
     get().initializeRandomTurn();
