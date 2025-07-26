@@ -1,5 +1,6 @@
 import { COLORS } from "@/config/colors";
 import { useGameState } from "@/hooks/useGameState";
+import { DEBUG_CONFIG } from "@/utils/debug";
 
 import type { Ship } from "@/stores/gameStore";
 export const DebugInfo = () => {
@@ -32,41 +33,68 @@ export const DebugInfo = () => {
               border: `1px solid ${COLORS.ui.debug.border}`,
             }}
           >
-            <div>
-              Barco {index + 1}: {ship.variant} (tamaño: {size})
-            </div>
+            {DEBUG_CONFIG.SHOW_SHIP_DETAILS && (
+              <div>
+                Barco {index + 1}: {ship.variant} (tamaño: {size})
+              </div>
+            )}
             <div>
               Posición: [{ship.coords[0]}, {ship.coords[1]}]
             </div>
             <div>Orientación: {ship.orientation}</div>
-            <div>Celdas: {cells.map(([x, y]) => `[${x},${y}]`).join(", ")}</div>
+            {DEBUG_CONFIG.SHOW_CELL_COORDINATES && (
+              <div>Celdas: {cells.map(([x, y]) => `[${x},${y}]`).join(", ")}</div>
+            )}
           </div>
         );
       })}
     </div>
   );
 
+  // Don't render if debug info is disabled
+  if (!DEBUG_CONFIG.ENABLE_DEBUG_INFO) {
+    return null;
+  }
+
+  const getPositionStyles = () => {
+    const baseStyles = {
+      position: "fixed" as const,
+      background: COLORS.ui.debug.background,
+      color: "white",
+      padding: "20px",
+      borderRadius: "8px",
+      maxWidth: `${DEBUG_CONFIG.DEBUG_INFO_MAX_WIDTH}px`,
+      maxHeight: DEBUG_CONFIG.DEBUG_INFO_MAX_HEIGHT,
+      overflow: "auto" as const,
+      zIndex: 1000,
+      fontSize: "12px",
+    };
+
+    const position = DEBUG_CONFIG.DEBUG_INFO_POSITION;
+    
+    if (position === 'top-left') {
+      return { ...baseStyles, top: "10px", left: "10px" };
+    } else if (position === 'top-right') {
+      return { ...baseStyles, top: "10px", right: "10px" };
+    } else if (position === 'bottom-left') {
+      return { ...baseStyles, bottom: "10px", left: "10px" };
+    } else if (position === 'bottom-right') {
+      return { ...baseStyles, bottom: "10px", right: "10px" };
+    }
+    
+    // Default fallback
+    return { ...baseStyles, top: "10px", left: "10px" };
+  };
+
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: "10px",
-        right: "10px",
-        background: COLORS.ui.debug.background,
-        color: "white",
-        padding: "20px",
-        borderRadius: "8px",
-        maxWidth: "400px",
-        maxHeight: "80vh",
-        overflow: "auto",
-        zIndex: 1000,
-        fontSize: "12px",
-      }}
-    >
+    <div style={getPositionStyles()}>
       <h2>Debug Info</h2>
-      <div style={{ marginBottom: "10px" }}>
-        <strong>Turno actual:</strong> {currentTurn}
-      </div>
+      
+      {DEBUG_CONFIG.SHOW_GAME_STATE && (
+        <div style={{ marginBottom: "10px" }}>
+          <strong>Turno actual:</strong> {currentTurn}
+        </div>
+      )}
 
       <button
         onClick={initializeGame}

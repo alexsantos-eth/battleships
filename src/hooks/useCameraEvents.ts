@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 
 import { useGameStore } from "@/stores/gameStore";
-import { PLAYER_CAMERA_POSITION } from "@/utils/camera";
+import { isMobile, PLAYER_CAMERA_POSITION } from "@/utils/camera";
 import { eventBus, EVENTS } from "@/utils/eventBus";
 import { useFrame, useThree } from "@react-three/fiber";
 
@@ -41,28 +41,31 @@ export const useCameraEvents = (
   const [shootData, setShootData] = useState<CameraEventData | null>(null);
   const [isPlayerPerspective, setIsPlayerPerspective] = useState(false);
 
-  const setPlayerCameraPosition = useCallback((usePlayerPerspective: boolean) => {
-    if (usePlayerPerspective) {
-      targetPosition.current.set(
-        0,
-        PLAYER_CAMERA_POSITION.position[1] + 6,
-        5
-      );
-      targetRotation.current.set(0, 0, 0);
-    } else {
-      targetPosition.current.set(
-        PLAYER_CAMERA_POSITION.position[0],
-        PLAYER_CAMERA_POSITION.position[1],
-        PLAYER_CAMERA_POSITION.position[2]
-      );
-      targetRotation.current.set(
-        PLAYER_CAMERA_POSITION.rotation[0],
-        PLAYER_CAMERA_POSITION.rotation[1],
-        PLAYER_CAMERA_POSITION.rotation[2]
-      );
-    }
-    isAnimating.current = true;
-  }, []);
+  const setPlayerCameraPosition = useCallback(
+    (usePlayerPerspective: boolean) => {
+      if (usePlayerPerspective) {
+        targetPosition.current.set(
+          0,
+          PLAYER_CAMERA_POSITION.position[1] + (isMobile ? 4 : 6),
+          5
+        );
+        targetRotation.current.set(0, 0, 0);
+      } else {
+        targetPosition.current.set(
+          PLAYER_CAMERA_POSITION.position[0],
+          PLAYER_CAMERA_POSITION.position[1],
+          PLAYER_CAMERA_POSITION.position[2]
+        );
+        targetRotation.current.set(
+          PLAYER_CAMERA_POSITION.rotation[0],
+          PLAYER_CAMERA_POSITION.rotation[1],
+          PLAYER_CAMERA_POSITION.rotation[2]
+        );
+      }
+      isAnimating.current = true;
+    },
+    []
+  );
 
   const handleShootStart = useCallback(
     (...args: unknown[]) => {
@@ -93,7 +96,13 @@ export const useCameraEvents = (
         onShootEnd(data);
       }
     },
-    [onShootEnd, camera, setEnemyTurn, isPlayerPerspective, setPlayerCameraPosition]
+    [
+      onShootEnd,
+      camera,
+      setEnemyTurn,
+      isPlayerPerspective,
+      setPlayerCameraPosition,
+    ]
   );
 
   const handleTogglePlayerPerspective = useCallback(
