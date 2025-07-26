@@ -1,7 +1,6 @@
-import { BattleSimulator } from '../battleSimulator';
-import type { BattleConfig, BattleInstruction } from '../battleSimulator';
+import { BattleSimulator } from '../battleSimulator.js';
+import type { BattleConfig, BattleInstruction } from '../battleSimulator.js';
 
-// Ejemplo 1: Simulación de batalla completamente aleatoria
 export function simulateRandomBattle(seed: number = 12345) {
   console.log(`🎯 Simulando batalla aleatoria con seed: ${seed}`);
   
@@ -12,7 +11,7 @@ export function simulateRandomBattle(seed: number = 12345) {
   };
   
   const simulator = new BattleSimulator(config);
-  const result = simulator.simulateRandomBattle(200);
+  const result = simulator.simulateRandomBattle(50);
   
   console.log('📊 Resultados de la batalla:');
   console.log(`🏆 Ganador: ${result.winner}`);
@@ -25,7 +24,6 @@ export function simulateRandomBattle(seed: number = 12345) {
   return result;
 }
 
-// Ejemplo 2: Simulación con barcos predefinidos
 export function simulateCustomBattle(seed: number = 12345) {
   console.log(`🎯 Simulando batalla personalizada con seed: ${seed}`);
   
@@ -46,7 +44,7 @@ export function simulateCustomBattle(seed: number = 12345) {
   };
   
   const simulator = new BattleSimulator(config);
-  const result = simulator.simulateRandomBattle(100);
+  const result = simulator.simulateRandomBattle(30);
   
   console.log('📊 Resultados de la batalla personalizada:');
   console.log(`🏆 Ganador: ${result.winner}`);
@@ -55,7 +53,6 @@ export function simulateCustomBattle(seed: number = 12345) {
   return result;
 }
 
-// Ejemplo 3: Ejecución de instrucciones específicas
 export function executeSpecificInstructions(seed: number = 12345) {
   console.log(`🎯 Ejecutando instrucciones específicas con seed: ${seed}`);
   
@@ -68,7 +65,6 @@ export function executeSpecificInstructions(seed: number = 12345) {
   const simulator = new BattleSimulator(config);
   
   const instructions: BattleInstruction[] = [
-    // Colocar un barco específico
     {
       type: 'place_ship',
       data: {
@@ -78,7 +74,6 @@ export function executeSpecificInstructions(seed: number = 12345) {
         orientation: 'horizontal'
       }
     },
-    // Disparar a posiciones específicas
     {
       type: 'fire_shot',
       data: { position: { x: 0, y: 0 } }
@@ -105,8 +100,7 @@ export function executeSpecificInstructions(seed: number = 12345) {
   return result;
 }
 
-// Ejemplo 4: Comparación de múltiples simulaciones
-export function compareSimulations(seeds: number[] = [12345, 67890, 11111]) {
+export function compareSimulations(seeds: number[] = [12345, 67890]) {
   console.log('🔬 Comparando múltiples simulaciones...');
   
   const results = seeds.map(seed => {
@@ -114,7 +108,7 @@ export function compareSimulations(seeds: number[] = [12345, 67890, 11111]) {
     const simulator = new BattleSimulator(config);
     return {
       seed,
-      result: simulator.simulateRandomBattle(100)
+      result: simulator.simulateRandomBattle(40)
     };
   });
   
@@ -123,41 +117,28 @@ export function compareSimulations(seeds: number[] = [12345, 67890, 11111]) {
     console.log(`Seed ${seed}: Ganador=${result.winner}, Turnos=${result.totalTurns}, Precisión=${((result.playerHits / result.playerShots) * 100).toFixed(1)}%`);
   });
   
-  // Verificar determinismo
-  const sameSeedResults = results.filter(r => r.seed === 12345);
-  if (sameSeedResults.length > 1) {
-    const isDeterministic = sameSeedResults.every(r => 
-      r.result.winner === sameSeedResults[0].result.winner &&
-      r.result.totalTurns === sameSeedResults[0].result.totalTurns
-    );
-    console.log(`✅ Determinismo verificado: ${isDeterministic ? 'PASÓ' : 'FALLÓ'}`);
-  }
-  
   return results;
 }
 
-// Ejemplo 5: Análisis de estrategias
 export function analyzeStrategy(seed: number = 12345) {
   console.log(`🎯 Analizando estrategia con seed: ${seed}`);
   
   const config: BattleConfig = { seed, boardWidth: 10, boardHeight: 10 };
-  const simulator = new BattleSimulator(config);
   
-  // Estrategia 1: Disparar en diagonal
   const diagonalInstructions: BattleInstruction[] = [];
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 5; i++) {
     diagonalInstructions.push({
       type: 'fire_shot',
       data: { position: { x: i, y: i } }
     });
   }
   
-  const diagonalResult = simulator.executeInstructions(diagonalInstructions);
+  const simulator1 = new BattleSimulator(config);
+  const diagonalResult = simulator1.executeInstructions(diagonalInstructions);
   
-  // Estrategia 2: Disparar en filas
   const rowInstructions: BattleInstruction[] = [];
-  for (let y = 0; y < 5; y++) {
-    for (let x = 0; x < 10; x++) {
+  for (let y = 0; y < 3; y++) {
+    for (let x = 0; x < 5; x++) {
       rowInstructions.push({
         type: 'fire_shot',
         data: { position: { x, y } }
@@ -165,7 +146,8 @@ export function analyzeStrategy(seed: number = 12345) {
     }
   }
   
-  const rowResult = simulator.executeInstructions(rowInstructions);
+  const simulator2 = new BattleSimulator(config);
+  const rowResult = simulator2.executeInstructions(rowInstructions);
   
   console.log('📊 Análisis de estrategias:');
   console.log(`🔺 Estrategia diagonal: ${diagonalResult.playerHits} hits en ${diagonalResult.playerShots} disparos`);
@@ -174,7 +156,43 @@ export function analyzeStrategy(seed: number = 12345) {
   return { diagonalResult, rowResult };
 }
 
-// Función principal para ejecutar todos los ejemplos
+export function debugGameState(seed: number = 12345) {
+  console.log(`🔍 Debug del estado del juego con seed: ${seed}`);
+  
+  const config: BattleConfig = {
+    seed,
+    boardWidth: 10,
+    boardHeight: 10
+  };
+  
+  const simulator = new BattleSimulator(config);
+  const result = simulator.simulateRandomBattle(40);
+  
+  console.log('📊 Estado del juego:');
+  console.log(`🏆 Ganador: ${result.winner}`);
+  console.log(`🔄 Total de turnos: ${result.totalTurns}`);
+  console.log(`🎯 Disparos del jugador: ${result.playerShots} (${result.playerHits} aciertos)`);
+  console.log(`🎯 Disparos del enemigo: ${result.enemyShots} (${result.enemyHits} aciertos)`);
+  
+  console.log('\n📋 Barcos colocados:');
+  console.log(`Jugador: ${result.shipPlacements.player.length} barcos`);
+  result.shipPlacements.player.forEach((ship, i) => {
+    console.log(`  ${i + 1}. ${ship.variant} en (${ship.position.x}, ${ship.position.y}) ${ship.orientation}`);
+  });
+  
+  console.log(`Enemigo: ${result.shipPlacements.enemy.length} barcos`);
+  result.shipPlacements.enemy.forEach((ship, i) => {
+    console.log(`  ${i + 1}. ${ship.variant} en (${ship.position.x}, ${ship.position.y}) ${ship.orientation}`);
+  });
+  
+  console.log('\n🎯 Últimos 10 disparos:');
+  result.shotHistory.slice(-10).forEach((shot, i) => {
+    console.log(`  ${result.shotHistory.length - 9 + i}. ${shot.turn}: (${shot.position.x}, ${shot.position.y}) - ${shot.hit ? '✅ Hit' : '❌ Miss'}${shot.shipDestroyed ? ' 💥 Destroyed' : ''}`);
+  });
+  
+  return result;
+}
+
 export function runAllExamples() {
   console.log('🚀 Ejecutando ejemplos del sistema determinista...\n');
   
@@ -188,10 +206,13 @@ export function runAllExamples() {
   executeSpecificInstructions(12345);
   
   console.log('\n' + '='.repeat(50));
-  compareSimulations([12345, 67890, 11111]);
+  compareSimulations([12345, 67890]);
   
   console.log('\n' + '='.repeat(50));
   analyzeStrategy(12345);
+  
+  console.log('\n' + '='.repeat(50));
+  debugGameState(12345);
   
   console.log('\n✅ Todos los ejemplos completados!');
 } 

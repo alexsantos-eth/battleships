@@ -1,4 +1,4 @@
-import type { ShipVariant, ShipOrientation, Position } from "./battleship";
+import type { ShipVariant, ShipOrientation, Position } from "./battleship.js";
 
 export interface ShipPlacement {
   position: Position;

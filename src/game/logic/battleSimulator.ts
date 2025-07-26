@@ -1,7 +1,7 @@
-import { BattleshipGame } from './battleship';
-import { ShipGenerator } from './shipGenerator';
-import { DeterministicRandom } from './deterministicRandom';
-import type { Position, ShipVariant, ShipOrientation, GameTurn, Ship } from './battleship';
+import { BattleshipGame } from './battleship.js';
+import { ShipGenerator } from './shipGenerator.js';
+import { DeterministicRandom } from './deterministicRandom.js';
+import type { Position, ShipVariant, ShipOrientation, GameTurn, Ship } from './battleship.js';
 
 export interface BattleConfig {
   seed: number;

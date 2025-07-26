@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "run:deterministic": "tsc -p tsconfig.script.json && node dist/examples/runDeterministicExample.js"
   },
   "dependencies": {
     "@react-spring/three": "^10.0.1",
@@ -38,6 +39,7 @@
     "globals": "^16.3.0",
     "jest": "^30.0.5",
     "ts-jest": "^29.4.0",
+    "ts-node": "^10.9.2",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.35.1",
     "vite": "^7.0.4"
