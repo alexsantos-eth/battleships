@@ -4,6 +4,11 @@ import Cell from "@/components/Cell";
 import WaterExplosion from "@/components/WaterExplosion";
 import { useGameStore } from "@/stores/gameStore";
 import { eventBus, EVENTS } from "@/utils/eventBus";
+import {
+  worldToGridCoordinates,
+  gridToWorldCoordinates,
+  isValidGridPosition,
+} from "./utils";
 
 interface Explosion {
   id: number;
@@ -11,7 +16,6 @@ interface Explosion {
 }
 
 const PressGrid: React.FC = () => {
-  const spacing = 0.5;
   const [explosions, setExplosions] = useState<Explosion[]>([]);
   const lastTurn = useRef<string>("");
 
@@ -38,14 +42,9 @@ const PressGrid: React.FC = () => {
   const handleClick = (pos: [number, number, number]) => {
     if (!isPlayerTurn) return;
 
-    const gridX = Math.round(
-      (pos[0] + (spacing * 10) / 2 - spacing / 2) / spacing
-    );
-    const gridY = Math.round(
-      (pos[1] + (spacing * 10) / 2 - spacing / 2) / spacing
-    );
+    const [gridX, gridY] = worldToGridCoordinates(pos);
 
-    if (gridX < 0 || gridX >= 10 || gridY < 0 || gridY >= 10) return;
+    if (!isValidGridPosition(gridX, gridY)) return;
     if (isCellShot(gridX, gridY, true)) return;
 
     const { hit, shipId } = checkShot(gridX, gridY, true);
@@ -84,8 +83,7 @@ const PressGrid: React.FC = () => {
   const cells = [];
   for (let x = 0; x < 10; x++) {
     for (let y = 0; y < 10; y++) {
-      const posX = x * spacing - (spacing * 10) / 2 + spacing / 2;
-      const posY = y * spacing - (spacing * 10) / 2 + spacing / 2;
+      const [posX, posY] = gridToWorldCoordinates(x, y);
 
       const isShot = isCellShot(x, y, true);
       const shot = useGameStore
