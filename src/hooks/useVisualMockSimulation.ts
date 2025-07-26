@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { useGameStore } from '@/stores/gameStore';
 import { runMockSimulation } from '@/game/logic/examples/mockBattleSimulation';
 import type { MockBattleResult } from '@/game/logic/examples/mockBattleSimulation';
-
+import { CoordinateUtils } from "@/utils/coordinates";
 
 
 export const useVisualMockSimulation = () => {
@@ -32,43 +32,27 @@ export const useVisualMockSimulation = () => {
   const simulateShot = useCallback((shot: MockBattleResult['shotHistory'][0], delay: number = 500) => {
     return new Promise<void>((resolve) => {
       setTimeout(() => {
-        // Calcular si es un hit usando la lógica del juego
         const isPlayerShot = shot.turn === 'PLAYER_TURN';
-        
-        // Invertir coordenadas para disparos del jugador (tablero del enemigo rotado)
-        let adjustedX = shot.position.x;
-        let adjustedY = shot.position.y;
-        
-        if (isPlayerShot) {
-          // El tablero del enemigo está rotado 180°, invertir coordenadas
-          adjustedX = 9 - shot.position.x;
-          adjustedY = 9 - shot.position.y;
-        }
-        
+        // Usar coordenadas lógicas directamente
+        const logicalPos = { x: shot.position.x, y: shot.position.y };
         const { hit, shipId } = useGameStore.getState().checkShot(
-          adjustedX,
-          adjustedY,
+          logicalPos.x,
+          logicalPos.y,
           isPlayerShot
         );
-
         const gameShot = {
-          x: adjustedX,
-          y: adjustedY,
+          x: logicalPos.x,
+          y: logicalPos.y,
           hit: hit,
           shipId: shipId,
         };
-
-        // Log con coordenadas corregidas para que coincida con la visualización
-        console.log(`${shot.turn}: (${adjustedX}, ${adjustedY}) - ${hit ? '✅ Hit' : '❌ Miss'}`);
-
         if (shot.turn === 'PLAYER_TURN') {
           addPlayerShot(gameShot);
-          setPlayerTurn(); // Emitir evento para animaciones
+          setPlayerTurn();
         } else {
           addEnemyShot(gameShot);
-          setEnemyTurn(); // Emitir evento para animaciones
+          setEnemyTurn();
         }
-
         resolve();
       }, delay);
     });
@@ -77,39 +61,27 @@ export const useVisualMockSimulation = () => {
   const simulateQuickShot = useCallback((shot: { turn: 'PLAYER_TURN' | 'ENEMY_TURN', position: { x: number, y: number }, hit: boolean, shipDestroyed: boolean }, delay: number = 500) => {
     return new Promise<void>((resolve) => {
       setTimeout(() => {
-        // Calcular si es un hit usando la lógica del juego
         const isPlayerShot = shot.turn === 'PLAYER_TURN';
-        
-        // Para la simulación rápida, las coordenadas ya están ajustadas para el tablero rotado
+        // Usar coordenadas lógicas directamente
+        const logicalPos = { x: shot.position.x, y: shot.position.y };
         const { hit, shipId } = useGameStore.getState().checkShot(
-          shot.position.x,
-          shot.position.y,
+          logicalPos.x,
+          logicalPos.y,
           isPlayerShot
         );
-
         const gameShot = {
-          x: shot.position.x,
-          y: shot.position.y,
+          x: logicalPos.x,
+          y: logicalPos.y,
           hit: hit,
           shipId: shipId,
         };
-
-        // Log detallado para debug
-        console.log(`🎯 Disparo: ${shot.turn}`);
-        console.log(`  Coordenadas originales: (${shot.position.x}, ${shot.position.y})`);
-        console.log(`  Coordenadas del juego: (${gameShot.x}, ${gameShot.y})`);
-        console.log(`  ¿Es disparo del jugador?: ${isPlayerShot}`);
-        console.log(`  ¿Hit?: ${hit}`);
-        console.log(`  ShipId: ${shipId}`);
-
         if (shot.turn === 'PLAYER_TURN') {
           addPlayerShot(gameShot);
-          setPlayerTurn(); // Emitir evento para animaciones
+          setPlayerTurn();
         } else {
           addEnemyShot(gameShot);
-          setEnemyTurn(); // Emitir evento para animaciones
+          setEnemyTurn();
         }
-
         resolve();
       }, delay);
     });
@@ -138,17 +110,8 @@ export const useVisualMockSimulation = () => {
       console.log('🔍 Debug - Celdas de los barcos:');
       enemyShips.forEach((ship, index) => {
         const shipSize = ship.variant === 'small' ? 2 : ship.variant === 'medium' ? 3 : ship.variant === 'large' ? 4 : 5;
-        const cells = [];
-        if (ship.orientation === 'horizontal') {
-          for (let j = 0; j < shipSize; j++) {
-            cells.push([ship.coords[0] + j, ship.coords[1]]);
-          }
-        } else if (ship.orientation === 'vertical') {
-          for (let j = 0; j < shipSize; j++) {
-            cells.push([ship.coords[0], ship.coords[1] + j]);
-          }
-        }
-        console.log(`  Barco enemigo ${index}: ${cells.map(([x, y]) => `[${x},${y}]`).join(', ')}`);
+        const cells = CoordinateUtils.getShipCells(ship.coords, ship.orientation, shipSize);
+        console.log(`  Barco enemigo ${index}: ${cells.map(cell => `[${cell.x},${cell.y}]`).join(', ')}`);
       });
       
       setPlayerShips(playerShips);
