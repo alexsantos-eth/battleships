@@ -1,31 +1,29 @@
-import { useState, useEffect } from 'react';
-import { PerformanceContent } from '../PerformanceDashboard/PerformanceContent';
-import { DebugInfoContent } from '../DebugInfo/DebugInfoContent';
-import { SystemMetrics } from '../SystemMetrics';
-import { DEBUG_CONFIG } from '@/utils/debug';
-import { COLORS } from '@/config/colors';
+import { useState, useEffect } from "react";
+import { COLORS } from "@/config/colors";
+import { DEBUG_CONFIG } from "@/utils/debug";
+import { DebugInfoContent } from "@/components/DebugInfo/DebugInfoContent";
+import { PerformanceContent } from "@/components/PerformanceDashboard/PerformanceContent";
+import { SystemMetrics } from "@/components/SystemMetrics";
+import { GameInitializerPanel } from "./GameInitializerPanel";
 
 export const DebugPanel = () => {
   const [isVisible, setIsVisible] = useState<boolean>(DEBUG_CONFIG.ENABLE_DEBUG_PANEL);
-  const [isManuallyClosed, setIsManuallyClosed] = useState<boolean>(false);
+  const [isManuallyClosed, setIsManuallyClosed] = useState(false);
 
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
-      if (event.key.toLowerCase() === 'p') {
-        if (isManuallyClosed) {
-          setIsManuallyClosed(false);
-          setIsVisible(true);
-        } else {
-          setIsVisible((prev: boolean) => !prev);
+      if (event.key === 'p' || event.key === 'P') {
+        if (DEBUG_CONFIG.ENABLE_DEBUG_PANEL) {
+          setIsVisible(prev => !prev);
         }
       }
     };
 
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [isManuallyClosed]);
+    document.addEventListener('keydown', handleKeyPress);
+    return () => document.removeEventListener('keydown', handleKeyPress);
+  }, []);
 
-  if (!isVisible) {
+  if (!DEBUG_CONFIG.ENABLE_DEBUG_PANEL || isManuallyClosed || !isVisible) {
     return null;
   }
 
@@ -34,9 +32,9 @@ export const DebugPanel = () => {
       position: 'fixed' as const,
       background: COLORS.ui.debug.background,
       color: 'white',
-      padding: '20px',
+      padding: '15px',
       borderRadius: '8px',
-      maxWidth: `${DEBUG_CONFIG.DEBUG_PANEL_MAX_WIDTH}px`,
+      maxWidth: DEBUG_CONFIG.DEBUG_PANEL_MAX_WIDTH,
       maxHeight: DEBUG_CONFIG.DEBUG_PANEL_MAX_HEIGHT,
       overflow: 'auto' as const,
       zIndex: 1002,
@@ -88,6 +86,8 @@ export const DebugPanel = () => {
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <GameInitializerPanel />
+
         {DEBUG_CONFIG.SHOW_PERFORMANCE_SECTION && (
           <div>
             <h3 style={{ margin: '0 0 10px 0', fontSize: '14px' }}>Performance</h3>

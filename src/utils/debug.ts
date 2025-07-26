@@ -22,7 +22,7 @@ export const DEBUG_CONFIG = {
   DEBUG_INFO_MAX_HEIGHT: '80vh',
 
   // Debug Panel Configuration
-  ENABLE_DEBUG_PANEL: false,
+  ENABLE_DEBUG_PANEL: true,
   DEBUG_PANEL_POSITION: 'top-right' as const,
   DEBUG_PANEL_MAX_WIDTH: 500,
   DEBUG_PANEL_MAX_HEIGHT: '90vh',

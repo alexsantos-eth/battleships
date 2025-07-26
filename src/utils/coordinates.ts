@@ -1,26 +1,37 @@
-export type GridPosition = { x: number; y: number };
+import { useGameStore } from "@/stores/gameStore";
+
+export interface GridPosition {
+  x: number;
+  y: number;
+}
 
 export class CoordinateUtils {
-  static readonly GRID_SIZE = 10;
-
   static logicalToEnemyVisual(pos: GridPosition): GridPosition {
+    const { boardWidth, boardHeight } = useGameStore.getState();
+    const gridSize = Math.max(boardWidth, boardHeight);
+    
     return {
-      x: this.GRID_SIZE - 1 - pos.x,
-      y: this.GRID_SIZE - 1 - pos.y,
+      x: gridSize - 1 - pos.x,
+      y: gridSize - 1 - pos.y,
     };
   }
 
   static enemyVisualToLogical(pos: GridPosition): GridPosition {
+    const { boardWidth, boardHeight } = useGameStore.getState();
+    const gridSize = Math.max(boardWidth, boardHeight);
+    
     return {
-      x: this.GRID_SIZE - 1 - pos.x,
-      y: this.GRID_SIZE - 1 - pos.y,
+      x: gridSize - 1 - pos.x,
+      y: gridSize - 1 - pos.y,
     };
   }
 
   static isValidPosition(pos: GridPosition): boolean {
+    const { boardWidth, boardHeight } = useGameStore.getState();
+    
     return (
-      pos.x >= 0 && pos.x < this.GRID_SIZE &&
-      pos.y >= 0 && pos.y < this.GRID_SIZE
+      pos.x >= 0 && pos.x < boardWidth &&
+      pos.y >= 0 && pos.y < boardHeight
     );
   }
 

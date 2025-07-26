@@ -30,11 +30,14 @@ export interface GameState {
   enemyShots: Shot[];
   isGameOver: boolean;
   winner: "player" | "enemy" | null;
+  boardWidth: number;
+  boardHeight: number;
   setPlayerTurn: () => void;
   setEnemyTurn: () => void;
   toggleTurn: () => void;
   setPlayerShips: (ships: Ship[]) => void;
   setEnemyShips: (ships: Ship[]) => void;
+  setBoardDimensions: (width: number, height: number) => void;
   addPlayerShot: (shot: Shot) => void;
   addEnemyShot: (shot: Shot) => void;
   initializeGame: () => void;
@@ -60,6 +63,8 @@ export const useGameStore = create<GameState>((set, get) => ({
   enemyShots: [],
   isGameOver: false,
   winner: null,
+  boardWidth: 10,
+  boardHeight: 10,
 
   setPlayerTurn: () => {
     set({
@@ -94,6 +99,10 @@ export const useGameStore = create<GameState>((set, get) => ({
 
   setEnemyShips: (ships: Ship[]) => {
     set({ enemyShips: ships });
+  },
+
+  setBoardDimensions: (width: number, height: number) => {
+    set({ boardWidth: width, boardHeight: height });
   },
 
   addPlayerShot: (shot: Shot) => {
@@ -222,6 +231,8 @@ export const useGameStore = create<GameState>((set, get) => ({
       enemyShots: [],
       isGameOver: false,
       winner: null,
+      boardWidth: 10,
+      boardHeight: 10,
     });
   },
 

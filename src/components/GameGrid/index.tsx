@@ -8,6 +8,7 @@ import ShipsPlane from "@/components/ShipsPlane";
 import TreePlane from "@/components/TreePlane";
 import WaterPlane from "@/components/WaterPlane";
 import { useGameStore } from "@/stores/gameStore";
+import { useGridDimensions } from "@/hooks/useGridDimensions";
 
 interface GameGridProps {
   position?: [number, number, number];
@@ -23,10 +24,15 @@ const GameGrid = ({
   isPlayerBoard = true,
 }: GameGridProps) => {
   const { isPlayerTurn } = useGameStore();
+  const { calculateTotalGridWidth, calculateTotalGridHeight } = useGridDimensions();
+  
+  const gridWidth = calculateTotalGridWidth();
+  const gridHeight = calculateTotalGridHeight();
+  const planeSize = Math.max(gridWidth, gridHeight, 5); // Mínimo 5 para mantener compatibilidad
 
   return (
     <mesh rotation={rotation} position={position}>
-      <planeGeometry args={[5, 5, 10, 10]} />
+      <planeGeometry args={[planeSize, planeSize, 10, 10]} />
       <meshStandardMaterial color="lightblue" wireframe={false} />
 
       <group>

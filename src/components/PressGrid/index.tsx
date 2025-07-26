@@ -4,11 +4,7 @@ import Cell from "@/components/Cell";
 import WaterExplosion from "@/components/WaterExplosion";
 import { useGameStore } from "@/stores/gameStore";
 import { eventBus, EVENTS } from "@/utils/eventBus";
-import {
-  worldToGridCoordinates,
-  gridToWorldCoordinates,
-  isValidGridPosition,
-} from "./utils";
+import { useGridDimensions } from "@/hooks/useGridDimensions";
 
 interface Explosion {
   id: number;
@@ -28,6 +24,14 @@ const PressGrid: React.FC = () => {
     isShipDestroyed,
     setEnemyTurn,
   } = useGameStore();
+
+  const {
+    boardWidth,
+    boardHeight,
+    worldToGridCoordinates,
+    gridToWorldCoordinates,
+    isValidGridPosition,
+  } = useGridDimensions();
 
   useEffect(() => {
     if (currentTurn === "PLAYER_TURN" && lastTurn.current === "ENEMY_TURN") {
@@ -81,8 +85,8 @@ const PressGrid: React.FC = () => {
   };
 
   const cells = [];
-  for (let x = 0; x < 10; x++) {
-    for (let y = 0; y < 10; y++) {
+  for (let x = 0; x < boardWidth; x++) {
+    for (let y = 0; y < boardHeight; y++) {
       const [posX, posY] = gridToWorldCoordinates(x, y);
 
       const isShot = isCellShot(x, y, true);

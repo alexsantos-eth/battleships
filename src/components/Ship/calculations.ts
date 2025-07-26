@@ -1,5 +1,6 @@
+import { useGameStore } from "@/stores/gameStore";
+
 export const SHIP_SPACING = 0.5;
-export const GRID_SIZE = 10;
 
 export interface ShipPosition {
   x: number;
@@ -29,17 +30,20 @@ export const calculateShipPosition = (
   shipSize: number,
   extraOffset: number = 0
 ): ShipPosition => {
+  const { boardWidth, boardHeight } = useGameStore.getState();
+  const gridSize = Math.max(boardWidth, boardHeight);
+  
   // Usar la lógica original que funcionaba
   const posX =
     coords[0] * SHIP_SPACING -
-    (SHIP_SPACING * GRID_SIZE) / 2 +
+    (SHIP_SPACING * gridSize) / 2 +
     (orientation === "vertical"
       ? SHIP_SPACING / 2
       : (SHIP_SPACING * shipSize) / 2);
 
   const posY =
     coords[1] * SHIP_SPACING -
-    (SHIP_SPACING * GRID_SIZE) / 2 +
+    (SHIP_SPACING * gridSize) / 2 +
     (orientation === "vertical"
       ? (SHIP_SPACING * shipSize) / 2
       : SHIP_SPACING / 2);

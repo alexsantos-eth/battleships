@@ -1,7 +1,12 @@
-const GRID_SIZE = 10;
+import { useGameStore } from "@/stores/gameStore";
 
 function getRandomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function getGridSize() {
+  const { boardWidth, boardHeight } = useGameStore.getState();
+  return Math.max(boardWidth, boardHeight);
 }
 
 function getShipCells(
@@ -123,28 +128,28 @@ export function getRandomShipsWithConfig(shipDefinitions: Array<{
         const targetQuadrant = preferredQuadrants[Math.floor(Math.random() * preferredQuadrants.length)];
         
         const quadrantBounds = [
-          { xMin: 0, xMax: Math.floor(GRID_SIZE / 2) - 1, yMin: 0, yMax: Math.floor(GRID_SIZE / 2) - 1 },
-          { xMin: Math.floor(GRID_SIZE / 2), xMax: GRID_SIZE - 1, yMin: 0, yMax: Math.floor(GRID_SIZE / 2) - 1 },
-          { xMin: 0, xMax: Math.floor(GRID_SIZE / 2) - 1, yMin: Math.floor(GRID_SIZE / 2), yMax: GRID_SIZE - 1 },
-          { xMin: Math.floor(GRID_SIZE / 2), xMax: GRID_SIZE - 1, yMin: Math.floor(GRID_SIZE / 2), yMax: GRID_SIZE - 1 },
+          { xMin: 0, xMax: Math.floor(getGridSize() / 2) - 1, yMin: 0, yMax: Math.floor(getGridSize() / 2) - 1 },
+          { xMin: Math.floor(getGridSize() / 2), xMax: getGridSize() - 1, yMin: 0, yMax: Math.floor(getGridSize() / 2) - 1 },
+          { xMin: 0, xMax: Math.floor(getGridSize() / 2) - 1, yMin: Math.floor(getGridSize() / 2), yMax: getGridSize() - 1 },
+          { xMin: Math.floor(getGridSize() / 2), xMax: getGridSize() - 1, yMin: Math.floor(getGridSize() / 2), yMax: getGridSize() - 1 },
         ];
         
         const bounds = quadrantBounds[targetQuadrant];
         
         if (orientation === "horizontal") {
-          x = getRandomInt(bounds.xMin, Math.min(bounds.xMax, GRID_SIZE - shipDef.size));
+          x = getRandomInt(bounds.xMin, Math.min(bounds.xMax, getGridSize() - shipDef.size));
           y = getRandomInt(bounds.yMin, bounds.yMax);
         } else {
           x = getRandomInt(bounds.xMin, bounds.xMax);
-          y = getRandomInt(bounds.yMin, Math.min(bounds.yMax, GRID_SIZE - shipDef.size));
+          y = getRandomInt(bounds.yMin, Math.min(bounds.yMax, getGridSize() - shipDef.size));
         }
       } else {
         if (orientation === "horizontal") {
-          x = getRandomInt(0, GRID_SIZE - shipDef.size);
-          y = getRandomInt(0, GRID_SIZE - 1);
+          x = getRandomInt(0, getGridSize() - shipDef.size);
+          y = getRandomInt(0, getGridSize() - 1);
         } else {
-          x = getRandomInt(0, GRID_SIZE - 1);
-          y = getRandomInt(0, GRID_SIZE - shipDef.size);
+          x = getRandomInt(0, getGridSize() - 1);
+          y = getRandomInt(0, getGridSize() - shipDef.size);
         }
       }
 
@@ -170,11 +175,11 @@ export function getRandomShipsWithConfig(shipDefinitions: Array<{
       
       while (fallbackAttempts < maxFallbackAttempts) {
         if (orientation === "horizontal") {
-          x = getRandomInt(0, GRID_SIZE - shipDef.size);
-          y = getRandomInt(0, GRID_SIZE - 1);
+          x = getRandomInt(0, getGridSize() - shipDef.size);
+          y = getRandomInt(0, getGridSize() - 1);
         } else {
-          x = getRandomInt(0, GRID_SIZE - 1);
-          y = getRandomInt(0, GRID_SIZE - shipDef.size);
+          x = getRandomInt(0, getGridSize() - 1);
+          y = getRandomInt(0, getGridSize() - shipDef.size);
         }
 
         const newShipCells = getShipCells(x, y, shipDef.size, orientation);
