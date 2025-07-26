@@ -3,14 +3,16 @@ import { useSystemMetrics } from "@/hooks/useSystemMetrics";
 interface SystemMetricsProps {
   enabled?: boolean;
   showDetails?: boolean;
+  showCpu?: boolean;
 }
 
 export const SystemMetrics = ({
   enabled = true,
   showDetails = false,
+  showCpu = false,
 }: SystemMetricsProps) => {
   const { metrics, formatBytes, getMemoryColor, getCpuColor } =
-    useSystemMetrics(enabled);
+    useSystemMetrics(enabled, 2000, showCpu);
 
   if (!enabled) return null;
 

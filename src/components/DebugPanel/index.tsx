@@ -106,6 +106,7 @@ export const DebugPanel = () => {
             <SystemMetrics 
               enabled={true}
               showDetails={DEBUG_CONFIG.SYSTEM_METRICS_SHOW_DETAILS}
+              showCpu={false}
             />
           </div>
         )}

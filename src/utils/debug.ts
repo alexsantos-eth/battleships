@@ -13,7 +13,7 @@ export const DEBUG_CONFIG = {
   TARGET_FPS: 60,
 
   // Debug Info Configuration
-  ENABLE_DEBUG_INFO: true,
+  ENABLE_DEBUG_INFO: false,
   DEBUG_INFO_POSITION: 'top-right' as const,
   SHOW_SHIP_DETAILS: true,
   SHOW_CELL_COORDINATES: true,
@@ -22,7 +22,7 @@ export const DEBUG_CONFIG = {
   DEBUG_INFO_MAX_HEIGHT: '80vh',
 
   // Debug Panel Configuration
-  ENABLE_DEBUG_PANEL: true,
+  ENABLE_DEBUG_PANEL: false,
   DEBUG_PANEL_POSITION: 'top-right' as const,
   DEBUG_PANEL_MAX_WIDTH: 500,
   DEBUG_PANEL_MAX_HEIGHT: '90vh',
