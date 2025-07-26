@@ -11,6 +11,10 @@ interface CameraEventData {
   targetDistance: number;
 }
 
+interface TogglePlayerPerspectiveData {
+  isPlayerPerspective: boolean;
+}
+
 interface UseCameraEventsOptions {
   onShootStart?: (data: CameraEventData) => void;
   onShootEnd?: (data: CameraEventData) => void;
@@ -35,6 +39,30 @@ export const useCameraEvents = (
   const isAnimating = useRef(false);
   const [isShooting, setIsShooting] = useState(false);
   const [shootData, setShootData] = useState<CameraEventData | null>(null);
+  const [isPlayerPerspective, setIsPlayerPerspective] = useState(false);
+
+  const setPlayerCameraPosition = useCallback((usePlayerPerspective: boolean) => {
+    if (usePlayerPerspective) {
+      targetPosition.current.set(
+        0,
+        PLAYER_CAMERA_POSITION.position[1] + 6,
+        5
+      );
+      targetRotation.current.set(0, 0, 0);
+    } else {
+      targetPosition.current.set(
+        PLAYER_CAMERA_POSITION.position[0],
+        PLAYER_CAMERA_POSITION.position[1],
+        PLAYER_CAMERA_POSITION.position[2]
+      );
+      targetRotation.current.set(
+        PLAYER_CAMERA_POSITION.rotation[0],
+        PLAYER_CAMERA_POSITION.rotation[1],
+        PLAYER_CAMERA_POSITION.rotation[2]
+      );
+    }
+    isAnimating.current = true;
+  }, []);
 
   const handleShootStart = useCallback(
     (...args: unknown[]) => {
@@ -58,25 +86,26 @@ export const useCameraEvents = (
   const handleShootEnd = useCallback(
     (...args: unknown[]) => {
       const data = args[0] as CameraEventData;
-      targetPosition.current.set(
-        PLAYER_CAMERA_POSITION.position[0],
-        PLAYER_CAMERA_POSITION.position[1],
-        PLAYER_CAMERA_POSITION.position[2]
-      );
-
-      targetRotation.current.set(
-        PLAYER_CAMERA_POSITION.rotation[0],
-        PLAYER_CAMERA_POSITION.rotation[1],
-        PLAYER_CAMERA_POSITION.rotation[2]
-      );
-      isAnimating.current = true;
+      setPlayerCameraPosition(isPlayerPerspective);
       setEnemyTurn();
 
       if (onShootEnd) {
         onShootEnd(data);
       }
     },
-    [onShootEnd, camera, setEnemyTurn]
+    [onShootEnd, camera, setEnemyTurn, isPlayerPerspective, setPlayerCameraPosition]
+  );
+
+  const handleTogglePlayerPerspective = useCallback(
+    (...args: unknown[]) => {
+      const data = args[0] as TogglePlayerPerspectiveData;
+      setIsPlayerPerspective(data.isPlayerPerspective);
+
+      if (!isPlayerTurn) {
+        setPlayerCameraPosition(data.isPlayerPerspective);
+      }
+    },
+    [isPlayerTurn, setPlayerCameraPosition]
   );
 
   const triggerShoot = useCallback(() => {}, []);
@@ -123,12 +152,20 @@ export const useCameraEvents = (
   useEffect(() => {
     eventBus.on(EVENTS.CAMERA_SHOOT_START, handleShootStart);
     eventBus.on(EVENTS.CAMERA_SHOOT_END, handleShootEnd);
+    eventBus.on(
+      EVENTS.CAMERA_TOGGLE_PLAYER_PERSPECTIVE,
+      handleTogglePlayerPerspective
+    );
 
     return () => {
       eventBus.off(EVENTS.CAMERA_SHOOT_START, handleShootStart);
       eventBus.off(EVENTS.CAMERA_SHOOT_END, handleShootEnd);
+      eventBus.off(
+        EVENTS.CAMERA_TOGGLE_PLAYER_PERSPECTIVE,
+        handleTogglePlayerPerspective
+      );
     };
-  }, [handleShootStart, handleShootEnd]);
+  }, [handleShootStart, handleShootEnd, handleTogglePlayerPerspective]);
 
   useEffect(() => {
     if (isPlayerTurn) {
