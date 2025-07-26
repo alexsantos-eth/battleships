@@ -17,6 +17,13 @@ export const gridToWorldCoordinates = (x: number, y: number): [number, number] =
   return [posX, posY];
 };
 
+// Nueva función para posicionar barcos anclados en el borde de la celda
+export const gridToWorldCoordinatesForShip = (x: number, y: number): [number, number] => {
+  const posX = x * GRID_SPACING - (GRID_SPACING * GRID_SIZE) / 2;
+  const posY = y * GRID_SPACING - (GRID_SPACING * GRID_SIZE) / 2;
+  return [posX, posY];
+};
+
 export const isValidGridPosition = (x: number, y: number): boolean => {
   return x >= 0 && x < GRID_SIZE && y >= 0 && y < GRID_SIZE;
 };

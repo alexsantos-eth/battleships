@@ -1,5 +1,7 @@
 import GridHelper from "@/components/GridHelper";
 import PressGrid from "@/components/PressGrid";
+import PlayerShotsGrid from "@/components/PlayerShotsGrid";
+import EnemyShotsGrid from "@/components/EnemyShotsGrid";
 import RocksPlane from "@/components/RocksPlane";
 import SandPlane from "@/components/SandPlane";
 import ShipsPlane from "@/components/ShipsPlane";
@@ -34,7 +36,12 @@ const GameGrid = ({
         <TreePlane />
 
         <GridHelper />
-        {enablePressGrid && isPlayerTurn && <PressGrid />}
+        {/* PressGrid para interacción del jugador */}
+        {enablePressGrid && isPlayerTurn && !isPlayerBoard && <PressGrid />}
+        {/* PlayerShotsGrid para mostrar disparos del jugador */}
+        {!isPlayerBoard && <PlayerShotsGrid />}
+        {/* EnemyShotsGrid para mostrar disparos del enemigo */}
+        {isPlayerBoard && <EnemyShotsGrid />}
         <ShipsPlane isPlayerBoard={isPlayerBoard} />
       </group>
     </mesh>

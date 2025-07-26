@@ -11,6 +11,7 @@ import {
   calculateShipPlaneSize,
   calculateWaveAnimation,
   calculateOrientationOffset,
+  calculateModelOffset,
 } from "./calculations";
 
 const Ship: React.FC<ShipProps> = ({
@@ -44,6 +45,8 @@ const Ship: React.FC<ShipProps> = ({
     orientation,
     shipConfig.extraOffset
   );
+
+  const modelOffset = calculateModelOffset();
 
   const planeSize = useMemo(() => {
     const size = calculateShipPlaneSize(shipConfig.size, orientation);
@@ -80,7 +83,11 @@ const Ship: React.FC<ShipProps> = ({
       <group ref={groupRef}>
         <primitive
           object={clonedScene}
-          position={[orientationOffset.x, orientationOffset.y, 0]}
+          position={[
+            orientationOffset.x + modelOffset.x, 
+            orientationOffset.y + modelOffset.y, 
+            0
+          ]}
           scale={shipConfig.scale}
           rotation={[rotation.x, rotation.y, rotation.z]}
         />

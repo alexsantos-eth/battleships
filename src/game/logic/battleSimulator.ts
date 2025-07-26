@@ -165,7 +165,7 @@ export class BattleSimulator {
         
       case 'fire_shot':
         if (instruction.data.position) {
-          const board = this.game.isPlayerTurn() ? 'enemy' : 'player';
+          const board = this.game.isPlayerTurn() ? 'player' : 'enemy';
           const shot = this.game.fireShot(board, instruction.data.position);
           
           this.shotHistory.push({
@@ -198,7 +198,7 @@ export class BattleSimulator {
       const randomIndex = this.random.nextInt(0, availablePositions.length - 1);
       const position = availablePositions[randomIndex];
       
-      const board = this.game.isPlayerTurn() ? 'enemy' : 'player';
+      const board = this.game.isPlayerTurn() ? 'player' : 'enemy';
       
       try {
         const shot = this.game.fireShot(board, position);
@@ -226,7 +226,7 @@ export class BattleSimulator {
 
   private getAvailablePositions(): Position[] {
     const positions: Position[] = [];
-    const board = this.game.isPlayerTurn() ? 'enemy' : 'player';
+    const board = this.game.isPlayerTurn() ? 'player' : 'enemy';
     
     for (let x = 0; x < this.config.boardWidth; x++) {
       for (let y = 0; y < this.config.boardHeight; y++) {

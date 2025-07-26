@@ -29,6 +29,7 @@ export const calculateShipPosition = (
   shipSize: number,
   extraOffset: number = 0
 ): ShipPosition => {
+  // Usar la lógica original que funcionaba
   const posX =
     coords[0] * SHIP_SPACING -
     (SHIP_SPACING * GRID_SIZE) / 2 +
@@ -43,12 +44,30 @@ export const calculateShipPosition = (
       ? (SHIP_SPACING * shipSize) / 2
       : SHIP_SPACING / 2);
 
+  // Ajustes específicos por tamaño de barco para el grupo completo
+  let groupOffsetX = 0;
+  let groupOffsetY = 0;
+
+  if (shipSize === 2) {
+    groupOffsetX = 0;
+    groupOffsetY = 0;
+  } else if (shipSize === 3) {
+    groupOffsetX = 0;
+    groupOffsetY = 0;
+  } else if (shipSize === 4) {
+    groupOffsetX = orientation === "horizontal" ? -0.1 : 0;
+    groupOffsetY = orientation === "horizontal" ? 0 : -0.1;
+  } else if (shipSize === 5) {
+    groupOffsetX = orientation === "horizontal" ? -0.1 : 0;
+    groupOffsetY = orientation === "horizontal" ? 0 : -0.1;
+  }
+
   const orientationOffsetY = orientation === "vertical" ? extraOffset : 0;
   const orientationOffsetX = orientation === "vertical" ? 0 : extraOffset;
 
   return {
-    x: posX + orientationOffsetX,
-    y: posY + orientationOffsetY,
+    x: posX + orientationOffsetX - groupOffsetX,
+    y: posY + orientationOffsetY - groupOffsetY,
     z: 0.18,
   };
 };
@@ -90,6 +109,15 @@ export const calculateShipPlaneSize = (
   }
 };
 
+// Función para calcular el offset del modelo 3D (ahora sin offset)
+export const calculateModelOffset = (): { x: number; y: number } => {
+  // Sin offset adicional, el grupo ya está ajustado
+  return {
+    x: 0,
+    y: 0,
+  };
+};
+
 export const calculateWaveAnimation = (
   time: number,
   frequency: number,
@@ -118,4 +146,4 @@ export const calculateOrientationOffset = (
     x: orientationOffsetX,
     y: orientationOffsetY,
   };
-}; 
+};
