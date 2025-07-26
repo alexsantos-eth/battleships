@@ -178,7 +178,7 @@ Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más det
 ## 🔗 Enlaces Útiles
 
 - [Demo en Vivo](#) *(próximamente)*
-- [Changelog](#) *(próximamente)*
+- [Changelog](CHANGELOG.md) - Historial de cambios
 - [Roadmap](#) *(próximamente)*
 
 ---
