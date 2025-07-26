@@ -1,153 +1,169 @@
-# Game Logic Module
+# Sistema Determinista de Batalla Naval
 
-Este módulo contiene toda la lógica del juego separada de la lógica visual, permitiendo pruebas unitarias exhaustivas.
+## 🎯 Descripción
 
-## Estructura
+Este sistema permite simular batallas de batalla naval de manera completamente determinista. Esto significa que con los mismos parámetros de entrada (semilla, posiciones de barcos, historial de tiros), siempre se obtendrá el mismo resultado.
 
-### `battleship.ts`
-- **BattleshipGame**: Clase principal que maneja toda la lógica del juego
-- **Interfaces**: Ship, Shot, GameBoard, Position
-- **Funcionalidades**:
-  - Gestión de turnos
-  - Colocación de barcos
-  - Disparos y detección de impactos
-  - Destrucción de barcos
-  - Estado del juego (victoria/derrota)
+## 🔧 Componentes Principales
 
-### `camera.ts`
-- **CameraController**: Clase para manejar la lógica de la cámara
-- **Interfaces**: CameraPosition, CameraRotation, CameraState
-- **Funcionalidades**:
-  - Posiciones predefinidas de la cámara
-  - Cálculos de distancia y interpolación
-  - Gestión de perspectivas
+### 1. DeterministicRandom
+Generador de números pseudo-aleatorios determinista basado en el algoritmo Linear Congruential Generator (LCG).
 
-### `shipGenerator.ts`
-- **ShipGenerator**: Clase para generar barcos aleatoriamente
-- **Funcionalidades**:
-  - Generación de posiciones aleatorias válidas
-  - Validación de colocación de barcos
-  - Configuración de tipos y cantidades de barcos
+```typescript
+import { DeterministicRandom } from './deterministicRandom';
 
-### `math.ts`
-- **MathUtils**: Utilidades matemáticas reutilizables
-- **Funcionalidades**:
-  - Cálculos de distancia 2D y 3D
-  - Interpolación lineal
-  - Utilidades de aleatorización
-  - Conversiones de ángulos
-  - Validaciones de límites
-
-## Configuración de Pruebas Unitarias
-
-### 1. Instalar dependencias
-```bash
-npm install --save-dev jest @types/jest ts-jest
+const random = new DeterministicRandom(12345);
+const value = random.next(); // Número entre 0 y 1
+const int = random.nextInt(1, 10); // Entero entre 1 y 10
+const bool = random.nextBoolean(); // true/false
+const choice = random.nextChoice(['a', 'b', 'c']); // Elección de array
 ```
 
-### 2. Configurar Jest
-Crear `jest.config.js` en la raíz del proyecto:
-```javascript
-module.exports = {
-  preset: 'ts-jest',
-  testEnvironment: 'node',
-  roots: ['<rootDir>/src'],
-  testMatch: ['**/__tests__/**/*.test.ts'],
-  moduleNameMapping: {
-    '^@/(.*)$': '<rootDir>/src/$1',
+### 2. BattleSimulator
+Simulador de batallas que mantiene todas las decisiones aleatorias pero las hace reproducibles.
+
+```typescript
+import { BattleSimulator } from './battleSimulator';
+
+const config = {
+  seed: 12345,
+  boardWidth: 10,
+  boardHeight: 10
+};
+
+const simulator = new BattleSimulator(config);
+const result = simulator.simulateRandomBattle(100);
+```
+
+## 🚀 Casos de Uso
+
+### 1. Simulación de Batalla Aleatoria
+```typescript
+const result = simulator.simulateRandomBattle(200);
+console.log(`Ganador: ${result.winner}`);
+console.log(`Total turnos: ${result.totalTurns}`);
+```
+
+### 2. Ejecución de Instrucciones Específicas
+```typescript
+const instructions = [
+  {
+    type: 'place_ship',
+    data: {
+      player: 'player',
+      position: { x: 0, y: 0 },
+      variant: 'small',
+      orientation: 'horizontal'
+    }
   },
+  {
+    type: 'fire_shot',
+    data: { position: { x: 0, y: 0 } }
+  }
+];
+
+const result = simulator.executeInstructions(instructions);
+```
+
+### 3. Comparación de Estrategias
+```typescript
+// Estrategia diagonal
+const diagonalResult = simulator.executeInstructions(diagonalInstructions);
+
+// Estrategia por filas
+const rowResult = simulator.executeInstructions(rowInstructions);
+
+console.log(`Diagonal: ${diagonalResult.playerHits} hits`);
+console.log(`Filas: ${rowResult.playerHits} hits`);
+```
+
+## 📊 Resultados
+
+El sistema proporciona información detallada sobre cada batalla:
+
+- **Ganador**: 'player' | 'enemy' | null
+- **Estadísticas**: Total de turnos, disparos, aciertos
+- **Historial**: Secuencia completa de disparos con resultados
+- **Posiciones de barcos**: Ubicación exacta de cada barco
+
+## 🔬 Determinismo
+
+### Verificación
+```typescript
+// Misma semilla = mismos resultados
+const result1 = simulator1.simulateRandomBattle(100);
+const result2 = simulator2.simulateRandomBattle(100);
+expect(result1.winner).toBe(result2.winner);
+expect(result1.totalTurns).toBe(result2.totalTurns);
+```
+
+### Reproducibilidad
+- **Semilla**: Controla toda la aleatoriedad
+- **Posiciones de barcos**: Pueden ser predefinidas o aleatorias
+- **Historial de tiros**: Secuencia exacta de disparos
+- **Resultados**: Siempre idénticos con los mismos parámetros
+
+## 🎮 Integración con el Juego
+
+El sistema mantiene compatibilidad con el juego existente:
+
+- **Mismas reglas**: Colocación de barcos, validación de disparos
+- **Misma lógica**: Detección de hits, destrucción de barcos
+- **Misma interfaz**: APIs compatibles con el sistema actual
+
+## 📈 Beneficios
+
+1. **Testing**: Simulaciones reproducibles para testing
+2. **Análisis**: Comparación de estrategias
+3. **Debugging**: Identificación de problemas específicos
+4. **Investigación**: Análisis de patrones de juego
+5. **IA**: Entrenamiento de algoritmos con datos consistentes
+
+## 🛠️ Uso Avanzado
+
+### Configuración Personalizada
+```typescript
+const config = {
+  seed: 12345,
+  boardWidth: 10,
+  boardHeight: 10,
+  playerShips: [
+    { position: { x: 0, y: 0 }, variant: 'small', orientation: 'horizontal' }
+  ],
+  enemyShips: [
+    { position: { x: 5, y: 5 }, variant: 'large', orientation: 'vertical' }
+  ]
 };
 ```
 
-### 3. Agregar scripts al package.json
-```json
-{
-  "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
-  }
+### Análisis de Rendimiento
+```typescript
+const results = [];
+for (let seed = 0; seed < 1000; seed++) {
+  const simulator = new BattleSimulator({ seed, boardWidth: 10, boardHeight: 10 });
+  const result = simulator.simulateRandomBattle(200);
+  results.push(result);
 }
+
+const playerWins = results.filter(r => r.winner === 'player').length;
+const avgTurns = results.reduce((sum, r) => sum + r.totalTurns, 0) / results.length;
 ```
 
-### 4. Ejecutar pruebas
+## 🧪 Testing
+
 ```bash
-npm test
-npm run test:watch
-npm run test:coverage
+# Ejecutar tests del sistema determinista
+npm test -- --testPathPatterns="deterministicRandom|battleSimulator"
 ```
 
-## Ejemplos de Pruebas
+## 📝 Ejemplos
 
-### Pruebas de Lógica del Juego
-```typescript
-import { BattleshipGame } from '../battleship';
+Ver `src/game/logic/examples/deterministicBattleExample.ts` para ejemplos completos de uso.
 
-describe('BattleshipGame', () => {
-  let game: BattleshipGame;
+## 🔮 Futuras Mejoras
 
-  beforeEach(() => {
-    game = new BattleshipGame(10, 10);
-  });
-
-  test('should start with player turn', () => {
-    expect(game.getCurrentTurn()).toBe('PLAYER_TURN');
-  });
-
-  test('should toggle turn correctly', () => {
-    game.toggleTurn();
-    expect(game.getCurrentTurn()).toBe('ENEMY_TURN');
-  });
-});
-```
-
-### Pruebas de Matemáticas
-```typescript
-import { MathUtils } from '../math';
-
-describe('MathUtils', () => {
-  test('should calculate distance correctly', () => {
-    const distance = MathUtils.distance2D({ x: 0, y: 0 }, { x: 3, y: 4 });
-    expect(distance).toBe(5);
-  });
-
-  test('should interpolate correctly', () => {
-    const result = MathUtils.lerp(0, 10, 0.5);
-    expect(result).toBe(5);
-  });
-});
-```
-
-### Pruebas de Cámara
-```typescript
-import { CameraController } from '../camera';
-
-describe('CameraController', () => {
-  let controller: CameraController;
-
-  beforeEach(() => {
-    controller = new CameraController();
-  });
-
-  test('should set player perspective correctly', () => {
-    const state = controller.setPlayerPerspective(true);
-    expect(controller.isInPlayerPerspective()).toBe(true);
-  });
-});
-```
-
-## Beneficios de esta Arquitectura
-
-1. **Separación de Responsabilidades**: La lógica del juego está completamente separada de la lógica visual
-2. **Testabilidad**: Cada módulo puede ser probado independientemente
-3. **Reutilización**: La lógica puede ser reutilizada en diferentes contextos (web, móvil, etc.)
-4. **Mantenibilidad**: Cambios en la lógica no afectan la interfaz visual
-5. **Debugging**: Es más fácil encontrar y corregir errores en la lógica
-
-## Próximos Pasos
-
-1. Configurar Jest y ejecutar las pruebas existentes
-2. Agregar más pruebas para cubrir todos los casos edge
-3. Implementar pruebas de integración
-4. Agregar pruebas de rendimiento para algoritmos complejos
-5. Configurar CI/CD para ejecutar pruebas automáticamente 
+1. **Algoritmos de IA**: Integración con algoritmos de búsqueda
+2. **Análisis estadístico**: Métricas avanzadas de rendimiento
+3. **Visualización**: Gráficos de batallas y estrategias
+4. **Optimización**: Algoritmos más eficientes para simulaciones masivas
+5. **Networking**: Simulaciones distribuidas en múltiples nodos 
