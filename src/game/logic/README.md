@@ -1,8 +1,8 @@
-# Sistema Determinista de Batalla Naval
+# Sistema Determinista de Armada
 
 ## 🎯 Descripción
 
-Este sistema permite simular batallas de batalla naval de manera completamente determinista. Esto significa que con los mismos parámetros de entrada (semilla, posiciones de barcos, historial de tiros), siempre se obtendrá el mismo resultado.
+Este sistema permite simular batallas de armada de manera completamente determinista. Esto significa que con los mismos parámetros de entrada (semilla, posiciones de barcos, historial de tiros), siempre se obtendrá el mismo resultado.
 
 ## 🔧 Componentes Principales
 
@@ -20,7 +20,7 @@ const choice = random.nextChoice(['a', 'b', 'c']); // Elección de array
 ```
 
 ### 2. BattleSimulator
-Simulador de batallas que mantiene todas las decisiones aleatorias pero las hace reproducibles.
+Simulador de armadas que mantiene todas las decisiones aleatorias pero las hace reproducibles.
 
 ```typescript
 import { BattleSimulator } from './battleSimulator';
@@ -37,7 +37,7 @@ const result = simulator.simulateRandomBattle(100);
 
 ## 🚀 Casos de Uso
 
-### 1. Simulación de Batalla Aleatoria
+### 1. Simulación de Armada Aleatoria
 ```typescript
 const result = simulator.simulateRandomBattle(200);
 console.log(`Ganador: ${result.winner}`);
@@ -79,7 +79,7 @@ console.log(`Filas: ${rowResult.playerHits} hits`);
 
 ## 📊 Resultados
 
-El sistema proporciona información detallada sobre cada batalla:
+El sistema proporciona información detallada sobre cada armada:
 
 - **Ganador**: 'player' | 'enemy' | null
 - **Estadísticas**: Total de turnos, disparos, aciertos
@@ -164,6 +164,6 @@ Ver `src/game/logic/examples/deterministicBattleExample.ts` para ejemplos comple
 
 1. **Algoritmos de IA**: Integración con algoritmos de búsqueda
 2. **Análisis estadístico**: Métricas avanzadas de rendimiento
-3. **Visualización**: Gráficos de batallas y estrategias
+3. **Visualización**: Gráficos de armadas y estrategias
 4. **Optimización**: Algoritmos más eficientes para simulaciones masivas
 5. **Networking**: Simulaciones distribuidas en múltiples nodos 

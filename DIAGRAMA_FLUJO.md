@@ -1,4 +1,4 @@
-# Diagrama de Flujo del Juego de Batalla Naval
+# Diagrama de Flujo de Armada.io
 
 ## Flujo Principal del Juego
 
@@ -98,7 +98,7 @@ graph TB
     end
     
     subgraph "Lógica del Juego"
-        L[battleship.ts]
+        L[armada.ts]
         M[shipGenerator.ts]
         N[math.ts]
     end
@@ -236,7 +236,7 @@ classDiagram
         +toggleTurn()
     }
     
-    class BattleshipGame {
+    class ArmadaGame {
         -playerBoard: GameBoard
         -enemyBoard: GameBoard
         -currentTurn: GameTurn
@@ -248,7 +248,7 @@ classDiagram
     
     GameState --> Ship
     GameState --> Shot
-    BattleshipGame --> GameState
+    ArmadaGame --> GameState
 ```
 
 ## Sistema de Coordenadas

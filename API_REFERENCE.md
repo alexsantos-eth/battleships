@@ -1,4 +1,4 @@
-# API Reference - Juego de Batalla Naval
+# API Reference - Armada.io
 
 ## GameStore (Zustand)
 
@@ -109,7 +109,7 @@ resetGame(): void
 ```
 Reinicia completamente el estado del juego.
 
-## BattleshipGame Class
+## ArmadaGame Class
 
 ### Constructor
 

@@ -1,8 +1,8 @@
-# Documentación del Juego de Batalla Naval
+# Documentación de Armada.io
 
 ## Descripción General
 
-Este es un juego de batalla naval 3D desarrollado con React, TypeScript, Three.js y Vite. El juego presenta una experiencia visual inmersiva con gráficos 3D, efectos de partículas y animaciones de cámara.
+Este es un juego de armada 3D desarrollado con React, TypeScript, Three.js y Vite. El juego presenta una experiencia visual inmersiva con gráficos 3D, efectos de partículas y animaciones de cámara.
 
 ## Tecnologías Utilizadas
 
@@ -150,7 +150,7 @@ Sistema de comunicación entre componentes:
 - Desuscripción de eventos en cleanup
 - Reutilización de objetos 3D
 
-## Flujo de Juego
+## Flujo de Juego de Armada.io
 
 ### 1. Inicialización
 1. Generación aleatoria de barcos para jugador y enemigo
@@ -192,7 +192,7 @@ src/
 │   ├── WaterExplosion/ # Efectos de impacto
 │   └── ...
 ├── game/logic/         # Lógica del juego
-│   ├── battleship.ts   # Clase principal del juego
+    │   ├── armada.ts   # Clase principal del juego
 │   ├── shipGenerator.ts # Generación de barcos
 │   └── ...
 ├── stores/             # Estado global
@@ -239,7 +239,7 @@ npm run run:deterministic # Ejecutar simulación determinística
 - Sistema de eventos desacoplado
 - Estado centralizado para gestión consistente
 
-## Posibles Mejoras
+## Posibles Mejoras para Armada.io
 
 1. **IA Avanzada**: Implementar estrategias más inteligentes para el enemigo
 2. **Multiplayer**: Soporte para juego en red

@@ -1,7 +1,7 @@
 import { runAllExamples } from './deterministicBattleExample.js';
 
 // Ejecutar todos los ejemplos
-console.log('🎯 Sistema Determinista de Batalla Naval');
+console.log('🎯 Sistema Determinista de Armada');
 console.log('=====================================\n');
 
 try {

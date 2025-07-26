@@ -2,7 +2,7 @@ import { BattleSimulator } from '../battleSimulator.js';
 import type { BattleConfig, BattleInstruction } from '../battleSimulator.js';
 
 export function simulateRandomBattle(seed: number = 12345) {
-  console.log(`🎯 Simulando batalla aleatoria con seed: ${seed}`);
+  console.log(`🎯 Simulando armada aleatoria con seed: ${seed}`);
   
   const config: BattleConfig = {
     seed,
@@ -13,7 +13,7 @@ export function simulateRandomBattle(seed: number = 12345) {
   const simulator = new BattleSimulator(config);
   const result = simulator.simulateRandomBattle(50);
   
-  console.log('📊 Resultados de la batalla:');
+  console.log('📊 Resultados de la armada:');
   console.log(`🏆 Ganador: ${result.winner}`);
   console.log(`🔄 Total de turnos: ${result.totalTurns}`);
   console.log(`🎯 Disparos del jugador: ${result.playerShots} (${result.playerHits} aciertos)`);
@@ -25,7 +25,7 @@ export function simulateRandomBattle(seed: number = 12345) {
 }
 
 export function simulateCustomBattle(seed: number = 12345) {
-  console.log(`🎯 Simulando batalla personalizada con seed: ${seed}`);
+  console.log(`🎯 Simulando armada personalizada con seed: ${seed}`);
   
   const config: BattleConfig = {
     seed,
@@ -46,7 +46,7 @@ export function simulateCustomBattle(seed: number = 12345) {
   const simulator = new BattleSimulator(config);
   const result = simulator.simulateRandomBattle(30);
   
-  console.log('📊 Resultados de la batalla personalizada:');
+  console.log('📊 Resultados de la armada personalizada:');
   console.log(`🏆 Ganador: ${result.winner}`);
   console.log(`🔄 Total de turnos: ${result.totalTurns}`);
   

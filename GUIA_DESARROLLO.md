@@ -1,4 +1,4 @@
-# Guía de Desarrollo - Juego de Batalla Naval
+# Guía de Desarrollo - Armada.io
 
 ## Configuración del Entorno
 
@@ -13,7 +13,7 @@
 1. **Clonar el repositorio**
 ```bash
 git clone <repository-url>
-cd battleships
+cd armada-io
 ```
 
 2. **Instalar dependencias**
@@ -42,7 +42,7 @@ src/
 │   └── ...
 ├── game/logic/         # Lógica del juego
 │   ├── __tests__/      # Tests de lógica
-│   ├── battleship.ts   # Clase principal del juego
+    │   ├── armada.ts   # Clase principal del juego
 │   ├── shipGenerator.ts # Generación de barcos
 │   └── ...
 ├── stores/             # Estado global (Zustand)
@@ -184,7 +184,7 @@ describe('GameGrid', () => {
 // Ejemplo de test para lógica
 describe('checkShot', () => {
   it('should return hit when shot hits ship', () => {
-    const game = new BattleshipGame();
+    const game = new ArmadaGame();
     game.addShip('enemy', {
       position: { x: 0, y: 0 },
       variant: 'small',
@@ -430,4 +430,8 @@ eventBus.on('*', (event, ...args) => {
 ### Comunidad
 - [React Three Fiber Discord](https://discord.gg/ZZjjNvJ)
 - [Three.js Forum](https://discourse.threejs.org/)
-- [Stack Overflow](https://stackoverflow.com/questions/tagged/three.js) 
+- [Stack Overflow](https://stackoverflow.com/questions/tagged/three.js)
+
+---
+
+**¡Gracias por contribuir a Armada.io! 🚢💥** 
