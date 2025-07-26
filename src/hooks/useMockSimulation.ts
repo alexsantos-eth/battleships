@@ -7,7 +7,7 @@ export const useMockSimulation = () => {
   const [lastResult, setLastResult] = useState<MockBattleResult | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const runSimulation = async (type: 'player-win' | 'enemy-win' | 'quick' = 'quick') => {
+  const runSimulation = async (type: 'player-win' | 'enemy-win' | 'quick' | 'random' = 'quick') => {
     setIsRunning(true);
     setError(null);
     

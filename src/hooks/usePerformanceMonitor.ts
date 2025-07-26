@@ -1,11 +1,11 @@
-import { useEffect, useRef, useCallback } from 'react';
-import Stats from 'stats.js';
-import type { WebGLRenderer } from 'three';
-import { DEBUG_CONFIG } from '@/utils/debug';
+import { useEffect, useRef, useCallback } from "react";
+import Stats from "stats.js";
+import type { WebGLRenderer } from "three";
+import { DEBUG_CONFIG } from "@/utils/debug";
 
 interface PerformanceMonitorOptions {
   enabled?: boolean;
-  position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+  position?: "top-left" | "top-right" | "bottom-left" | "bottom-right";
   showMemory?: boolean;
   showRenderTime?: boolean;
   targetFPS?: number;
@@ -33,7 +33,7 @@ export const usePerformanceMonitor = (
     showMemory = true,
     showRenderTime = true,
     targetFPS = DEBUG_CONFIG.TARGET_FPS,
-    onPerformanceWarning
+    onPerformanceWarning,
   } = options;
 
   const statsRef = useRef<Stats | null>(null);
@@ -42,7 +42,7 @@ export const usePerformanceMonitor = (
     fps: 0,
     memory: { geometries: 0, textures: 0, triangles: 0 },
     renderTime: 0,
-    isLowPerformance: false
+    isLowPerformance: false,
   });
 
   const initializeStats = useCallback(() => {
@@ -51,35 +51,30 @@ export const usePerformanceMonitor = (
     const stats = new Stats();
     statsRef.current = stats;
 
-    // Configure stats display
-    stats.showPanel(0); // FPS panel
-    if (showMemory) stats.showPanel(1); // Memory panel
-    if (showRenderTime) stats.showPanel(2); // Render time panel
-
     // Position the stats panel
     const container = containerRef.current;
     container.appendChild(stats.dom);
-    
+
     const statsDom = stats.dom as HTMLElement;
-    statsDom.style.position = 'absolute';
-    statsDom.style.zIndex = '1000';
-    
+    statsDom.style.position = "absolute";
+    statsDom.style.zIndex = "1000";
+
     switch (position) {
-      case 'top-left':
-        statsDom.style.top = '10px';
-        statsDom.style.left = '10px';
+      case "top-left":
+        statsDom.style.top = "10px";
+        statsDom.style.left = "10px";
         break;
-      case 'top-right':
-        statsDom.style.top = '10px';
-        statsDom.style.right = '10px';
+      case "top-right":
+        statsDom.style.top = "10px";
+        statsDom.style.right = "10px";
         break;
-      case 'bottom-left':
-        statsDom.style.bottom = '10px';
-        statsDom.style.left = '10px';
+      case "bottom-left":
+        statsDom.style.bottom = "10px";
+        statsDom.style.left = "10px";
         break;
-      case 'bottom-right':
-        statsDom.style.bottom = '10px';
-        statsDom.style.right = '10px';
+      case "bottom-right":
+        statsDom.style.bottom = "10px";
+        statsDom.style.right = "10px";
         break;
     }
   }, [enabled, position, showMemory, showRenderTime]);
@@ -106,7 +101,7 @@ export const usePerformanceMonitor = (
       memory = {
         geometries: info.memory.geometries,
         textures: info.memory.textures,
-        triangles: info.render.triangles
+        triangles: info.render.triangles,
       };
     }
 
@@ -116,14 +111,16 @@ export const usePerformanceMonitor = (
       fps,
       memory,
       renderTime,
-      isLowPerformance
+      isLowPerformance,
     };
 
     metricsRef.current = metrics;
 
     // Trigger performance warning if needed
     if (isLowPerformance && onPerformanceWarning) {
-      onPerformanceWarning(`Low performance detected: ${fps} FPS (target: ${targetFPS})`);
+      onPerformanceWarning(
+        `Low performance detected: ${fps} FPS (target: ${targetFPS})`
+      );
     }
 
     return metrics;
@@ -141,14 +138,17 @@ export const usePerformanceMonitor = (
     }
   }, []);
 
-  const setContainer = useCallback((container: HTMLDivElement | null) => {
-    containerRef.current = container;
-    if (container && enabled) {
-      initializeStats();
-    } else {
-      cleanupStats();
-    }
-  }, [enabled, initializeStats, cleanupStats]);
+  const setContainer = useCallback(
+    (container: HTMLDivElement | null) => {
+      containerRef.current = container;
+      if (container && enabled) {
+        initializeStats();
+      } else {
+        cleanupStats();
+      }
+    },
+    [enabled, initializeStats, cleanupStats]
+  );
 
   useEffect(() => {
     if (enabled && containerRef.current) {
@@ -166,6 +166,6 @@ export const usePerformanceMonitor = (
     beginMeasure,
     endMeasure,
     isEnabled: enabled,
-    stats: statsRef.current
+    stats: statsRef.current,
   };
-}; 
+};

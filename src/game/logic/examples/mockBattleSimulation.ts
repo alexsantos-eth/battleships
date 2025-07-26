@@ -223,6 +223,57 @@ export function createMockBattleWithEnemyWin(seed: number = 67890): MockBattleRe
   };
 }
 
+export function createRandomBattleSimulation(seed: number = 99999, maxShots: number = 15): MockBattleResult {
+  const config: BattleConfig = {
+    seed,
+    boardWidth: 8,
+    boardHeight: 8,
+    playerShips: [
+      { position: { x: 0, y: 0 }, variant: 'small', orientation: 'horizontal' },
+      { position: { x: 2, y: 2 }, variant: 'medium', orientation: 'vertical' },
+      { position: { x: 5, y: 1 }, variant: 'large', orientation: 'horizontal' }
+    ],
+    enemyShips: [
+      { position: { x: 1, y: 1 }, variant: 'small', orientation: 'vertical' },
+      { position: { x: 3, y: 3 }, variant: 'medium', orientation: 'horizontal' },
+      { position: { x: 6, y: 6 }, variant: 'large', orientation: 'vertical' }
+    ]
+  };
+
+  const simulator = new BattleSimulator(config);
+  
+  const instructions: BattleInstruction[] = [];
+  const usedPositions = new Set<string>();
+  
+  for (let i = 0; i < maxShots; i++) {
+    let x: number, y: number;
+    let positionKey: string;
+    
+    // Generar posiciones únicas
+    do {
+      x = Math.floor(Math.random() * 8);
+      y = Math.floor(Math.random() * 8);
+      positionKey = `${x},${y}`;
+    } while (usedPositions.has(positionKey));
+    
+    usedPositions.add(positionKey);
+    instructions.push({ type: 'fire_shot', data: { position: { x, y } } });
+  }
+
+  const result = simulator.executeInstructions(instructions);
+  
+  return {
+    winner: result.winner || 'enemy',
+    totalTurns: result.totalTurns,
+    playerShots: result.playerShots,
+    enemyShots: result.enemyShots,
+    playerHits: result.playerHits,
+    enemyHits: result.enemyHits,
+    shipPlacements: result.shipPlacements,
+    shotHistory: result.shotHistory
+  };
+}
+
 export function createQuickMockBattle(seed: number = 11111): MockBattleResult {
   const config: BattleConfig = {
     seed,
@@ -257,7 +308,7 @@ export function createQuickMockBattle(seed: number = 11111): MockBattleResult {
   };
 }
 
-export function runMockSimulation(type: 'player-win' | 'enemy-win' | 'quick' = 'quick'): MockBattleResult {
+export function runMockSimulation(type: 'player-win' | 'enemy-win' | 'quick' | 'random' = 'quick'): MockBattleResult {
   console.log(`🎯 Ejecutando simulación mock: ${type}`);
   
   let result: MockBattleResult;
@@ -268,6 +319,9 @@ export function runMockSimulation(type: 'player-win' | 'enemy-win' | 'quick' = '
       break;
     case 'enemy-win':
       result = createMockBattleWithEnemyWin();
+      break;
+    case 'random':
+      result = createRandomBattleSimulation();
       break;
     case 'quick':
     default:

@@ -23,11 +23,6 @@ export const PerformanceMonitor = ({
     const stats = new Stats();
     statsRef.current = stats;
 
-    // Configure stats display
-    stats.showPanel(0); // FPS panel
-    if (showMemory) stats.showPanel(1); // Memory panel
-    if (showRenderTime) stats.showPanel(2); // Render time panel
-
     // Position the stats panel
     const container = containerRef.current;
     if (container) {

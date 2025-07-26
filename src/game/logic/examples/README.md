@@ -8,11 +8,13 @@ Este directorio contiene las simulaciones deterministas que **SÍ terminan con u
 - **⚡ Rápida**: 1 barco vs 1 barco, termina en 2 turnos
 - **👤 Jugador Gana**: Configuración específica donde el jugador destruye todos los barcos enemigos
 - **🤖 Enemigo Gana**: Configuración específica donde el enemigo destruye todos los barcos del jugador
+- **🎲 Aleatoria**: Disparos aleatorios en tablero 8x8, máximo 15 tiros
 
 ### 2. **Simulaciones Visuales (UI)**
 - **🎬 Visual Rápida**: Muestra los disparos en tiempo real en el tablero
 - **🎬 Visual Jugador Gana**: Simulación visual donde el jugador gana
 - **🎬 Visual Enemigo Gana**: Simulación visual donde el enemigo gana
+- **🎬 Visual Aleatoria**: Simulación visual con disparos aleatorios
 
 ## 📊 Características
 
@@ -83,6 +85,13 @@ type SimulationType = 'quick' | 'player-win' | 'enemy-win';
 - **Ganador**: Enemy
 - **Turnos**: 5
 - **Disparos**: 5
+
+### 🎲 Aleatoria:
+- **Ganador**: Variable (Player o Enemy)
+- **Turnos**: Máximo 15
+- **Disparos**: Máximo 15
+- **Tablero**: 8x8
+- **Barcos**: 3 vs 3
 
 ## 🎯 Ventajas
 

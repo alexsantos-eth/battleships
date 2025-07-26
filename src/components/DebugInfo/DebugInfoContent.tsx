@@ -249,6 +249,23 @@ export const DebugInfoContent = () => {
         >
           {isRunning ? '⏳' : '🤖'} Enemigo Gana
         </button>
+        
+        <button
+          onClick={() => runSimulation('random')}
+          disabled={isRunning || isSimulating}
+          style={{
+            background: "#9C27B0",
+            color: "white",
+            border: "none",
+            padding: "4px 8px",
+            borderRadius: "3px",
+            cursor: (isRunning || isSimulating) ? "not-allowed" : "pointer",
+            fontSize: "9px",
+            opacity: (isRunning || isSimulating) ? 0.6 : 1,
+          }}
+        >
+          {isRunning ? '⏳' : '🎲'} Aleatoria
+        </button>
       </div>
 
       <h4 style={{ margin: "8px 0 8px 0", fontSize: "12px" }}>🎬 Simulación Visual</h4>
@@ -303,6 +320,23 @@ export const DebugInfoContent = () => {
           }}
         >
           {isSimulating ? '⏳' : '🎬'} Visual Enemigo Gana
+        </button>
+        
+        <button
+          onClick={() => runVisualSimulation('random')}
+          disabled={isRunning || isSimulating}
+          style={{
+            background: "#9C27B0",
+            color: "white",
+            border: "none",
+            padding: "4px 8px",
+            borderRadius: "3px",
+            cursor: (isRunning || isSimulating) ? "not-allowed" : "pointer",
+            fontSize: "9px",
+            opacity: (isRunning || isSimulating) ? 0.6 : 1,
+          }}
+        >
+          {isSimulating ? '⏳' : '🎬'} Visual Aleatoria
         </button>
       </div>
 

@@ -72,7 +72,7 @@ export const useVisualMockSimulation = () => {
     });
   }, [addPlayerShot, addEnemyShot, setPlayerTurn, setEnemyTurn]);
 
-  const runVisualSimulation = useCallback(async (type: 'player-win' | 'enemy-win' | 'quick' = 'quick') => {
+  const runVisualSimulation = useCallback(async (type: 'player-win' | 'enemy-win' | 'quick' | 'random' = 'quick') => {
     setIsSimulating(true);
     setError(null);
     setCurrentStep(0);
