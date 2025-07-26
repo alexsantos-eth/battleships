@@ -82,22 +82,24 @@ function isTooClose(
 }
 
 export function getRandomShips() {
-  const placedShips: Array<{
-    coords: [number, number];
-    size: number;
-    orientation: "horizontal" | "vertical";
-  }> = [];
-
-  const shipDefinitions: Array<{
-    variant: "small" | "medium" | "large" | "xlarge";
-    size: number;
-  }> = [
+  return getRandomShipsWithConfig([
     { variant: "small", size: 2 },
     { variant: "medium", size: 3 },
     { variant: "medium", size: 3 },
     { variant: "large", size: 4 },
     { variant: "xlarge", size: 5 },
-  ];
+  ]);
+}
+
+export function getRandomShipsWithConfig(shipDefinitions: Array<{
+  variant: "small" | "medium" | "large" | "xlarge";
+  size: number;
+}>) {
+  const placedShips: Array<{
+    coords: [number, number];
+    size: number;
+    orientation: "horizontal" | "vertical";
+  }> = [];
 
   const quadrantPreferences = [
     [0, 1],
@@ -196,4 +198,11 @@ export function getRandomShips() {
       orientation: orientation,
     };
   });
+}
+
+export function getFewShips() {
+  return getRandomShipsWithConfig([
+    { variant: "small", size: 2 },
+    { variant: "small", size: 2 },
+  ]);
 }

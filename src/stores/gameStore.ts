@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import { getRandomShips } from "@/components/ShipsPlane/utils";
+import { getFewShips } from "@/components/ShipsPlane/utils";
 import { eventBus, EVENTS } from "@/utils/eventBus";
 
 export type GameTurn = "PLAYER_TURN" | "ENEMY_TURN";
@@ -28,6 +28,8 @@ export interface GameState {
   enemyShips: Ship[];
   playerShots: Shot[];
   enemyShots: Shot[];
+  isGameOver: boolean;
+  winner: "player" | "enemy" | null;
   setPlayerTurn: () => void;
   setEnemyTurn: () => void;
   toggleTurn: () => void;
@@ -44,6 +46,8 @@ export interface GameState {
   ) => { hit: boolean; shipId?: number };
   isCellShot: (x: number, y: number, isPlayerShot: boolean) => boolean;
   isShipDestroyed: (shipId: number, isPlayerShot: boolean) => boolean;
+  checkGameOver: () => void;
+  resetGame: () => void;
 }
 
 export const useGameStore = create<GameState>((set, get) => ({
@@ -54,6 +58,8 @@ export const useGameStore = create<GameState>((set, get) => ({
   enemyShips: [],
   playerShots: [],
   enemyShots: [],
+  isGameOver: false,
+  winner: null,
 
   setPlayerTurn: () => {
     set({
@@ -94,12 +100,14 @@ export const useGameStore = create<GameState>((set, get) => ({
     set((state) => ({
       playerShots: [...state.playerShots, shot],
     }));
+    get().checkGameOver();
   },
 
   addEnemyShot: (shot: Shot) => {
     set((state) => ({
       enemyShots: [...state.enemyShots, shot],
     }));
+    get().checkGameOver();
   },
 
   initializeRandomTurn: () => {
@@ -183,14 +191,48 @@ export const useGameStore = create<GameState>((set, get) => ({
     return hitCells.length === shipCells.length;
   },
 
+  checkGameOver: () => {
+    const { playerShips, enemyShips } = get();
+    
+    const areAllPlayerShipsDestroyed = playerShips.every((_, shipId) => 
+      get().isShipDestroyed(shipId, false)
+    );
+    
+    const areAllEnemyShipsDestroyed = enemyShips.every((_, shipId) => 
+      get().isShipDestroyed(shipId, true)
+    );
+    
+    if (areAllPlayerShipsDestroyed || areAllEnemyShipsDestroyed) {
+      const winner = areAllPlayerShipsDestroyed ? "enemy" : "player";
+      set({
+        isGameOver: true,
+        winner,
+      });
+    }
+  },
+
+  resetGame: () => {
+    set({
+      currentTurn: "PLAYER_TURN",
+      isPlayerTurn: true,
+      isEnemyTurn: false,
+      playerShips: [],
+      enemyShips: [],
+      playerShots: [],
+      enemyShots: [],
+      isGameOver: false,
+      winner: null,
+    });
+  },
+
   initializeGame: () => {
     if (get().playerShips.length === 0) {
-      const playerShips = getRandomShips();
+      const playerShips = getFewShips();
       set({ playerShips });
     }
 
     if (get().enemyShips.length === 0) {
-      const enemyShips = getRandomShips();
+      const enemyShips = getFewShips();
       set({ enemyShips });
     }
 

@@ -2,6 +2,7 @@ import { useEffect } from "react";
 
 import GameGrid from "@/components/GameGrid";
 import { DebugPanel } from "@/components/DebugPanel";
+import { GameOverModal } from "@/components/GameOverModal";
 import EnvironmentBox from "@/env";
 import { useGameStore } from "@/stores/gameStore";
 import UIBox from "@/ui";
@@ -28,6 +29,9 @@ const App = () => {
 
       {/* Centralized Debug Panel - Press P to toggle */}
       <DebugPanel />
+      
+      {/* Game Over Modal */}
+      <GameOverModal />
     </>
   );
 };
