@@ -14,6 +14,9 @@ export default {
     ],
   },
   extensionsToTreatAsEsm: [".ts"],
+  moduleNameMapper: {
+    "^@/(.*)$": "<rootDir>/src/$1",
+  },
   collectCoverageFrom: [
     "src/game/logic/**/*.ts",
     "src/components/**/*.ts",
