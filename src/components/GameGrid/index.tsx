@@ -28,7 +28,7 @@ const GameGrid = ({
   
   const gridWidth = calculateTotalGridWidth();
   const gridHeight = calculateTotalGridHeight();
-  const planeSize = Math.max(gridWidth, gridHeight, 5); // Mínimo 5 para mantener compatibilidad
+  const planeSize = Math.max(gridWidth, gridHeight, 5);
 
   return (
     <mesh rotation={rotation} position={position}>

@@ -14,7 +14,7 @@ const ShipsPlane = ({ isPlayerBoard = true }: ShipsPlaneProps) => {
   const ships = useMemo(() => {
     const currentShips = isPlayerBoard ? playerShips : enemyShips;
 
-    if (currentShips.length === 0) {
+    if (!currentShips || currentShips.length === 0) {
       initializeGame();
       return [];
     }

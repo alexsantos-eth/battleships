@@ -51,7 +51,6 @@ export const DebugInfo = () => {
     </div>
   );
 
-  // Don't render if debug info is disabled
   if (!DEBUG_CONFIG.ENABLE_DEBUG_INFO) {
     return null;
   }

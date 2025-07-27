@@ -46,8 +46,8 @@ describe('Ship Utils', () => {
     it('should have correct extraOffset values', () => {
       expect(SHIP_VARIANTS.small.extraOffset).toBe(0);
       expect(SHIP_VARIANTS.medium.extraOffset).toBe(0);
-      expect(SHIP_VARIANTS.large.extraOffset).toBe(-0.1);
-      expect(SHIP_VARIANTS.xlarge.extraOffset).toBe(-0.1);
+      expect(SHIP_VARIANTS.large.extraOffset).toBe(0);
+      expect(SHIP_VARIANTS.xlarge.extraOffset).toBe(0);
     });
 
     it('should have valid wave frequency values', () => {
@@ -69,6 +69,52 @@ describe('Ship Utils', () => {
       expect(SHIP_VARIANTS.medium).toHaveProperty('color');
       expect(SHIP_VARIANTS.large).toHaveProperty('color');
       expect(SHIP_VARIANTS.xlarge).toHaveProperty('color');
+    });
+
+    it('should have groupOffset properties for each variant', () => {
+      expect(SHIP_VARIANTS.small).toHaveProperty('groupOffset');
+      expect(SHIP_VARIANTS.medium).toHaveProperty('groupOffset');
+      expect(SHIP_VARIANTS.large).toHaveProperty('groupOffset');
+      expect(SHIP_VARIANTS.xlarge).toHaveProperty('groupOffset');
+    });
+
+    it('should have valid groupOffset structure for each variant', () => {
+      Object.values(SHIP_VARIANTS).forEach(variant => {
+        expect(variant.groupOffset).toHaveProperty('x');
+        expect(variant.groupOffset).toHaveProperty('y');
+        expect(variant.groupOffset).toHaveProperty('z');
+        expect(typeof variant.groupOffset.x).toBe('number');
+        expect(typeof variant.groupOffset.y).toBe('number');
+        expect(typeof variant.groupOffset.z).toBe('number');
+      });
+    });
+
+    it('should have shipOffset properties for each variant', () => {
+      expect(SHIP_VARIANTS.small).toHaveProperty('shipOffset');
+      expect(SHIP_VARIANTS.medium).toHaveProperty('shipOffset');
+      expect(SHIP_VARIANTS.large).toHaveProperty('shipOffset');
+      expect(SHIP_VARIANTS.xlarge).toHaveProperty('shipOffset');
+    });
+
+    it('should have valid shipOffset structure for each variant', () => {
+      Object.values(SHIP_VARIANTS).forEach(variant => {
+        expect(variant.shipOffset).toHaveProperty('horizontal');
+        expect(variant.shipOffset).toHaveProperty('vertical');
+        
+        expect(variant.shipOffset.horizontal).toHaveProperty('x');
+        expect(variant.shipOffset.horizontal).toHaveProperty('y');
+        expect(variant.shipOffset.horizontal).toHaveProperty('z');
+        expect(typeof variant.shipOffset.horizontal.x).toBe('number');
+        expect(typeof variant.shipOffset.horizontal.y).toBe('number');
+        expect(typeof variant.shipOffset.horizontal.z).toBe('number');
+        
+        expect(variant.shipOffset.vertical).toHaveProperty('x');
+        expect(variant.shipOffset.vertical).toHaveProperty('y');
+        expect(variant.shipOffset.vertical).toHaveProperty('z');
+        expect(typeof variant.shipOffset.vertical.x).toBe('number');
+        expect(typeof variant.shipOffset.vertical.y).toBe('number');
+        expect(typeof variant.shipOffset.vertical.z).toBe('number');
+      });
     });
 
     it('should have consistent scale structure', () => {

@@ -38,22 +38,19 @@ export const PerformanceDashboard = ({
   );
 
   useEffect(() => {
-    if (!enabled) return;
-
     const updateMetrics = () => {
       const currentMetrics = getPerformanceMetrics();
       setMetrics(currentMetrics);
     };
 
-    const interval = setInterval(updateMetrics, 1000); // Update every second
-
+    const interval = setInterval(updateMetrics, 1000);
     return () => clearInterval(interval);
-  }, [enabled, getPerformanceMetrics]);
+  }, [getPerformanceMetrics]);
 
-  const getPerformanceColor = (fps: number) => {
-    if (fps >= 55) return '#4CAF50'; // Green
-    if (fps >= 45) return '#FF9800'; // Orange
-    return '#F44336'; // Red
+  const getFpsColor = (fps: number) => {
+    if (fps >= 55) return '#4CAF50';
+    if (fps >= 45) return '#FF9800';
+    return '#F44336';
   };
 
   const getMemoryUsage = () => {
@@ -88,13 +85,13 @@ export const PerformanceDashboard = ({
           fontSize: '12px',
           cursor: 'pointer',
           minWidth: '150px',
-          border: `2px solid ${getPerformanceColor(metrics.fps)}`
+          border: `2px solid ${getFpsColor(metrics.fps)}`
         }}
         onClick={() => setIsExpanded(!isExpanded)}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <span>FPS: {metrics.fps}</span>
-          <span style={{ color: getPerformanceColor(metrics.fps) }}>
+          <span style={{ color: getFpsColor(metrics.fps) }}>
             {metrics.isLowPerformance ? '⚠️' : '✅'}
           </span>
         </div>

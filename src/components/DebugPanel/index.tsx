@@ -19,8 +19,10 @@ export const DebugPanel = () => {
       }
     };
 
-    document.addEventListener('keydown', handleKeyPress);
-    return () => document.removeEventListener('keydown', handleKeyPress);
+    if (typeof document !== 'undefined') {
+      document.addEventListener('keydown', handleKeyPress);
+      return () => document.removeEventListener('keydown', handleKeyPress);
+    }
   }, []);
 
   if (!DEBUG_CONFIG.ENABLE_DEBUG_PANEL || isManuallyClosed || !isVisible) {
@@ -95,7 +97,7 @@ export const DebugPanel = () => {
               renderer={null}
               enabled={DEBUG_CONFIG.ENABLE_PERFORMANCE_MONITOR}
               showAdvanced={DEBUG_CONFIG.SHOW_ADVANCED_METRICS}
-              onPerformanceWarning={(message: string) => console.warn(message)}
+              onPerformanceWarning={() => {}}
             />
           </div>
         )}

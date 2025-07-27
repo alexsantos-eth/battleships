@@ -29,7 +29,7 @@ export const usePerformanceMonitor = (
 ) => {
   const {
     enabled = DEBUG_CONFIG.ENABLE_PERFORMANCE_MONITOR,
-    position = DEBUG_CONFIG.PERFORMANCE_MONITOR_POSITION,
+    position = "top-right",
     showMemory = true,
     showRenderTime = true,
     targetFPS = DEBUG_CONFIG.TARGET_FPS,
@@ -51,7 +51,6 @@ export const usePerformanceMonitor = (
     const stats = new Stats();
     statsRef.current = stats;
 
-    // Position the stats panel
     const container = containerRef.current;
     container.appendChild(stats.dom);
 
@@ -89,12 +88,9 @@ export const usePerformanceMonitor = (
   const getPerformanceMetrics = useCallback((): PerformanceMetrics => {
     if (!statsRef.current) return metricsRef.current;
 
-    // For now, return basic metrics without parsing DOM
-    // This avoids issues with DOM access and textContent parsing
-    const fps = 60; // Default value, can be enhanced later
-    const renderTime = 16; // Default ~60fps
+    const fps = 60;
+    const renderTime = 16;
 
-    // Get Three.js memory info if renderer is available
     let memory = { geometries: 0, textures: 0, triangles: 0 };
     if (renderer) {
       const info = renderer.info;
@@ -105,7 +101,7 @@ export const usePerformanceMonitor = (
       };
     }
 
-    const isLowPerformance = fps < targetFPS * 0.8; // Warning if FPS drops below 80% of target
+    const isLowPerformance = fps < targetFPS * 0.8;
 
     const metrics: PerformanceMetrics = {
       fps,
@@ -116,7 +112,6 @@ export const usePerformanceMonitor = (
 
     metricsRef.current = metrics;
 
-    // Trigger performance warning if needed
     if (isLowPerformance && onPerformanceWarning) {
       onPerformanceWarning(
         `Low performance detected: ${fps} FPS (target: ${targetFPS})`

@@ -17,8 +17,6 @@ export class DeterministicRandom {
   }
 
   next(): number {
-    // Implementación del algoritmo Linear Congruential Generator (LCG)
-    // Usando parámetros de glibc para buena distribución
     this.currentValue = (this.currentValue * 1103515245 + 12345) & 0x7fffffff;
     return this.currentValue / 0x7fffffff;
   }
@@ -49,7 +47,6 @@ export class DeterministicRandom {
   }
 }
 
-// Instancia global para mantener consistencia
 let globalRandom: DeterministicRandom = new DeterministicRandom();
 
 export const getGlobalRandom = (): DeterministicRandom => {

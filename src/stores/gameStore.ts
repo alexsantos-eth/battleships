@@ -2,6 +2,7 @@ import { create } from "zustand";
 
 import { eventBus, EVENTS } from "@/utils/eventBus";
 import { GameInitializer } from "@/game/logic/gameInitializer";
+import { GAME_CONSTANTS } from "@/utils/constants";
 
 export type GameTurn = "PLAYER_TURN" | "ENEMY_TURN";
 
@@ -63,8 +64,8 @@ export const useGameStore = create<GameState>((set, get) => ({
   enemyShots: [],
   isGameOver: false,
   winner: null,
-  boardWidth: 10,
-  boardHeight: 10,
+  boardWidth: GAME_CONSTANTS.BOARD.DEFAULT_WIDTH,
+  boardHeight: GAME_CONSTANTS.BOARD.DEFAULT_HEIGHT,
 
   setPlayerTurn: () => {
     set({
@@ -120,7 +121,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   initializeRandomTurn: () => {
-    const randomTurn = Math.random() < 0.5 ? "PLAYER_TURN" : "ENEMY_TURN";
+    const randomTurn = Math.random() < GAME_CONSTANTS.GAME_LOGIC.BATTLE.RANDOM_TURN_THRESHOLD ? "PLAYER_TURN" : "ENEMY_TURN";
 
     set({
       currentTurn: randomTurn,
@@ -134,14 +135,7 @@ export const useGameStore = create<GameState>((set, get) => ({
 
     for (let i = 0; i < ships.length; i++) {
       const ship = ships[i];
-      const shipSize =
-        ship.variant === "small"
-          ? 2
-          : ship.variant === "medium"
-          ? 3
-          : ship.variant === "large"
-          ? 4
-          : 5;
+      const shipSize = GAME_CONSTANTS.SHIPS.SIZES[ship.variant];
 
       const shipCells: [number, number][] = [];
       if (ship.orientation === "horizontal") {
@@ -176,14 +170,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     if (shipId >= ships.length) return false;
 
     const ship = ships[shipId];
-    const shipSize =
-      ship.variant === "small"
-        ? 2
-        : ship.variant === "medium"
-        ? 3
-        : ship.variant === "large"
-        ? 4
-        : 5;
+    const shipSize = GAME_CONSTANTS.SHIPS.SIZES[ship.variant];
 
     const shipCells: [number, number][] = [];
     if (ship.orientation === "horizontal") {
@@ -231,8 +218,8 @@ export const useGameStore = create<GameState>((set, get) => ({
       enemyShots: [],
       isGameOver: false,
       winner: null,
-      boardWidth: 10,
-      boardHeight: 10,
+      boardWidth: GAME_CONSTANTS.BOARD.DEFAULT_WIDTH,
+      boardHeight: GAME_CONSTANTS.BOARD.DEFAULT_HEIGHT,
     });
   },
 

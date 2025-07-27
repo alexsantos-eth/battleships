@@ -4,6 +4,7 @@ import { Group } from "three";
 import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 
+import { useGameStore } from "@/stores/gameStore";
 import { SHIP_VARIANTS, type ShipProps } from "./utils";
 import {
   calculateShipPosition,
@@ -12,6 +13,8 @@ import {
   calculateWaveAnimation,
   calculateOrientationOffset,
   calculateModelOffset,
+  calculateGroupOffset,
+  calculateShipModelOffset,
 } from "./calculations";
 
 const Ship: React.FC<ShipProps> = ({
@@ -19,13 +22,13 @@ const Ship: React.FC<ShipProps> = ({
   variant,
   orientation = "horizontal",
 }) => {
+  const { boardWidth, boardHeight } = useGameStore();
   const shipConfig = SHIP_VARIANTS[variant];
   const { scene } = useGLTF(shipConfig.url);
   const clonedScene = useMemo(() => {
     try {
       return scene.clone();
-    } catch (error) {
-      console.error(`Error cloning scene for ${variant}:`, error);
+    } catch {
       return scene;
     }
   }, [scene, variant]);
@@ -34,6 +37,8 @@ const Ship: React.FC<ShipProps> = ({
 
   const position = calculateShipPosition(
     coords,
+    boardWidth,
+    boardHeight,
     orientation,
     shipConfig.size,
     shipConfig.extraOffset
@@ -47,6 +52,17 @@ const Ship: React.FC<ShipProps> = ({
   );
 
   const modelOffset = calculateModelOffset();
+
+  const groupOffset = calculateGroupOffset(
+    shipConfig.groupOffset, 
+    orientation, 
+    shipConfig.extraOffset
+  );
+
+  const shipModelOffset = calculateShipModelOffset(
+    shipConfig.shipOffset,
+    orientation
+  );
 
   const planeSize = useMemo(() => {
     const size = calculateShipPlaneSize(shipConfig.size, orientation);
@@ -63,13 +79,13 @@ const Ship: React.FC<ShipProps> = ({
         coords
       );
 
-      groupRef.current.position.y = waveAnimation.y;
-      groupRef.current.position.z = waveAnimation.z;
+      groupRef.current.position.y = waveAnimation.y + groupOffset.y;
+      groupRef.current.position.z = waveAnimation.z + groupOffset.z;
     }
   });
 
   return (
-    <group position={[position.x, position.y, position.z]}>
+    <group position={[position.x, position.y, position.z + groupOffset.z]}>
       <mesh rotation={[0, 0, 0]} position={[0, 0, 0.03]}>
         <planeGeometry args={planeSize} />
         <meshStandardMaterial
@@ -84,9 +100,9 @@ const Ship: React.FC<ShipProps> = ({
         <primitive
           object={clonedScene}
           position={[
-            orientationOffset.x + modelOffset.x, 
-            orientationOffset.y + modelOffset.y, 
-            0
+            orientationOffset.x + modelOffset.x + shipModelOffset.x,
+            orientationOffset.y + modelOffset.y + shipModelOffset.y,
+            shipModelOffset.z,
           ]}
           scale={shipConfig.scale}
           rotation={[rotation.x, rotation.y, rotation.z]}

@@ -1,6 +1,7 @@
 import { useGameStore } from '@/stores/gameStore';
+import { GAME_CONSTANTS } from '@/utils/constants';
 
-export const GRID_SPACING = 0.5;
+export const GRID_SPACING = GAME_CONSTANTS.BOARD.GRID_SPACING;
 
 export const useGridDimensions = () => {
   const { boardWidth, boardHeight } = useGameStore();

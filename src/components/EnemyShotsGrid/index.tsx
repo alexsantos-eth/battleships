@@ -50,7 +50,7 @@ const EnemyShotsGrid: React.FC = () => {
         <Cell
           key={`${x}-${y}`}
           position={[posX, posY, 0]}
-          onClick={() => {}} // No click handler for enemy shots
+          onClick={() => {}}
           isShot={isShot}
           isHit={isHit}
         />

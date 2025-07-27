@@ -1,6 +1,6 @@
-import { useGameStore } from "@/stores/gameStore";
+import { GAME_CONSTANTS } from '@/utils/constants';
 
-export const SHIP_SPACING = 0.5;
+export const SHIP_SPACING = GAME_CONSTANTS.BOARD.SHIP_SPACING;
 
 export interface ShipPosition {
   x: number;
@@ -8,10 +8,18 @@ export interface ShipPosition {
   z: number;
 }
 
-export interface ShipRotation {
-  x: number;
-  y: number;
-  z: number;
+export interface ShipAnimation {
+  position: ShipPosition;
+  rotation: {
+    x: number;
+    y: number;
+    z: number;
+  };
+  scale: {
+    x: number;
+    y: number;
+    z: number;
+  };
 }
 
 export interface ShipPlaneSize {
@@ -26,59 +34,33 @@ export interface WaveAnimation {
 
 export const calculateShipPosition = (
   coords: [number, number],
+  boardWidth: number,
+  boardHeight: number,
   orientation: "horizontal" | "vertical",
   shipSize: number,
   extraOffset: number = 0
 ): ShipPosition => {
-  const { boardWidth, boardHeight } = useGameStore.getState();
   const gridSize = Math.max(boardWidth, boardHeight);
   
-  // Usar la lógica original que funcionaba
-  const posX =
-    coords[0] * SHIP_SPACING -
-    (SHIP_SPACING * gridSize) / 2 +
-    (orientation === "vertical"
-      ? SHIP_SPACING / 2
-      : (SHIP_SPACING * shipSize) / 2);
-
-  const posY =
-    coords[1] * SHIP_SPACING -
-    (SHIP_SPACING * gridSize) / 2 +
-    (orientation === "vertical"
-      ? (SHIP_SPACING * shipSize) / 2
-      : SHIP_SPACING / 2);
-
-  // Ajustes específicos por tamaño de barco para el grupo completo
-  let groupOffsetX = 0;
-  let groupOffsetY = 0;
-
-  if (shipSize === 2) {
-    groupOffsetX = 0;
-    groupOffsetY = 0;
-  } else if (shipSize === 3) {
-    groupOffsetX = 0;
-    groupOffsetY = 0;
-  } else if (shipSize === 4) {
-    groupOffsetX = orientation === "horizontal" ? -0.1 : 0;
-    groupOffsetY = orientation === "horizontal" ? 0 : -0.1;
-  } else if (shipSize === 5) {
-    groupOffsetX = orientation === "horizontal" ? -0.1 : 0;
-    groupOffsetY = orientation === "horizontal" ? 0 : -0.1;
-  }
+  const posX = coords[0] * SHIP_SPACING - (SHIP_SPACING * gridSize) / 2 + 
+    (orientation === "vertical" ? SHIP_SPACING / 2 : (SHIP_SPACING * shipSize) / 2);
+  
+  const posY = coords[1] * SHIP_SPACING - (SHIP_SPACING * gridSize) / 2 + 
+    (orientation === "vertical" ? (SHIP_SPACING * shipSize) / 2 : SHIP_SPACING / 2);
 
   const orientationOffsetY = orientation === "vertical" ? extraOffset : 0;
   const orientationOffsetX = orientation === "vertical" ? 0 : extraOffset;
 
   return {
-    x: posX + orientationOffsetX - groupOffsetX,
-    y: posY + orientationOffsetY - groupOffsetY,
+    x: posX + orientationOffsetX,
+    y: posY + orientationOffsetY,
     z: 0.18,
   };
 };
 
 export const calculateShipRotation = (
   orientation: "horizontal" | "vertical"
-): ShipRotation => {
+): { x: number; y: number; z: number } => {
   if (orientation === "vertical") {
     return {
       x: -Math.PI / 2,
@@ -92,6 +74,19 @@ export const calculateShipRotation = (
       z: -Math.PI,
     };
   }
+};
+
+export const calculateShipScale = (
+  variant: "small" | "medium" | "large" | "xlarge"
+): { x: number; y: number; z: number } => {
+  const baseScale = 0.2;
+  const zScale = variant === "large" ? 0.23 : variant === "xlarge" ? 0.3 : baseScale;
+
+  return {
+    x: baseScale,
+    y: baseScale,
+    z: zScale,
+  };
 };
 
 export const calculateShipPlaneSize = (
@@ -113,25 +108,16 @@ export const calculateShipPlaneSize = (
   }
 };
 
-// Función para calcular el offset del modelo 3D (ahora sin offset)
-export const calculateModelOffset = (): { x: number; y: number } => {
-  // Sin offset adicional, el grupo ya está ajustado
-  return {
-    x: 0,
-    y: 0,
-  };
-};
-
 export const calculateWaveAnimation = (
   time: number,
   frequency: number,
   amplitude: number,
   coords: [number, number]
 ): WaveAnimation => {
-  const phase = (coords[0] + coords[1]) * 0.5;
+  const phase = (coords[0] + coords[1]) * GAME_CONSTANTS.ANIMATIONS.WAVE.phaseMultiplier;
 
   const waveY = Math.sin(time * frequency + phase) * amplitude;
-  const waveZ = Math.cos(time * frequency * 0.7 + phase) * (amplitude * 0.5);
+  const waveZ = Math.cos(time * frequency * GAME_CONSTANTS.ANIMATIONS.WAVE.frequencyMultiplier + phase) * (amplitude * GAME_CONSTANTS.ANIMATIONS.WAVE.amplitudeMultiplier);
 
   return {
     y: waveY,
@@ -150,4 +136,88 @@ export const calculateOrientationOffset = (
     x: orientationOffsetX,
     y: orientationOffsetY,
   };
+};
+
+export const calculateShipAnimation = (
+  coords: [number, number],
+  boardWidth: number,
+  boardHeight: number,
+  orientation: "horizontal" | "vertical",
+  variant: "small" | "medium" | "large" | "xlarge",
+  extraOffset: number = 0,
+  time: number = 0
+): ShipAnimation => {
+  const shipSize = GAME_CONSTANTS.SHIPS.SIZES[variant];
+  const position = calculateShipPosition(coords, boardWidth, boardHeight, orientation, shipSize, extraOffset);
+  const rotation = calculateShipRotation(orientation);
+  const scale = calculateShipScale(variant);
+
+  const phase = (coords[0] + coords[1]) * GAME_CONSTANTS.ANIMATIONS.WAVE.phaseMultiplier;
+  const frequency = variant === "small" ? 3.5 : variant === "medium" ? 3.0 : variant === "large" ? 2.5 : 2.0;
+  const amplitude = variant === "small" ? 0.02 : variant === "medium" ? 0.025 : variant === "large" ? 0.03 : 0.035;
+
+  const waveZ = Math.cos(time * frequency * GAME_CONSTANTS.ANIMATIONS.WAVE.frequencyMultiplier + phase) * (amplitude * GAME_CONSTANTS.ANIMATIONS.WAVE.amplitudeMultiplier);
+
+  return {
+    position: { ...position, z: position.z + waveZ },
+    rotation,
+    scale,
+  };
+};
+
+export const calculateShipCells = (
+  x: number,
+  y: number,
+  size: number,
+  orientation: "horizontal" | "vertical"
+): [number, number][] => {
+  const cells: [number, number][] = [];
+
+  for (let i = 0; i < size; i++) {
+    const cellX = orientation === "horizontal" ? x + i : x;
+    const cellY = orientation === "vertical" ? y + i : y;
+    cells.push([cellX, cellY]);
+  }
+
+  return cells;
+};
+
+export const calculateModelOffset = (): { x: number; y: number } => {
+  return { x: 0, y: 0 };
+};
+
+export const calculateGroupOffset = (
+  groupOffset: { x: number; y: number; z: number },
+  orientation: "horizontal" | "vertical",
+  extraOffset: number = 0
+): { x: number; y: number; z: number } => {
+  const baseOffset = {
+    x: groupOffset.x,
+    y: groupOffset.y,
+    z: groupOffset.z,
+  };
+
+  if (orientation === "vertical") {
+    return {
+      x: baseOffset.y + extraOffset,
+      y: baseOffset.x,
+      z: baseOffset.z,
+    };
+  } else {
+    return {
+      x: baseOffset.x + extraOffset,
+      y: baseOffset.y,
+      z: baseOffset.z,
+    };
+  }
+};
+
+export const calculateShipModelOffset = (
+  shipOffset: {
+    horizontal: { x: number; y: number; z: number };
+    vertical: { x: number; y: number; z: number };
+  },
+  orientation: "horizontal" | "vertical"
+): { x: number; y: number; z: number } => {
+  return shipOffset[orientation];
 };

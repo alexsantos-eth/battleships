@@ -1,3 +1,20 @@
+import { GAME_CONSTANTS } from '@/utils/constants';
+
+export interface ExplosionPosition {
+  x: number;
+  y: number;
+  z: number;
+}
+
+export interface ExplosionAnimation {
+  from: ExplosionPosition;
+  to: ExplosionPosition;
+  opacity: {
+    from: number;
+    to: number;
+  };
+}
+
 export interface DropletDirection {
   id: number;
   dir: [number, number];
@@ -8,7 +25,7 @@ export interface ExplosionPattern {
   drops: DropletDirection[];
 }
 
-export const DROPLET_COUNT = 10;
+export const DROPLET_COUNT = GAME_CONSTANTS.ANIMATIONS.DROPLET.count;
 
 export const generateRandomAngle = (): number => {
   return Math.random() * Math.PI * 2;

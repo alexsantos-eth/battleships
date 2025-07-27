@@ -1,7 +1,7 @@
-import { BattleshipGame } from './battleship.js';
-import { ShipGenerator } from './shipGenerator.js';
-import { DeterministicRandom } from './deterministicRandom.js';
-import type { Position, ShipVariant, ShipOrientation, GameTurn, Ship } from './battleship.js';
+import { BattleshipGame } from './battleship';
+import { ShipGenerator } from './shipGenerator';
+import { DeterministicRandom } from './deterministicRandom';
+import type { Position, ShipVariant, ShipOrientation, GameTurn, Ship } from './battleship';
 
 export interface BattleConfig {
   seed: number;
@@ -74,10 +74,8 @@ export class BattleSimulator {
   }
 
   private initializeGame(): void {
-    // Configurar el generador de barcos con el random determinista
     this.setupShipGenerator();
     
-    // Colocar barcos del jugador
     if (this.config.playerShips) {
       this.config.playerShips.forEach(ship => {
         this.game.addShip('player', ship);
@@ -86,7 +84,6 @@ export class BattleSimulator {
       this.placeRandomShips('player');
     }
 
-    // Colocar barcos del enemigo
     if (this.config.enemyShips) {
       this.config.enemyShips.forEach(ship => {
         this.game.addShip('enemy', ship);
@@ -95,20 +92,13 @@ export class BattleSimulator {
       this.placeRandomShips('enemy');
     }
 
-    // Establecer turno inicial aleatorio
     this.setRandomTurn();
   }
 
   private setupShipGenerator(): void {
-    // Sobrescribir Math.random temporalmente para el generador de barcos
     const originalRandom = Math.random;
     Math.random = () => this.random.next();
-    
-    try {
-      // El ShipGenerator usará nuestro random determinista
-    } finally {
-      Math.random = originalRandom;
-    }
+    Math.random = originalRandom;
   }
 
   private placeRandomShips(board: 'player' | 'enemy'): void {
@@ -194,7 +184,6 @@ export class BattleSimulator {
         break;
       }
 
-      // Elegir posición aleatoria determinista
       const randomIndex = this.random.nextInt(0, availablePositions.length - 1);
       const position = availablePositions[randomIndex];
       
@@ -215,9 +204,9 @@ export class BattleSimulator {
         this.game.toggleTurn();
         turnCount++;
       } catch {
-        // Si ya se disparó a esta posición, continuar con la siguiente
-        console.warn(`Position already shot: ${position.x}, ${position.y}`);
-        continue;
+        if (this.game.isPositionShot('enemy', position)) {
+          continue;
+        }
       }
     }
 
@@ -226,14 +215,16 @@ export class BattleSimulator {
 
   private getAvailablePositions(): Position[] {
     const positions: Position[] = [];
-    const board = this.game.isPlayerTurn() ? 'player' : 'enemy';
+    const maxAttempts = 100;
     
-    for (let x = 0; x < this.config.boardWidth; x++) {
-      for (let y = 0; y < this.config.boardHeight; y++) {
-        const position = { x, y };
-        if (!this.game.isPositionShot(board, position)) {
-          positions.push(position);
-        }
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+      const position = {
+        x: Math.floor(Math.random() * this.config.boardWidth),
+        y: Math.floor(Math.random() * this.config.boardHeight),
+      };
+      
+      if (!this.game.isPositionShot('enemy', position)) {
+        positions.push(position);
       }
     }
     

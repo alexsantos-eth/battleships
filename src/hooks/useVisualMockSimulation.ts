@@ -4,7 +4,6 @@ import { runMockSimulation } from '@/game/logic/examples/mockBattleSimulation';
 import type { MockBattleResult } from '@/game/logic/examples/mockBattleSimulation';
 import { CoordinateUtils } from "@/utils/coordinates";
 
-
 export const useVisualMockSimulation = () => {
   const [isSimulating, setIsSimulating] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
@@ -33,7 +32,6 @@ export const useVisualMockSimulation = () => {
     return new Promise<void>((resolve) => {
       setTimeout(() => {
         const isPlayerShot = shot.turn === 'PLAYER_TURN';
-        // Usar coordenadas lógicas directamente
         const logicalPos = { x: shot.position.x, y: shot.position.y };
         const { hit, shipId } = useGameStore.getState().checkShot(
           logicalPos.x,
@@ -62,7 +60,6 @@ export const useVisualMockSimulation = () => {
     return new Promise<void>((resolve) => {
       setTimeout(() => {
         const isPlayerShot = shot.turn === 'PLAYER_TURN';
-        // Usar coordenadas lógicas directamente
         const logicalPos = { x: shot.position.x, y: shot.position.y };
         const { hit, shipId } = useGameStore.getState().checkShot(
           logicalPos.x,
@@ -93,12 +90,10 @@ export const useVisualMockSimulation = () => {
     setCurrentStep(0);
     
     try {
-      // Crear barcos basados en lo que veo en la imagen
       const playerShips = [
         { coords: [0, 0] as [number, number], variant: 'small' as const, orientation: 'horizontal' as const },
       ];
       
-      // El barco enemigo aparece vertical en [0,0] y [0,1] visualmente
       const enemyShips = [
         { coords: [0, 0] as [number, number], variant: 'small' as const, orientation: 'vertical' as const },
       ];
@@ -106,7 +101,6 @@ export const useVisualMockSimulation = () => {
       console.log('🚢 Barcos del jugador:', playerShips);
       console.log('🚢 Barcos del enemigo:', enemyShips);
       
-      // Debug: mostrar las celdas de cada barco
       console.log('🔍 Debug - Celdas de los barcos:');
       enemyShips.forEach((ship, index) => {
         const shipSize = ship.variant === 'small' ? 2 : ship.variant === 'medium' ? 3 : ship.variant === 'large' ? 4 : 5;
@@ -118,19 +112,14 @@ export const useVisualMockSimulation = () => {
       setEnemyShips(enemyShips);
       initializeGame();
 
-      // Crear disparos basados en lo que veo en la imagen
       const shots = [];
       
       if (winner === 'player') {
-        // Disparos del jugador para destruir barcos enemigos
-        // Basado en la imagen, el barco está en [0,0] y [0,1] verticalmente
-        // Los disparos exitosos aparecen exactamente en esas posiciones
         shots.push(
           { turn: 'PLAYER_TURN' as const, position: { x: 0, y: 0 }, hit: true, shipDestroyed: false },
           { turn: 'PLAYER_TURN' as const, position: { x: 0, y: 1 }, hit: true, shipDestroyed: true },
         );
       } else {
-        // Disparos del enemigo para destruir barcos del jugador
         shots.push(
           { turn: 'ENEMY_TURN' as const, position: { x: 0, y: 0 }, hit: true, shipDestroyed: false },
           { turn: 'ENEMY_TURN' as const, position: { x: 1, y: 0 }, hit: true, shipDestroyed: true },
@@ -139,12 +128,10 @@ export const useVisualMockSimulation = () => {
 
       console.log('🎯 Disparos configurados:', shots);
 
-      // Simular cada disparo con delay visual
       for (let i = 0; i < shots.length; i++) {
         const shot = shots[i];
         setCurrentStep(i + 1);
         
-        // Delay más largo para hits para que se vea la explosión
         const shotDelay = shot.hit ? 1000 : 600;
         await simulateQuickShot(shot, shotDelay);
       }
@@ -167,22 +154,18 @@ export const useVisualMockSimulation = () => {
       const result = runMockSimulation(type);
       setSimulationResult(result);
 
-      // Configurar los barcos en el juego
       const playerShips = convertMockShipsToGameShips(result.shipPlacements.player);
       const enemyShips = convertMockShipsToGameShips(result.shipPlacements.enemy);
       
       setPlayerShips(playerShips);
       setEnemyShips(enemyShips);
       
-      // Inicializar el juego
       initializeGame();
 
-      // Simular cada disparo con delay visual
       for (let i = 0; i < result.shotHistory.length; i++) {
         const shot = result.shotHistory[i];
         setCurrentStep(i + 1);
         
-        // Delay más largo para hits para que se vea la explosión
         const shotDelay = shot.hit ? 1200 : 800;
         await simulateShot(shot, shotDelay);
       }

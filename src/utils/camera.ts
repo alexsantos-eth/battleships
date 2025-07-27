@@ -1,30 +1,35 @@
 import type { CanvasProps } from "@react-three/fiber";
+import { GAME_CONSTANTS } from './constants';
 
-export const isMobile = window.innerWidth <= 768;
+export const isMobile = window.innerWidth <= GAME_CONSTANTS.CAMERA.MOBILE_BREAKPOINT;
 
 export const PLAYER_CAMERA_POSITION = {
-  position: [0, isMobile ? -2 : -4, 4], // Ajustado para balancear con la posición enemiga
-  rotation: [isMobile ? 1.05 : 1.1, 0, 0],
+  position: isMobile 
+    ? GAME_CONSTANTS.CAMERA.POSITIONS.PLAYER.mobile.position 
+    : GAME_CONSTANTS.CAMERA.POSITIONS.PLAYER.position,
+  rotation: isMobile 
+    ? GAME_CONSTANTS.CAMERA.POSITIONS.PLAYER.mobile.rotation 
+    : GAME_CONSTANTS.CAMERA.POSITIONS.PLAYER.rotation,
 };
 
 export const ENEMY_CAMERA_POSITION = {
-  position: [0, 9, 4], // Bajado de 7 a 5 para que el tablero no quede tan arriba
-  rotation: [0, 0, 0],
+  position: GAME_CONSTANTS.CAMERA.POSITIONS.ENEMY.position,
+  rotation: GAME_CONSTANTS.CAMERA.POSITIONS.ENEMY.rotation,
 };
 
 export const PLAYER_PERSPECTIVE_POSITION = {
-  position: [0, 0, 6], // Ajustado para mejor vista del tablero
-  rotation: [0, 0, 0],
+  position: GAME_CONSTANTS.CAMERA.POSITIONS.PERSPECTIVE.position,
+  rotation: GAME_CONSTANTS.CAMERA.POSITIONS.PERSPECTIVE.rotation,
 };
 
 export const cameraProps: CanvasProps = {
   orthographic: true,
   camera: {
-    far: 1500,
-    near: 0.5,
+    far: GAME_CONSTANTS.CAMERA.SETTINGS.far,
+    near: GAME_CONSTANTS.CAMERA.SETTINGS.near,
   },
   gl: {
-    precision: "lowp", // Cambiar de lowp a mediump para mejor calidad
+    precision: "lowp",
     powerPreference: "high-performance",
     antialias: false,
     alpha: false,

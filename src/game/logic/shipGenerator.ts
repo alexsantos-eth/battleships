@@ -78,14 +78,12 @@ export class ShipGenerator {
     const shipSize = this.getShipSize(placement.variant);
     const shipCells = this.getShipCells(placement.position, shipSize, placement.orientation);
     
-    // Check if ship is within board boundaries
     for (const cell of shipCells) {
       if (cell.x < 0 || cell.x >= this.boardWidth || cell.y < 0 || cell.y >= this.boardHeight) {
         return false;
       }
     }
     
-    // Check if ship overlaps with existing ships
     for (const existingShip of existingShips) {
       const existingShipSize = this.getShipSize(existingShip.variant);
       const existingShipCells = this.getShipCells(existingShip.position, existingShipSize, existingShip.orientation);

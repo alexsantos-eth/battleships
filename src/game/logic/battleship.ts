@@ -74,14 +74,12 @@ export class BattleshipGame {
     const shipSize = this.getShipSize(ship.variant);
     const shipCells = this.getShipCells(ship.position, shipSize, ship.orientation);
     
-    // Check if ship is within board boundaries
     for (const cell of shipCells) {
       if (cell.x < 0 || cell.x >= board.width || cell.y < 0 || cell.y >= board.height) {
         return false;
       }
     }
     
-    // Check if ship overlaps with existing ships
     for (const existingShip of board.ships) {
       const existingShipSize = this.getShipSize(existingShip.variant);
       const existingShipCells = this.getShipCells(existingShip.position, existingShipSize, existingShip.orientation);
@@ -127,7 +125,6 @@ export class BattleshipGame {
   fireShot(board: "player" | "enemy", position: Position): Shot {
     const targetBoard = board === "player" ? this.enemyBoard : this.playerBoard;
     
-    // Check if position was already shot
     const existingShot = targetBoard.shots.find(shot => 
       shot.position.x === position.x && shot.position.y === position.y
     );
@@ -136,7 +133,6 @@ export class BattleshipGame {
       throw new Error("Position already shot");
     }
     
-    // Check if shot hits a ship
     let hitShip: Ship | undefined;
     for (const ship of targetBoard.ships) {
       const shipSize = this.getShipSize(ship.variant);
@@ -190,7 +186,6 @@ export class BattleshipGame {
   private isAllShipsDestroyed(board: "player" | "enemy"): boolean {
     const targetBoard = board === "player" ? this.playerBoard : this.enemyBoard;
     
-    // Si no hay barcos, no están todos destruidos
     if (targetBoard.ships.length === 0) return false;
     
     return targetBoard.ships.every(ship => this.isShipDestroyed(board, ship.id));

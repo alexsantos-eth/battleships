@@ -1,3 +1,5 @@
+import { GAME_CONSTANTS } from '@/utils/constants';
+
 export interface DropletPosition {
   x: number;
   y: number;
@@ -13,12 +15,12 @@ export interface DropletAnimation {
   };
 }
 
-export const DROPLET_DISTANCE = 0.5;
-export const DROPLET_START_Z = 0.15;
-export const DROPLET_END_Z = 0.5;
-export const DROPLET_START_OPACITY = 1;
-export const DROPLET_END_OPACITY = 0;
-export const DROPLET_ANIMATION_DURATION = 400;
+export const DROPLET_DISTANCE = GAME_CONSTANTS.ANIMATIONS.DROPLET.distance;
+export const DROPLET_START_Z = GAME_CONSTANTS.ANIMATIONS.DROPLET.startZ;
+export const DROPLET_END_Z = GAME_CONSTANTS.ANIMATIONS.DROPLET.endZ;
+export const DROPLET_START_OPACITY = GAME_CONSTANTS.ANIMATIONS.DROPLET.startOpacity;
+export const DROPLET_END_OPACITY = GAME_CONSTANTS.ANIMATIONS.DROPLET.endOpacity;
+export const DROPLET_ANIMATION_DURATION = GAME_CONSTANTS.ANIMATIONS.DROPLET.duration;
 
 export const calculateDropletStartPosition = (
   basePosition: [number, number]

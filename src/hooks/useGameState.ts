@@ -1,57 +1,36 @@
 import { useGameStore } from '@/stores/gameStore';
-
-import type { Ship, ShipVariant } from "@/stores/gameStore";
+import { GAME_CONSTANTS } from '@/utils/constants';
 
 export const useGameState = () => {
-  const {
-    currentTurn,
-    isPlayerTurn,
-    isEnemyTurn,
-    playerShips,
-    enemyShips,
-    boardWidth,
-    boardHeight,
-    setPlayerTurn,
-    setEnemyTurn,
-    toggleTurn,
-    setPlayerShips,
-    setEnemyShips,
-    initializeGame,
-  } = useGameStore();
+  const { playerShips, enemyShips, isEnemyTurn, initializeGame, currentTurn } = useGameStore();
 
-  const getShipAtPosition = (x: number, y: number, isPlayerBoard: boolean): Ship | null => {
+  const getShipAtPosition = (x: number, y: number, isPlayerBoard: boolean = true) => {
     const ships = isPlayerBoard ? playerShips : enemyShips;
     
     for (const ship of ships) {
       const shipCells = getShipCells(ship.coords[0], ship.coords[1], getShipSize(ship.variant), ship.orientation);
-      
       for (const [shipX, shipY] of shipCells) {
         if (shipX === x && shipY === y) {
           return ship;
         }
       }
     }
-    
     return null;
   };
 
-  const getShipSize = (variant: ShipVariant): number => {
+  const getShipSize = (variant: "small" | "medium" | "large" | "xlarge") => {
     const sizeMap = {
-      small: 2,
-      medium: 3,
-      large: 4,
-      xlarge: 5,
+      small: GAME_CONSTANTS.SHIPS.SIZES.small,
+      medium: GAME_CONSTANTS.SHIPS.SIZES.medium,
+      large: GAME_CONSTANTS.SHIPS.SIZES.large,
+      xlarge: GAME_CONSTANTS.SHIPS.SIZES.xlarge,
     };
     return sizeMap[variant];
   };
 
-  const getShipCells = (
-    x: number,
-    y: number,
-    size: number,
-    orientation: "horizontal" | "vertical"
-  ): [number, number][] => {
+  const getShipCells = (x: number, y: number, size: number, orientation: "horizontal" | "vertical") => {
     const cells: [number, number][] = [];
+    
     if (orientation === "horizontal") {
       for (let i = 0; i < size; i++) {
         cells.push([x + i, y]);
@@ -61,25 +40,25 @@ export const useGameState = () => {
         cells.push([x, y + i]);
       }
     }
+    
     return cells;
   };
 
+  const getPlayerShips = () => playerShips;
+  const getEnemyShips = () => enemyShips;
+  const getIsEnemyTurn = () => isEnemyTurn;
+
   return {
     currentTurn,
-    isPlayerTurn,
-    isEnemyTurn,
     playerShips,
     enemyShips,
-    boardWidth,
-    boardHeight,
-    setPlayerTurn,
-    setEnemyTurn,
-    toggleTurn,
-    setPlayerShips,
-    setEnemyShips,
+    isEnemyTurn,
     initializeGame,
     getShipAtPosition,
     getShipSize,
     getShipCells,
+    getPlayerShips,
+    getEnemyShips,
+    getIsEnemyTurn,
   };
 }; 

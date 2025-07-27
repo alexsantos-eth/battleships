@@ -23,12 +23,10 @@ export const PerformanceMonitor = ({
     const stats = new Stats();
     statsRef.current = stats;
 
-    // Position the stats panel
     const container = containerRef.current;
     if (container) {
       container.appendChild(stats.dom);
 
-      // Apply positioning styles
       const statsDom = stats.dom as HTMLElement;
       statsDom.style.position = "absolute";
       statsDom.style.zIndex = "1000";
@@ -53,14 +51,9 @@ export const PerformanceMonitor = ({
       }
     }
 
-    // Animation loop for stats
     const animate = () => {
       stats.begin();
-
-      // Simulate render time measurement
-      // In a real app, this would be your actual render loop
       stats.end();
-
       requestAnimationFrame(animate);
     };
 

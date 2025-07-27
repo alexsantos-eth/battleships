@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { GAME_CONSTANTS } from '@/utils/constants';
 
 interface SystemMetrics {
   memory: {
@@ -13,21 +14,23 @@ interface SystemMetrics {
   timestamp: number;
 }
 
-export const useSystemMetrics = (enabled: boolean = true, updateInterval: number = 2000, showCpu: boolean = false) => {
+export const useSystemMetrics = (
+  enabled: boolean = true, 
+  updateInterval: number = GAME_CONSTANTS.PERFORMANCE.SYSTEM.UPDATE_INTERVAL, 
+  showCpu: boolean = false
+) => {
   const [metrics, setMetrics] = useState<SystemMetrics>({
     memory: { used: 0, total: 0, percentage: 0 },
     cpu: { usage: 0, cores: 0 },
     timestamp: Date.now()
   });
 
-  // Referencia para detectar actividad
   const lastActivityRef = useRef<number>(Date.now());
   const frameCountRef = useRef<number>(0);
 
   useEffect(() => {
     if (!enabled) return;
 
-    // Detectar actividad basada en requestAnimationFrame
     const detectActivity = () => {
       frameCountRef.current++;
       lastActivityRef.current = Date.now();
@@ -41,10 +44,8 @@ export const useSystemMetrics = (enabled: boolean = true, updateInterval: number
       const timeSinceLastActivity = now - lastActivityRef.current;
       const frameRate = frameCountRef.current / (updateInterval / 1000);
       
-      // Reset frame counter
       frameCountRef.current = 0;
       
-      // Simular uso de memoria (basado en performance.memory si está disponible)
       let memoryUsed = 0;
       let memoryTotal = 0;
       
@@ -53,24 +54,19 @@ export const useSystemMetrics = (enabled: boolean = true, updateInterval: number
         memoryUsed = mem.usedJSHeapSize;
         memoryTotal = mem.jsHeapSizeLimit;
       } else {
-        // Fallback: simular valores
-        memoryUsed = Math.random() * 100 * 1024 * 1024; // 0-100MB
-        memoryTotal = 512 * 1024 * 1024; // 512MB
+        memoryUsed = Math.random() * GAME_CONSTANTS.PERFORMANCE.MEMORY.DEFAULT_USED;
+        memoryTotal = GAME_CONSTANTS.PERFORMANCE.MEMORY.DEFAULT_TOTAL;
       }
 
-      // CPU usage basado en actividad real
-      let cpuUsage = 5; // Uso base del navegador
+      let cpuUsage: number = GAME_CONSTANTS.PERFORMANCE.CPU.BASE_USAGE;
       
       if (showCpu) {
-        // Si hay actividad reciente (menos de 1 segundo), aumentar CPU
-        if (timeSinceLastActivity < 1000) {
-          cpuUsage += Math.min(frameRate / 10, 20); // Máximo 25% con actividad
+        if (timeSinceLastActivity < GAME_CONSTANTS.PERFORMANCE.SYSTEM.ACTIVITY_TIMEOUT) {
+          cpuUsage += Math.min(frameRate / GAME_CONSTANTS.PERFORMANCE.SYSTEM.FRAME_RATE_DIVISOR, GAME_CONSTANTS.PERFORMANCE.CPU.ACTIVITY_BONUS);
         }
         
-        // Pequeña variación aleatoria
-        cpuUsage += Math.random() * 2;
+        cpuUsage += Math.random() * GAME_CONSTANTS.PERFORMANCE.CPU.VARIATION;
       } else {
-        // Si no mostrar CPU, usar valor muy bajo
         cpuUsage = 0;
       }
       
@@ -81,17 +77,15 @@ export const useSystemMetrics = (enabled: boolean = true, updateInterval: number
           percentage: (memoryUsed / memoryTotal) * 100
         },
         cpu: {
-          usage: Math.min(cpuUsage, 30), // Máximo 30%
-          cores: navigator.hardwareConcurrency || 4
+          usage: Math.min(cpuUsage, GAME_CONSTANTS.PERFORMANCE.CPU.MAX_USAGE),
+          cores: navigator.hardwareConcurrency || GAME_CONSTANTS.CAMERA.PERFORMANCE.slowDeviceCores
         },
         timestamp: now
       });
     };
 
-    // Actualizar inmediatamente
     updateMetrics();
 
-    // Configurar intervalo
     const interval = setInterval(updateMetrics, updateInterval);
 
     return () => {
@@ -102,22 +96,22 @@ export const useSystemMetrics = (enabled: boolean = true, updateInterval: number
 
   const formatBytes = (bytes: number): string => {
     if (bytes === 0) return '0 B';
-    const k = 1024;
+    const k = GAME_CONSTANTS.PERFORMANCE.SYSTEM.BYTES_BASE;
     const sizes = ['B', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
   };
 
   const getMemoryColor = (percentage: number): string => {
-    if (percentage < 50) return '#4CAF50'; // Verde
-    if (percentage < 80) return '#FF9800'; // Naranja
-    return '#F44336'; // Rojo
+    if (percentage < 50) return GAME_CONSTANTS.UI.COLORS.SUCCESS;
+    if (percentage < 80) return GAME_CONSTANTS.UI.COLORS.WARNING;
+    return GAME_CONSTANTS.UI.COLORS.DANGER;
   };
 
   const getCpuColor = (usage: number): string => {
-    if (usage < 50) return '#4CAF50'; // Verde
-    if (usage < 80) return '#FF9800'; // Naranja
-    return '#F44336'; // Rojo
+    if (usage < 50) return GAME_CONSTANTS.UI.COLORS.SUCCESS;
+    if (usage < 80) return GAME_CONSTANTS.UI.COLORS.WARNING;
+    return GAME_CONSTANTS.UI.COLORS.DANGER;
   };
 
   return {

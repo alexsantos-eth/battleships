@@ -50,7 +50,7 @@ const PlayerShotsGrid: React.FC = () => {
         <Cell
           key={`${x}-${y}`}
           position={[posX, posY, 0]}
-          onClick={() => {}} // No click handler for display only
+          onClick={() => {}}
           isShot={isShot}
           isHit={isHit}
         />
