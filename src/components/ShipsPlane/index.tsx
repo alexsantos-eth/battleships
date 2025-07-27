@@ -6,9 +6,10 @@ import { useGameState } from "@/hooks/useGameState";
 import type { Ship as ShipType } from "@/stores/gameStore";
 interface ShipsPlaneProps {
   isPlayerBoard?: boolean;
+  alwaysShowEnemyShips?: boolean;
 }
 
-const ShipsPlane = ({ isPlayerBoard = true }: ShipsPlaneProps) => {
+const ShipsPlane = ({ isPlayerBoard = true, alwaysShowEnemyShips = false }: ShipsPlaneProps) => {
   const { playerShips, enemyShips, initializeGame, currentTurn } = useGameState();
 
   const ships = useMemo(() => {
@@ -24,10 +25,10 @@ const ShipsPlane = ({ isPlayerBoard = true }: ShipsPlaneProps) => {
 
   const shouldShowShips = useMemo(() => {
     if (!isPlayerBoard) {
-      return currentTurn === "ENEMY_TURN";
+      return currentTurn === "ENEMY_TURN" || alwaysShowEnemyShips;
     }
     return true;
-  }, [isPlayerBoard, currentTurn]);
+  }, [isPlayerBoard, currentTurn, alwaysShowEnemyShips]);
 
   if (!shouldShowShips) {
     return null;

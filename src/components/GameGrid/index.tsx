@@ -15,6 +15,9 @@ interface GameGridProps {
   rotation?: [number, number, number];
   enablePressGrid?: boolean;
   isPlayerBoard?: boolean;
+  showShips?: boolean;
+  showShots?: boolean;
+  alwaysShowEnemyShips?: boolean;
 }
 
 const GameGrid = ({
@@ -22,6 +25,9 @@ const GameGrid = ({
   rotation,
   enablePressGrid,
   isPlayerBoard = true,
+  showShips = true,
+  showShots = true,
+  alwaysShowEnemyShips = false,
 }: GameGridProps) => {
   const { isPlayerTurn } = useGameStore();
   const { calculateTotalGridWidth, calculateTotalGridHeight } = useGridDimensions();
@@ -45,10 +51,10 @@ const GameGrid = ({
         {/* PressGrid para interacción del jugador */}
         {enablePressGrid && isPlayerTurn && !isPlayerBoard && <PressGrid />}
         {/* PlayerShotsGrid para mostrar disparos del jugador */}
-        {!isPlayerBoard && <PlayerShotsGrid />}
+        {showShots && !isPlayerBoard && <PlayerShotsGrid />}
         {/* EnemyShotsGrid para mostrar disparos del enemigo */}
-        {isPlayerBoard && <EnemyShotsGrid />}
-        <ShipsPlane isPlayerBoard={isPlayerBoard} />
+        {showShots && isPlayerBoard && <EnemyShotsGrid />}
+        {showShips && <ShipsPlane isPlayerBoard={isPlayerBoard} alwaysShowEnemyShips={alwaysShowEnemyShips} />}
       </group>
     </mesh>
   );
