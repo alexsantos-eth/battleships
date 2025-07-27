@@ -10,7 +10,7 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID || '1:123456789:web:abcdef123456'
 };
 
-// Add console log to debug Firebase initialization
+
 console.log('Firebase config:', firebaseConfig);
 
 export const app = initializeApp(firebaseConfig);

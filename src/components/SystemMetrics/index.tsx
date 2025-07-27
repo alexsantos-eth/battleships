@@ -95,7 +95,6 @@ export const SystemMetrics = ({
         </span>
       </div>
 
-      {/* CPU Usage */}
       <div style={{ marginBottom: "12px" }}>
         <div
           style={{
@@ -118,7 +117,6 @@ export const SystemMetrics = ({
         />
       </div>
 
-      {/* Memory Usage */}
       <div style={{ marginBottom: "8px" }}>
         <div
           style={{
@@ -141,7 +139,6 @@ export const SystemMetrics = ({
         />
       </div>
 
-      {/* Detailed Info */}
       {showDetails && (
         <div
           style={{
@@ -160,7 +157,6 @@ export const SystemMetrics = ({
         </div>
       )}
 
-      {/* Status Indicators */}
       <div
         style={{
           display: "flex",

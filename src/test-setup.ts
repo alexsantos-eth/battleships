@@ -1,6 +1,5 @@
 import { jest } from '@jest/globals';
 
-// Mock TextEncoder/TextDecoder for jsdom
 if (typeof global.TextEncoder === 'undefined') {
   global.TextEncoder = class TextEncoder {
     encode(input?: string): Uint8Array {
@@ -17,7 +16,6 @@ if (typeof global.TextDecoder === 'undefined') {
   } as typeof TextDecoder;
 }
 
-// Mock import.meta.env for Vite
 Object.defineProperty(global, 'import', {
   value: {
     meta: {
@@ -35,7 +33,6 @@ Object.defineProperty(global, 'import', {
   configurable: true
 });
 
-// Mock the firebase config module
 jest.mock('@/config/firebase', () => ({
   app: {},
   auth: {}
@@ -45,7 +42,6 @@ jest.mock('@/config/firestore', () => ({
   db: {}
 }));
 
-// Mock Firebase modules
 jest.mock('firebase/auth', () => ({
   signInAnonymously: jest.fn(),
   signOut: jest.fn(),
@@ -70,7 +66,6 @@ jest.mock('firebase/firestore', () => ({
   serverTimestamp: jest.fn(() => ({ toDate: () => new Date() }))
 }));
 
-// Mock React Router
 jest.mock('react-router-dom', () => ({
   useLocation: () => ({ pathname: '/test' }),
   useNavigate: () => jest.fn(),

@@ -55,7 +55,7 @@ npm run run:deterministic # Simulación determinística
 
 ## 📚 Documentación
 
-### 📖 [Documentación Completa](DOCUMENTACION.md)
+### 📖 [Documentación Completa](docs/DOCUMENTACION.md)
 Guía detallada que cubre todos los aspectos del juego:
 - Arquitectura y diseño del sistema
 - Lógica del juego y mecánicas
@@ -63,7 +63,7 @@ Guía detallada que cubre todos los aspectos del juego:
 - Sistema de cámara y eventos
 - Optimización y rendimiento
 
-### 🔄 [Diagramas de Flujo](DIAGRAMA_FLUJO.md)
+### 🔄 [Diagramas de Flujo](docs/DIAGRAMA_FLUJO.md)
 Visualizaciones del funcionamiento del juego:
 - Flujo principal del juego
 - Arquitectura de componentes
@@ -71,7 +71,7 @@ Visualizaciones del funcionamiento del juego:
 - Estructura de datos
 - Gestión de memoria
 
-### 🔧 [Referencia de API](API_REFERENCE.md)
+### 🔧 [Referencia de API](docs/API_REFERENCE.md)
 Documentación técnica completa:
 - GameStore y gestión de estado
 - Clases y métodos del juego
@@ -79,20 +79,19 @@ Documentación técnica completa:
 - Componentes React
 - Tipos y interfaces
 
-### 👨‍💻 [Guía de Desarrollo](GUIA_DESARROLLO.md)
-Guía para contribuir al proyecto:
-- Configuración del entorno
-- Patrones de desarrollo
-- Testing y debugging
-- Deployment y troubleshooting
-- Convenciones de código
+### 📋 [Guía de Constantes](docs/CONSTANTS_GUIDE.md)
+Guía de constantes y configuración del sistema:
+- Constantes del juego y configuración
+- Parámetros de rendimiento
+- Configuración de efectos visuales
+- Valores por defecto del sistema
 
-### 📊 [Estado Actual](ESTADO_ACTUAL.md)
-Resumen del estado actual del proyecto:
-- Cobertura de tests y calidad del código
-- Mejoras implementadas recientemente
-- Funcionalidades disponibles
-- Próximos pasos sugeridos
+### 📊 [Performance Monitor](docs/README.md)
+Documentación del sistema de monitoreo de rendimiento:
+- Componente PerformanceMonitor
+- Métricas y análisis de rendimiento
+- Herramientas de debugging
+- Optimización del sistema
 
 ## 🎯 Cómo Jugar
 
@@ -171,7 +170,7 @@ src/
 
 ## 🤝 Contribuir
 
-¡Las contribuciones son bienvenidas! Por favor, consulta nuestra [Guía de Desarrollo](GUIA_DESARROLLO.md) para:
+¡Las contribuciones son bienvenidas! Por favor, consulta nuestra [Documentación Completa](docs/DOCUMENTACION.md) para:
 
 - Configurar el entorno de desarrollo
 - Entender las convenciones de código

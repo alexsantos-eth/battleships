@@ -50,7 +50,7 @@ export const useGameStats = () => {
       gameId: `game_${Date.now()}`,
       timestamp: new Date(),
       result: gameStats.result,
-      duration: 0, // TODO: Implement game duration tracking
+              duration: 0,
       shots: gameStats.totalShots,
       hits: gameStats.totalHits,
       accuracy: gameStats.accuracy,

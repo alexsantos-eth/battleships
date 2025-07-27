@@ -30,7 +30,6 @@ export const useAuthStore = create<AuthState>((set) => ({
       const userCredential = await signInAnonymously(auth);
       const user = userCredential.user;
       
-      // Create user profile in Firestore
       try {
         const displayName = `Player_${user.uid.slice(0, 6)}`;
         await userService.createUser({
@@ -41,7 +40,6 @@ export const useAuthStore = create<AuthState>((set) => ({
         console.log('User profile created successfully:', displayName);
       } catch (profileError) {
         console.warn('Failed to create user profile:', profileError);
-        // Continue even if profile creation fails
       }
     } catch (error) {
       console.error('Error signing in anonymously:', error);
@@ -54,7 +52,6 @@ export const useAuthStore = create<AuthState>((set) => ({
     try {
       set({ isLoading: true });
       await signOut(auth);
-      // Reset state after successful sign out
       set({ 
         user: null, 
         isAuthenticated: false, 

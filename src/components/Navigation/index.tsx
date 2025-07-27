@@ -25,13 +25,11 @@ const Navigation = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-md border-b border-white/10">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <span className="text-2xl">⚓</span>
             <span className="text-xl font-bold text-white">Armada.io</span>
           </Link>
 
-          {/* Navigation Links */}
           <div className="hidden md:flex items-center space-x-1">
             {navItems.map((item) => (
               <Link
@@ -49,12 +47,10 @@ const Navigation = () => {
             ))}
           </div>
 
-          {/* Logout Button */}
           <div className="hidden md:block">
             <LogoutButton variant="minimal" />
           </div>
 
-          {/* Mobile Menu Button */}
           <div className="md:hidden">
             <button className="text-white p-2">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -64,7 +60,6 @@ const Navigation = () => {
           </div>
         </div>
 
-        {/* Mobile Navigation */}
         <div className="md:hidden pb-4">
           <div className="flex flex-col space-y-2">
             {navItems.map((item) => (
@@ -82,7 +77,6 @@ const Navigation = () => {
               </Link>
             ))}
             
-            {/* Mobile Logout Button */}
             <div className="pt-2 border-t border-white/10">
               <LogoutButton variant="minimal" className="w-full justify-start px-4 py-3" />
             </div>

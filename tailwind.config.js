@@ -7,7 +7,6 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Custom colors for Armada.io
         'navy': {
           50: '#f0f9ff',
           100: '#e0f2fe',

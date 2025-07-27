@@ -72,7 +72,6 @@ export const userService = {
       console.log('User profile created in Firestore:', userData.displayName);
     } catch (error) {
       console.warn('Firestore createUser failed, using localStorage fallback:', error);
-      // For development, we'll create a mock profile in localStorage
       const mockProfile: UserProfile = {
         uid: userData.uid,
         displayName: userData.displayName,
@@ -113,7 +112,6 @@ export const userService = {
       } as UserProfile;
     } catch (error) {
       console.warn('Firestore getUserProfile failed, checking localStorage:', error);
-      // Check localStorage for mock data
       const storedProfile = localStorage.getItem(`user_profile_${uid}`);
       if (storedProfile) {
         const profile = JSON.parse(storedProfile);
@@ -136,7 +134,6 @@ export const userService = {
       });
     } catch (error) {
       console.warn('Firestore updateUserProfile failed, updating localStorage:', error);
-      // Update localStorage mock data
       const storedProfile = localStorage.getItem(`user_profile_${uid}`);
       if (storedProfile) {
         const profile = JSON.parse(storedProfile);
