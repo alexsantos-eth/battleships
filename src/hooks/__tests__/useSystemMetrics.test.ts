@@ -6,23 +6,6 @@ describe('useSystemMetrics', () => {
   });
 
   it('should return expected properties', () => {
-    // Mock performance.memory
-    const mockPerformanceMemory = {
-      usedJSHeapSize: 50 * 1024 * 1024, // 50MB
-      jsHeapSizeLimit: 512 * 1024 * 1024, // 512MB
-    };
-
-    Object.defineProperty(performance, 'memory', {
-      value: mockPerformanceMemory,
-      writable: true,
-    });
-
-    // Mock navigator.hardwareConcurrency
-    Object.defineProperty(navigator, 'hardwareConcurrency', {
-      value: 8,
-      writable: true,
-    });
-
     // Test the utility functions directly
     const formatBytes = (bytes: number): string => {
       if (bytes === 0) return '0 B';

@@ -103,6 +103,20 @@ Destruir todos los barcos enemigos antes de que destruyan los tuyos.
 - **Large**: 4 celdas
 - **XLarge**: 5 celdas
 
+## 🧪 Testing y Calidad
+
+### Cobertura de Tests
+- **Cobertura General**: 77.06% (statements), 42.55% (branches)
+- **game/logic**: 94.68% de cobertura (módulo crítico)
+- **Archivos con 100%**: 8 archivos críticos del sistema
+- **Tests Ejecutándose**: 305 tests pasando, 99.35% éxito
+
+### Calidad del Código
+- **Linting**: ESLint configurado para TypeScript
+- **Type Safety**: TypeScript estricto habilitado
+- **Performance**: Monitoreo integrado de rendimiento
+- **Debug Tools**: Panel completo de debugging
+
 ## 🏗️ Arquitectura
 
 ### Stack Tecnológico

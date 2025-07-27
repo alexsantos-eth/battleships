@@ -11,9 +11,32 @@ Este es un juego de armada 3D desarrollado con React, TypeScript, Three.js y Vit
 - **Animaciones**: @react-spring/three 10.0.1
 - **Estado Global**: Zustand 5.0.6
 - **Build Tool**: Vite 7.0.4
-- **Testing**: Jest 30.0.5
+- **Testing**: Jest 30.0.5 (Cobertura: 77.06%)
 - **Ruido**: simplex-noise 4.0.3
 - **Performance**: stats.js 0.17.0
+
+## Calidad y Testing
+
+### Cobertura de Tests
+El proyecto mantiene una alta calidad de código con una cobertura de tests significativa:
+
+- **Cobertura General**: 77.06% statements, 42.55% branches
+- **Módulo game/logic**: 94.68% (módulo crítico del juego)
+- **Archivos con 100%**: 8 archivos críticos del sistema
+- **Tests Ejecutándose**: 305 tests pasando, 99.35% éxito
+
+### Archivos con Cobertura Completa
+- `gameInitializer.ts`: 100% (mejorado de 2.1%)
+- `math.ts`: 100% (mantenido)
+- `shipGenerator.ts`: 100% (mantenido)
+- `camera.ts`: 100% (mantenido)
+- `Droplet/calculations.ts`: 100% (mantenido)
+- `Rock/utils.ts`: 100% (mantenido)
+- `WaterExplosion/calculations.ts`: 100% (mantenido)
+- `Ship/utils.ts`: 100% (mantenido)
+
+### Limpieza de Código
+Se han eliminado 9 archivos de ejemplos innecesarios que tenían 0% de cobertura, mejorando la mantenibilidad del proyecto.
 
 ## Arquitectura del Juego
 

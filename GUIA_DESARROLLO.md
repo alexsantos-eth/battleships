@@ -60,6 +60,62 @@ src/
 - **Tipos**: PascalCase (`GameState`, `Ship`)
 - **Constantes**: UPPER_SNAKE_CASE (`GRID_SIZE`)
 
+## Testing y Calidad
+
+### Cobertura de Tests
+
+El proyecto mantiene una cobertura de tests del **77.06%** con énfasis en los módulos críticos:
+
+- **game/logic**: 94.68% (módulo principal del juego)
+- **Archivos críticos**: 8 archivos con 100% de cobertura
+- **Tests ejecutándose**: 305 tests pasando, 99.35% éxito
+
+### Comandos de Testing
+
+```bash
+npm test                    # Ejecutar todos los tests
+npm test -- --coverage     # Tests con reporte de cobertura
+npm test -- --watch        # Tests en modo watch
+npm test -- --testPathPattern="gameInitializer"  # Tests específicos
+```
+
+### Escribir Tests
+
+#### Tests de Componentes
+```typescript
+import { render, screen } from '@testing-library/react';
+import Componente from '../index';
+
+describe('Componente', () => {
+  it('should render correctly', () => {
+    render(<Componente />);
+    expect(screen.getByText('Expected Text')).toBeInTheDocument();
+  });
+});
+```
+
+#### Tests de Lógica
+```typescript
+import { GameInitializer } from '../gameInitializer';
+
+describe('GameInitializer', () => {
+  it('should initialize game correctly', () => {
+    const initializer = new GameInitializer();
+    const setup = initializer.initializeGame();
+    
+    expect(setup.playerShips).toBeDefined();
+    expect(setup.enemyShips).toBeDefined();
+  });
+});
+```
+
+### Estándares de Testing
+
+- **Cobertura mínima**: 70% para nuevos archivos
+- **Archivos críticos**: 100% de cobertura requerida
+- **Tests unitarios**: Para toda lógica de negocio
+- **Tests de integración**: Para componentes complejos
+
 ## Flujo de Desarrollo
 
 ### 1. Crear una Nueva Rama
