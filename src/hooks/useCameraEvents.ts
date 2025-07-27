@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 import * as THREE from "three";
 
 import { useGameStore } from "@/stores/gameStore";
+import { useTestingStore } from "@/stores/testingStore";
 import { PLAYER_CAMERA_POSITION, ENEMY_CAMERA_POSITION, PLAYER_PERSPECTIVE_POSITION } from "@/utils/camera";
 import { eventBus, EVENTS } from "@/utils/eventBus";
 import { useFrame, useThree } from "@react-three/fiber";
@@ -32,9 +34,13 @@ export const useCameraEvents = (
   options: UseCameraEventsOptions = {}
 ): UseCameraEventsReturn => {
   const { onShootStart, onShootEnd, animationSpeed = 0.15, enableLOD = true } = options;
+  const location = useLocation();
 
   const { camera, gl } = useThree();
   const { isPlayerTurn } = useGameStore();
+  const { freeCameraMovement } = useTestingStore();
+  
+  const isTestingRoute = location.pathname === "/testing";
   const targetPosition = useRef(camera.position.clone());
   const targetRotation = useRef(camera.rotation.clone());
   const isAnimating = useRef(false);
@@ -216,7 +222,7 @@ export const useCameraEvents = (
   useFrame(() => {
     checkPerformance();
     
-    if (!isAnimating.current) return;
+    if (!isAnimating.current || (isTestingRoute && freeCameraMovement)) return;
 
     const currentPos = camera.position;
     const currentRot = camera.rotation;

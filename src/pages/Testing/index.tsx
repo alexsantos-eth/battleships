@@ -8,6 +8,7 @@ import EnvironmentBox from "@/env";
 import UIBox from "@/ui";
 import type { GameConfig } from "@/game/logic/gameInitializer";
 import { useGameStore } from "@/stores/gameStore";
+import { useTestingStore } from "@/stores/testingStore";
 
 const Testing = () => {
   const navigate = useNavigate();
@@ -17,7 +18,10 @@ const Testing = () => {
   const [showEnemyBoard, setShowEnemyBoard] = useState(true);
   const [showShips, setShowShips] = useState(true);
   const [showShots, setShowShots] = useState(true);
-  const [alwaysShowEnemyShips, setAlwaysShowEnemyShips] = useState(false);
+  
+  const { freeCameraMovement, setFreeCameraMovement } = useTestingStore();
+  
+  const [alwaysShowEnemyShips, setAlwaysShowEnemyShips] = useState(true);
   
   const {
     initializeGame,
@@ -172,6 +176,16 @@ const Testing = () => {
               className="rounded"
             />
             <label htmlFor="alwaysShowEnemyShips" className="text-white">Always Show Enemy Ships</label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              id="freeCameraMovement"
+              checked={freeCameraMovement}
+              onChange={(e) => setFreeCameraMovement(e.target.checked)}
+              className="rounded"
+            />
+            <label htmlFor="freeCameraMovement" className="text-white">Free Camera Movement</label>
           </div>
         </div>
         

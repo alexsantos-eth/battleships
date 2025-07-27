@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { COLORS } from "@/config/colors";
 import { DEBUG_CONFIG } from "@/utils/debug";
 import { DebugInfoContent } from "@/components/DebugInfo/DebugInfoContent";
@@ -7,8 +8,11 @@ import { SystemMetrics } from "@/components/SystemMetrics";
 import { GameInitializerPanel } from "./GameInitializerPanel";
 
 export const DebugPanel = () => {
+  const location = useLocation();
   const [isVisible, setIsVisible] = useState<boolean>(DEBUG_CONFIG.ENABLE_DEBUG_PANEL);
   const [isManuallyClosed, setIsManuallyClosed] = useState(false);
+
+  const isTestingRoute = location.pathname === "/testing";
 
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
@@ -25,7 +29,7 @@ export const DebugPanel = () => {
     }
   }, []);
 
-  if (!DEBUG_CONFIG.ENABLE_DEBUG_PANEL || isManuallyClosed || !isVisible) {
+  if (!DEBUG_CONFIG.ENABLE_DEBUG_PANEL || isManuallyClosed || !isVisible || !isTestingRoute) {
     return null;
   }
 
