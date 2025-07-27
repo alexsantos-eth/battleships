@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 
-import GameGrid from "@/components/GameGrid";
-import { DebugPanel } from "@/components/DebugPanel";
-import { GameOverModal } from "@/components/GameOverModal";
-import { LoadingScreen } from "@/components/LoadingScreen";
+import { GameGrid } from "@/components/features/GameGrid";
+import { DebugPanel } from "@/components/debug/DebugPanel";
+import { GameOverModal } from "@/components/layouts/GameOverModal";
+import { LoadingScreen } from "@/components/ui/LoadingScreen";
 import EnvironmentBox from "@/env";
-import UIBox from "@/ui";
+import UIBox from "@/components/ui/UIBox/UIBox";
 import type { GameConfig } from "@/game/logic/gameInitializer";
-import { useGameStore } from "@/stores/gameStore";
+import { useGameStore } from "@/stores/game";
 import { useEnemyAI } from "@/hooks/useEnemyAI";
 
 const Match = () => {
@@ -47,7 +47,7 @@ const Match = () => {
     const shipsParam = searchParams.get("ships");
     const difficulty = searchParams.get("difficulty") || "medium";
 
-    console.log("Parámetros de URL:", { gridSize, shipsParam, difficulty });
+
 
     if (!shipsParam) {
       console.error("Parámetros de barcos no encontrados");
@@ -57,21 +57,16 @@ const Match = () => {
 
     try {
       const ships = JSON.parse(shipsParam);
-      console.log("Barcos parseados:", ships);
       const config = mapUrlParamsToGameConfig(gridSize, ships, difficulty);
-      console.log("Configuración generada:", config);
       
       setGameConfig(config);
-      console.log("Configuración establecida");
       
       if (!isInitialized) {
-        console.log("Inicializando juego inmediatamente con configuración:", config);
         setIsLoading(true);
         
         setTimeout(() => {
           try {
             initializeGame(config);
-            console.log("Juego inicializado exitosamente");
             setIsInitialized(true);
           } catch (error) {
             console.error("Error al inicializar el juego:", error);
@@ -109,7 +104,7 @@ const Match = () => {
           </div>
           <button
             onClick={() => {
-              console.log("Forzando inicialización...");
+
               setIsLoading(true);
               setTimeout(() => {
                 try {

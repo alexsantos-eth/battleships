@@ -1,6 +1,6 @@
 import { renderHook, act } from '@testing-library/react';
 import { useGameInitialization } from '../useGameInitialization';
-import { useGameStore } from '@/stores/gameStore';
+import { useGameStore } from '@/stores/game';
 
 jest.mock('@/stores/gameStore', () => ({
   useGameStore: jest.fn(),

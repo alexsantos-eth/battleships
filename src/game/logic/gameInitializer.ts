@@ -1,5 +1,5 @@
-import type { Ship, ShipVariant } from '@/stores/gameStore';
-import { GAME_CONSTANTS, GAME_CONFIGS } from '@/utils/constants';
+import type { Ship, ShipVariant } from '@/stores/game';
+import { GAME_CONSTANTS, GAME_CONFIGS } from '@/constants/game';
 
 export interface GameConfig {
   boardWidth: number;
@@ -18,7 +18,7 @@ export interface GameConfig {
   allowShipOverlap: boolean;
   minShipDistance: number;
   
-  enemyAI: 'random' | 'smart' | 'deterministic';
+  enemyAI: 'random' | 'smart' | 'deterministic' | 'basic';
   
   turnTimeLimit?: number;
 }
@@ -35,6 +35,30 @@ export class GameInitializer {
 
   constructor(config: Partial<GameConfig> = {}) {
     this.config = { ...this.getDefaultConfig(), ...config };
+    this.validateConfig();
+  }
+
+  private validateConfig(): void {
+    const { boardWidth, boardHeight, shipCounts, minShipDistance } = this.config;
+    
+    if (boardWidth < GAME_CONSTANTS.BOARD.MIN_SIZE || boardWidth > GAME_CONSTANTS.BOARD.MAX_SIZE) {
+      throw new Error(`Board width must be between ${GAME_CONSTANTS.BOARD.MIN_SIZE} and ${GAME_CONSTANTS.BOARD.MAX_SIZE}`);
+    }
+    
+    if (boardHeight < GAME_CONSTANTS.BOARD.MIN_SIZE || boardHeight > GAME_CONSTANTS.BOARD.MAX_SIZE) {
+      throw new Error(`Board height must be between ${GAME_CONSTANTS.BOARD.MIN_SIZE} and ${GAME_CONSTANTS.BOARD.MAX_SIZE}`);
+    }
+    
+    if (minShipDistance < 0) {
+      throw new Error('Minimum ship distance cannot be negative');
+    }
+    
+    const totalShips = Object.values(shipCounts).reduce((sum, count) => sum + count, 0);
+    const maxPossibleShips = Math.floor((boardWidth * boardHeight) / 4);
+    
+    if (totalShips > maxPossibleShips) {
+      throw new Error(`Too many ships for board size. Maximum possible: ${maxPossibleShips}`);
+    }
   }
 
   private getDefaultConfig(): GameConfig {
@@ -72,6 +96,8 @@ export class GameInitializer {
         const ship = this.generateShip(variant, ships);
         if (ship) {
           ships.push(ship);
+        } else {
+          console.warn(`Failed to place ${variant} ship ${i + 1}/${count}. Board may be too crowded.`);
         }
       }
     }
@@ -94,21 +120,6 @@ export class GameInitializer {
       } else {
         coords = this.generateRandomPosition(shipSize, orientation);
       }
-      
-      const ship: Ship = {
-        coords,
-        variant,
-        orientation
-      };
-
-      if (this.isValidShipPlacement(ship, existingShips)) {
-        return ship;
-      }
-    }
-
-    for (let attempt = 0; attempt < 50; attempt++) {
-      const orientation = Math.random() < GAME_CONSTANTS.GAME_LOGIC.SHIP_GENERATION.ORIENTATION_RANDOM_THRESHOLD ? 'horizontal' : 'vertical';
-      const coords = this.generateRandomPosition(shipSize, orientation);
       
       const ship: Ship = {
         coords,
@@ -250,14 +261,26 @@ export class GameInitializer {
   }
 
   public static createQuickGameConfig(): GameConfig {
-    return GAME_CONFIGS.QUICK;
+    return {
+      ...GAME_CONFIGS.QUICK,
+      initialTurn: 'player',
+      enemyAI: 'basic'
+    };
   }
 
   public static createClassicGameConfig(): GameConfig {
-    return GAME_CONFIGS.CLASSIC;
+    return {
+      ...GAME_CONFIGS.CLASSIC,
+      initialTurn: 'player',
+      enemyAI: 'basic'
+    };
   }
 
   public static createChallengingGameConfig(): GameConfig {
-    return GAME_CONFIGS.CHALLENGING;
+    return {
+      ...GAME_CONFIGS.CHALLENGING,
+      initialTurn: 'player',
+      enemyAI: 'basic'
+    };
   }
 } 

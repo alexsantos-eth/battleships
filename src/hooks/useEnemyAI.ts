@@ -1,5 +1,5 @@
 import { useEffect, useCallback } from 'react';
-import { useGameStore } from '@/stores/gameStore';
+import { useGameStore } from '@/stores/game';
 
 export const useEnemyAI = () => {
   const {

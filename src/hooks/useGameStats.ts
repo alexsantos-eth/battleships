@@ -1,5 +1,5 @@
 import { useUserProfile } from './useUserProfile';
-import { useGameStore } from '@/stores/gameStore';
+import { useGameStore } from '@/stores/game';
 import { useEffect } from 'react';
 import type { GameHistory } from '@/types/user';
 

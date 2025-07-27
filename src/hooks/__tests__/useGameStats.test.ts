@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react';
 import { useGameStats } from '../useGameStats';
 import { useUserProfile } from '../useUserProfile';
-import { useGameStore } from '@/stores/gameStore';
+import { useGameStore } from '@/stores/game';
 
 jest.mock('../useUserProfile');
 jest.mock('@/stores/gameStore');

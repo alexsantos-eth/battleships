@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { useGameStore } from '@/stores/gameStore';
+import { useGameStore } from '@/stores/game';
 import { GameInitializer, type GameConfig } from '@/game/logic/gameInitializer';
 
 export const useGameInitializer = () => {

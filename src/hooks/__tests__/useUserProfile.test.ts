@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react';
 import { useUserProfile } from '../useUserProfile';
-import { useUserProfileStore } from '@/stores/userProfileStore';
+import { useUserProfileStore } from '@/stores/userProfile';
 
 jest.mock('@/stores/userProfileStore');
 

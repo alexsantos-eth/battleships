@@ -2,9 +2,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import * as THREE from "three";
 
-import { useGameStore } from "@/stores/gameStore";
-import { usePlaygroundStore } from "@/stores/playgroundStore";
-import { PLAYER_CAMERA_POSITION, ENEMY_CAMERA_POSITION, PLAYER_PERSPECTIVE_POSITION } from "@/utils/camera";
+import { useGameStore } from "@/stores/game";
+import { usePlaygroundStore } from "@/stores/playground";
+import { PLAYER_CAMERA_POSITION, ENEMY_CAMERA_POSITION, PLAYER_PERSPECTIVE_POSITION } from "@/constants/camera";
 import { eventBus, EVENTS } from "@/utils/eventBus";
 import { useFrame, useThree } from "@react-three/fiber";
 

@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import GameGrid from "@/components/GameGrid";
-import { DebugPanel } from "@/components/DebugPanel";
-import TestingInfo from "@/components/TestingInfo";
+import { DebugPanel } from "@/components/debug/DebugPanel";
+import { TestingInfo } from "@/components/debug/TestingInfo";
+import { GameGrid } from "@/components/features/GameGrid";
+import UIBox from "@/components/ui/UIBox/UIBox";
 import EnvironmentBox from "@/env";
-import UIBox from "@/ui";
-import type { GameConfig } from "@/game/logic/gameInitializer";
-import { useGameStore } from "@/stores/gameStore";
-import { usePlaygroundStore } from "@/stores/playgroundStore";
+import { useGameStore } from "@/stores/game";
+import { usePlaygroundStore } from "@/stores/playground";
 
+import type { GameConfig } from "@/game/logic/gameInitializer";
 const Playground = () => {
   const navigate = useNavigate();
   const [isInitialized, setIsInitialized] = useState(false);
@@ -18,11 +18,11 @@ const Playground = () => {
   const [showEnemyBoard, setShowEnemyBoard] = useState(true);
   const [showShips, setShowShips] = useState(true);
   const [showShots, setShowShots] = useState(true);
-  
+
   const { freeCameraMovement, setFreeCameraMovement } = usePlaygroundStore();
-  
+
   const [alwaysShowEnemyShips, setAlwaysShowEnemyShips] = useState(true);
-  
+
   const {
     initializeGame,
     playerShips,
@@ -82,8 +82,12 @@ const Playground = () => {
       <div className="fixed inset-0 bg-gradient-to-br from-purple-900 via-purple-800 to-purple-900 flex items-center justify-center z-50">
         <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 shadow-2xl border border-white/20 max-w-md w-full mx-4 text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white mx-auto mb-4"></div>
-          <h2 className="text-2xl font-bold text-white mb-2">🚀 Armada.io Playground</h2>
-          <p className="text-purple-200 mb-4">Inicializando entorno de experimentación...</p>
+          <h2 className="text-2xl font-bold text-white mb-2">
+            🚀 Armada.io Playground
+          </h2>
+          <p className="text-purple-200 mb-4">
+            Inicializando entorno de experimentación...
+          </p>
           <button
             onClick={() => {
               setIsLoading(true);
@@ -128,10 +132,12 @@ const Playground = () => {
         <h3 className="text-white font-bold mb-3 text-sm flex items-center">
           🎮 Playground Controls
         </h3>
-        
+
         <div className="space-y-3">
           <div>
-            <h4 className="text-purple-300 font-semibold mb-2 text-xs">Visual Controls</h4>
+            <h4 className="text-purple-300 font-semibold mb-2 text-xs">
+              Visual Controls
+            </h4>
             <div className="space-y-2 text-sm">
               <div className="flex items-center space-x-2">
                 <input
@@ -141,7 +147,9 @@ const Playground = () => {
                   onChange={(e) => setShowPlayerBoard(e.target.checked)}
                   className="rounded"
                 />
-                <label htmlFor="showPlayerBoard" className="text-white">Player Board</label>
+                <label htmlFor="showPlayerBoard" className="text-white">
+                  Player Board
+                </label>
               </div>
               <div className="flex items-center space-x-2">
                 <input
@@ -151,7 +159,9 @@ const Playground = () => {
                   onChange={(e) => setShowEnemyBoard(e.target.checked)}
                   className="rounded"
                 />
-                <label htmlFor="showEnemyBoard" className="text-white">Enemy Board</label>
+                <label htmlFor="showEnemyBoard" className="text-white">
+                  Enemy Board
+                </label>
               </div>
               <div className="flex items-center space-x-2">
                 <input
@@ -161,7 +171,9 @@ const Playground = () => {
                   onChange={(e) => setShowShips(e.target.checked)}
                   className="rounded"
                 />
-                <label htmlFor="showShips" className="text-white">Show Ships</label>
+                <label htmlFor="showShips" className="text-white">
+                  Show Ships
+                </label>
               </div>
               <div className="flex items-center space-x-2">
                 <input
@@ -171,7 +183,9 @@ const Playground = () => {
                   onChange={(e) => setShowShots(e.target.checked)}
                   className="rounded"
                 />
-                <label htmlFor="showShots" className="text-white">Show Shots</label>
+                <label htmlFor="showShots" className="text-white">
+                  Show Shots
+                </label>
               </div>
               <div className="flex items-center space-x-2">
                 <input
@@ -181,13 +195,17 @@ const Playground = () => {
                   onChange={(e) => setAlwaysShowEnemyShips(e.target.checked)}
                   className="rounded"
                 />
-                <label htmlFor="alwaysShowEnemyShips" className="text-white">Always Show Enemy Ships</label>
+                <label htmlFor="alwaysShowEnemyShips" className="text-white">
+                  Always Show Enemy Ships
+                </label>
               </div>
             </div>
           </div>
 
           <div>
-            <h4 className="text-purple-300 font-semibold mb-2 text-xs">Camera Controls</h4>
+            <h4 className="text-purple-300 font-semibold mb-2 text-xs">
+              Camera Controls
+            </h4>
             <div className="space-y-2 text-sm">
               <div className="flex items-center space-x-2">
                 <input
@@ -197,27 +215,62 @@ const Playground = () => {
                   onChange={(e) => setFreeCameraMovement(e.target.checked)}
                   className="rounded"
                 />
-                <label htmlFor="freeCameraMovement" className="text-white">Free Camera Movement</label>
+                <label htmlFor="freeCameraMovement" className="text-white">
+                  Free Camera Movement
+                </label>
               </div>
-            </div>
-          </div>
-          
-          <div>
-            <h4 className="text-purple-300 font-semibold mb-2 text-xs">Game State</h4>
-            <div className="space-y-1 text-xs text-white">
-              <div>Turn: <span className="text-blue-300">{currentTurn}</span></div>
-              <div>Game Over: <span className={isGameOver ? "text-red-400" : "text-green-400"}>{isGameOver ? "Yes" : "No"}</span></div>
-              <div>Winner: <span className="text-yellow-300">{winner || "None"}</span></div>
-              <div>Board: <span className="text-cyan-300">{boardWidth}x{boardHeight}</span></div>
-              <div>Player Ships: <span className="text-green-300">{playerShips.length}</span></div>
-              <div>Enemy Ships: <span className="text-red-300">{enemyShips.length}</span></div>
-              <div>Player Shots: <span className="text-blue-300">{playerShots.length}</span></div>
-              <div>Enemy Shots: <span className="text-orange-300">{enemyShots.length}</span></div>
             </div>
           </div>
 
           <div>
-            <h4 className="text-purple-300 font-semibold mb-2 text-xs">Turn Controls</h4>
+            <h4 className="text-purple-300 font-semibold mb-2 text-xs">
+              Game State
+            </h4>
+            <div className="space-y-1 text-xs text-white">
+              <div>
+                Turn: <span className="text-blue-300">{currentTurn}</span>
+              </div>
+              <div>
+                Game Over:{" "}
+                <span
+                  className={isGameOver ? "text-red-400" : "text-green-400"}
+                >
+                  {isGameOver ? "Yes" : "No"}
+                </span>
+              </div>
+              <div>
+                Winner:{" "}
+                <span className="text-yellow-300">{winner || "None"}</span>
+              </div>
+              <div>
+                Board:{" "}
+                <span className="text-cyan-300">
+                  {boardWidth}x{boardHeight}
+                </span>
+              </div>
+              <div>
+                Player Ships:{" "}
+                <span className="text-green-300">{playerShips.length}</span>
+              </div>
+              <div>
+                Enemy Ships:{" "}
+                <span className="text-red-300">{enemyShips.length}</span>
+              </div>
+              <div>
+                Player Shots:{" "}
+                <span className="text-blue-300">{playerShots.length}</span>
+              </div>
+              <div>
+                Enemy Shots:{" "}
+                <span className="text-orange-300">{enemyShots.length}</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h4 className="text-purple-300 font-semibold mb-2 text-xs">
+              Turn Controls
+            </h4>
             <div className="space-y-1">
               <button
                 onClick={setPlayerTurn}
@@ -238,8 +291,8 @@ const Playground = () => {
 
       <EnvironmentBox>
         {showPlayerBoard && (
-          <GameGrid 
-            isPlayerBoard={true} 
+          <GameGrid
+            isPlayerBoard={true}
             showShips={showShips}
             showShots={showShots}
             alwaysShowEnemyShips={alwaysShowEnemyShips}
@@ -265,4 +318,4 @@ const Playground = () => {
   );
 };
 
-export default Playground; 
+export default Playground;

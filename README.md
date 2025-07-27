@@ -100,6 +100,8 @@ Documentación de las simulaciones de batalla:
 - Uso en debug panel y testing
 - Configuración de parámetros
 
+
+
 ## 🎯 Cómo Jugar
 
 ### Controles

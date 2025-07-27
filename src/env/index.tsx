@@ -1,4 +1,4 @@
-import CameraController from "@/components/CameraController";
+import { CameraController } from "@/components/features/CameraController";
 import useCameraProps from "@/hooks/useCameraProps";
 import { Canvas } from "@react-three/fiber";
 

@@ -4,6 +4,21 @@ Bienvenido a la documentación completa de **Armada.io**, un juego de armada inm
 
 ## 📖 Documentación Disponible
 
+### 🏗️ [Estándares y Buenas Prácticas](ESTANDARES_BUENAS_PRACTICAS.md)
+Guía completa de estándares y buenas prácticas para el desarrollo:
+- Estructura de directorios y organización
+- Convenciones de nomenclatura
+- Gestión de estado y componentes
+- Testing y performance
+- Documentación y mantenimiento
+
+### 🚀 [Plan de Implementación](PLAN_IMPLEMENTACION.md)
+Plan detallado para implementar los nuevos estándares:
+- Estado actual del proyecto
+- Fases de implementación
+- Cronograma y métricas
+- Comandos y recursos útiles
+
 ### 🎮 [Documentación Completa](DOCUMENTACION.md)
 Guía detallada que cubre todos los aspectos del juego:
 - Arquitectura y diseño del sistema
@@ -48,6 +63,8 @@ Documentación de las simulaciones de batalla:
 - Tipos de simulaciones disponibles
 - Uso en debug panel y testing
 - Configuración de parámetros
+
+
 
 ## 🚀 Inicio Rápido
 

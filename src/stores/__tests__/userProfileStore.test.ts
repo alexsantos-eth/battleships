@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react';
-import { useUserProfileStore } from '../userProfileStore';
+import { useUserProfileStore } from '../userProfile';
 import type { UserProfile, GameStats, UserPreferences, GameHistory } from '@/types/user';
 
 jest.mock('@/services/userService', () => ({
@@ -61,7 +61,7 @@ describe('UserProfileStore', () => {
 
   it('should load profile successfully', async () => {
     const { result } = renderHook(() => useUserProfileStore());
-    const { userService } = await import('@/services/userService');
+    const { userService } = await import('@/services/user');
     (userService.getUserProfile as jest.Mock).mockResolvedValue(mockUserProfile);
 
     await act(async () => {
@@ -75,7 +75,7 @@ describe('UserProfileStore', () => {
 
   it('should handle profile loading error', async () => {
     const { result } = renderHook(() => useUserProfileStore());
-    const { userService } = await import('@/services/userService');
+    const { userService } = await import('@/services/user');
     (userService.getUserProfile as jest.Mock).mockRejectedValue(new Error('Failed to load'));
 
     await act(async () => {
@@ -89,7 +89,7 @@ describe('UserProfileStore', () => {
 
   it('should create profile successfully', async () => {
     const { result } = renderHook(() => useUserProfileStore());
-    const { userService } = await import('@/services/userService');
+    const { userService } = await import('@/services/user');
     (userService.createUser as jest.Mock).mockResolvedValue(undefined);
     (userService.getUserProfile as jest.Mock).mockResolvedValue(mockUserProfile);
 
@@ -104,7 +104,7 @@ describe('UserProfileStore', () => {
 
   it('should update stats successfully', async () => {
     const { result } = renderHook(() => useUserProfileStore());
-    const { userService } = await import('@/services/userService');
+    const { userService } = await import('@/services/user');
     
     await act(async () => {
       useUserProfileStore.setState({ profile: mockUserProfile });
@@ -124,7 +124,7 @@ describe('UserProfileStore', () => {
 
   it('should update preferences successfully', async () => {
     const { result } = renderHook(() => useUserProfileStore());
-    const { userService } = await import('@/services/userService');
+    const { userService } = await import('@/services/user');
     
     await act(async () => {
       useUserProfileStore.setState({ profile: mockUserProfile });
@@ -144,7 +144,7 @@ describe('UserProfileStore', () => {
 
   it('should add game to history successfully', async () => {
     const { result } = renderHook(() => useUserProfileStore());
-    const { userService } = await import('@/services/userService');
+    const { userService } = await import('@/services/user');
     
     await act(async () => {
       useUserProfileStore.setState({ profile: mockUserProfile });

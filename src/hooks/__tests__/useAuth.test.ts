@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react';
 import { useAuth } from '../useAuth';
-import { useAuthStore } from '@/stores/authStore';
+import { useAuthStore } from '@/stores/auth';
 import type { User } from 'firebase/auth';
 
 jest.mock('@/stores/authStore');

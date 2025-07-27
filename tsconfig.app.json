@@ -21,9 +21,15 @@
     "paths": {
       "@/*": ["src/*"],
       "@/components/*": ["src/components/*"],
+      "@/components/ui/*": ["src/components/ui/*"],
+      "@/components/features/*": ["src/components/features/*"],
+      "@/components/layouts/*": ["src/components/layouts/*"],
       "@/config/*": ["src/config/*"],
+      "@/constants/*": ["src/constants/*"],
       "@/hooks/*": ["src/hooks/*"],
+      "@/services/*": ["src/services/*"],
       "@/stores/*": ["src/stores/*"],
+      "@/types/*": ["src/types/*"],
       "@/utils/*": ["src/utils/*"],
       "@/ui/*": ["src/ui/*"],
       "@/env/*": ["src/env/*"]

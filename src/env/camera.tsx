@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 
-import { usePlaygroundStore } from "@/stores/playgroundStore";
+import { usePlaygroundStore } from "@/stores/playground";
 import { DEBUG_CONFIG } from "@/utils/debug";
 import { OrbitControls } from "@react-three/drei";
 
