@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { runMockSimulation } from '@/game/logic/examples/mockBattleSimulation';
-import type { MockBattleResult } from '@/game/logic/examples/mockBattleSimulation';
+import { runMockSimulation, type MockBattleResult } from '@/simulations';
 
 export const useMockSimulation = () => {
   const [isRunning, setIsRunning] = useState(false);

@@ -42,6 +42,13 @@ Documentación del sistema de monitoreo de rendimiento:
 - Herramientas de debugging
 - Optimización del sistema
 
+### 🎮 [Simulaciones](SIMULATIONS.md)
+Documentación de las simulaciones de batalla:
+- Simulaciones predefinidas para testing
+- Tipos de simulaciones disponibles
+- Uso en debug panel y testing
+- Configuración de parámetros
+
 ## 🚀 Inicio Rápido
 
 Para comenzar a desarrollar con Armada.io:

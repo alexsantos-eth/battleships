@@ -1,5 +1,5 @@
-import { BattleSimulator } from "../battleSimulator";
-import type { BattleConfig, BattleInstruction } from "../battleSimulator";
+import { BattleSimulator } from "@/game/logic/battleSimulator";
+import type { BattleConfig, BattleInstruction } from "@/game/logic/battleSimulator";
 
 export interface MockBattleResult {
   winner: "player" | "enemy";
