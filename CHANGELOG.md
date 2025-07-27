@@ -13,6 +13,12 @@ y este proyecto adhiere al [Versionado Semántico](https://semver.org/spec/v2.0.
   - Tests para funciones de utilidad de debug
   - Validación de configuración de debug
   - Tests para hooks de métricas del sistema
+- **IA Enemiga Aleatoria**:
+  - Hook `useEnemyAI` para manejo automático de turnos del enemigo
+  - Ejecución automática de tiros enemigos cuando es su turno
+  - Generación aleatoria de posiciones de disparo
+  - Integración con eventos de cámara para transiciones suaves
+  - Tests completos para la funcionalidad de IA
 
 ### Changed
 - **Cobertura de Tests**:
@@ -49,10 +55,11 @@ y este proyecto adhiere al [Versionado Semántico](https://semver.org/spec/v2.0.
   - Arreglado error de TypeScript en `DebugInfo` component
 
 ### Technical Details
-- **Cobertura de Tests**: 311 tests pasando, 0 fallando (100% éxito)
-- **Tiempo de Ejecución**: 10.824s para suite completa
+- **Cobertura de Tests**: 317 tests pasando, 0 fallando (100% éxito)
+- **Tiempo de Ejecución**: 11.94s para suite completa
 - **Archivos con 100% Cobertura**: 8 archivos críticos
 - **Limpieza de Código**: Eliminación de ~50KB de código innecesario
+- **Nuevos Hooks**: `useEnemyAI` con 6 tests de cobertura completa
 
 ### Documentación
 - Documentación completa del proyecto con múltiples archivos

@@ -9,6 +9,7 @@ import EnvironmentBox from "@/env";
 import UIBox from "@/ui";
 import type { GameConfig } from "@/game/logic/gameInitializer";
 import { useGameStore } from "@/stores/gameStore";
+import { useEnemyAI } from "@/hooks/useEnemyAI";
 
 const Match = () => {
   const [searchParams] = useSearchParams();
@@ -38,6 +39,8 @@ const Match = () => {
   const [isInitialized, setIsInitialized] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { initializeGame } = useGameStore();
+  
+  useEnemyAI();
 
   useEffect(() => {
     const gridSize = parseInt(searchParams.get("gridSize") || "10");

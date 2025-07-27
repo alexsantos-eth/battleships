@@ -116,7 +116,12 @@ Destruir todos los barcos enemigos antes de que destruyan los tuyos.
 - **Cobertura General**: 76.97% (statements), 42.55% (branches)
 - **game/logic**: 94.68% de cobertura (módulo crítico)
 - **Archivos con 100%**: 8 archivos críticos del sistema
-- **Tests Ejecutándose**: 311 tests pasando, 100% éxito
+- **Tests Ejecutándose**: 317 tests pasando, 100% éxito
+
+### IA Enemiga
+- **IA Aleatoria**: Ejecución automática de tiros enemigos
+- **Turnos automáticos**: Transición fluida entre jugador y enemigo
+- **Generación inteligente**: Posiciones de disparo aleatorias pero válidas
 
 ### Calidad del Código
 - **Linting**: ESLint configurado para TypeScript

@@ -34,13 +34,13 @@ export const useCameraEvents = (
   const { onShootStart, onShootEnd, animationSpeed = 0.15, enableLOD = true } = options;
 
   const { camera, gl } = useThree();
-  const { setPlayerTurn, setEnemyTurn, isPlayerTurn } = useGameStore();
+  const { isPlayerTurn } = useGameStore();
   const targetPosition = useRef(camera.position.clone());
   const targetRotation = useRef(camera.rotation.clone());
   const isAnimating = useRef(false);
   const [isShooting, setIsShooting] = useState(false);
   const [shootData, setShootData] = useState<CameraEventData | null>(null);
-  const [isPlayerPerspective, setIsPlayerPerspective] = useState(false);
+  const [isPlayerPerspective, setIsPlayerPerspective] = useState(true);
   const originalPixelRatio = useRef<number>(1);
   const lastEventTime = useRef<number>(0);
   const EVENT_THROTTLE_MS = 16;
@@ -144,13 +144,12 @@ export const useCameraEvents = (
 
       setIsShooting(true);
       setShootData(data);
-      setPlayerTurn();
 
       if (onShootStart) {
         onShootStart(data);
       }
     },
-    [onShootStart, camera, setPlayerTurn, setLowQualityMode, enableLOD]
+    [onShootStart, camera, setLowQualityMode, enableLOD]
   );
 
   const handleShootEnd = useCallback(
@@ -181,8 +180,6 @@ export const useCameraEvents = (
         );
       }
       isAnimating.current = true;
-      
-      setEnemyTurn();
 
       const isSlowDevice = navigator.hardwareConcurrency <= 4;
       if (isSlowDevice && enableLOD) {
@@ -196,7 +193,6 @@ export const useCameraEvents = (
     [
       onShootEnd,
       camera,
-      setEnemyTurn,
       isPlayerPerspective,
       setLowQualityMode,
       enableLOD,
