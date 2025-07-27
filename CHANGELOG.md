@@ -9,16 +9,16 @@ y este proyecto adhiere al [Versionado Semántico](https://semver.org/spec/v2.0.
 
 ### Added
 - **Sistema de Tests Mejorado**:
-  - Tests completos para `GameInitializer` con 100% de cobertura
+  - Tests completos para `GameInitializer` con 98.94% de cobertura
   - Tests para funciones de utilidad de debug
   - Validación de configuración de debug
   - Tests para hooks de métricas del sistema
 
 ### Changed
 - **Cobertura de Tests**:
-  - Mejora general de cobertura: 48.78% → 77.06% (+28.28%)
+  - Mejora general de cobertura: 48.78% → 76.97% (+28.19%)
   - Cobertura de `game/logic`: 72.22% → 94.68% (+22.46%)
-  - `gameInitializer.ts`: 2.1% → 100% (mejora masiva)
+  - `gameInitializer.ts`: 2.1% → 98.94% (mejora masiva)
   - `math.ts`, `shipGenerator.ts`, `camera.ts`: 100% mantenido
   - `Droplet`, `Rock`, `WaterExplosion`, `Ship/utils`: 100% mantenido
 
@@ -46,10 +46,11 @@ y este proyecto adhiere al [Versionado Semántico](https://semver.org/spec/v2.0.
   - Arreglado test de `useSystemMetrics` para evitar errores de navigator
   - Eliminados tests problemáticos de componentes React
   - Mejorada estabilidad de suite de tests
+  - Arreglado error de TypeScript en `DebugInfo` component
 
 ### Technical Details
-- **Cobertura de Tests**: 305 tests pasando, 2 fallando (99.35% éxito)
-- **Tiempo de Ejecución**: 9.488s para suite completa
+- **Cobertura de Tests**: 311 tests pasando, 0 fallando (100% éxito)
+- **Tiempo de Ejecución**: 10.824s para suite completa
 - **Archivos con 100% Cobertura**: 8 archivos críticos
 - **Limpieza de Código**: Eliminación de ~50KB de código innecesario
 

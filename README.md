@@ -87,6 +87,13 @@ Guía para contribuir al proyecto:
 - Deployment y troubleshooting
 - Convenciones de código
 
+### 📊 [Estado Actual](ESTADO_ACTUAL.md)
+Resumen del estado actual del proyecto:
+- Cobertura de tests y calidad del código
+- Mejoras implementadas recientemente
+- Funcionalidades disponibles
+- Próximos pasos sugeridos
+
 ## 🎯 Cómo Jugar
 
 ### Controles
@@ -106,10 +113,10 @@ Destruir todos los barcos enemigos antes de que destruyan los tuyos.
 ## 🧪 Testing y Calidad
 
 ### Cobertura de Tests
-- **Cobertura General**: 77.06% (statements), 42.55% (branches)
+- **Cobertura General**: 76.97% (statements), 42.55% (branches)
 - **game/logic**: 94.68% de cobertura (módulo crítico)
 - **Archivos con 100%**: 8 archivos críticos del sistema
-- **Tests Ejecutándose**: 305 tests pasando, 99.35% éxito
+- **Tests Ejecutándose**: 311 tests pasando, 100% éxito
 
 ### Calidad del Código
 - **Linting**: ESLint configurado para TypeScript

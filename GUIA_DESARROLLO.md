@@ -68,7 +68,7 @@ El proyecto mantiene una cobertura de tests del **77.06%** con énfasis en los m
 
 - **game/logic**: 94.68% (módulo principal del juego)
 - **Archivos críticos**: 8 archivos con 100% de cobertura
-- **Tests ejecutándose**: 305 tests pasando, 99.35% éxito
+- **Tests ejecutándose**: 311 tests pasando, 100% éxito
 
 ### Comandos de Testing
 

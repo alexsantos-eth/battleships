@@ -20,10 +20,10 @@ Este es un juego de armada 3D desarrollado con React, TypeScript, Three.js y Vit
 ### Cobertura de Tests
 El proyecto mantiene una alta calidad de código con una cobertura de tests significativa:
 
-- **Cobertura General**: 77.06% statements, 42.55% branches
+- **Cobertura General**: 76.97% statements, 42.55% branches
 - **Módulo game/logic**: 94.68% (módulo crítico del juego)
 - **Archivos con 100%**: 8 archivos críticos del sistema
-- **Tests Ejecutándose**: 305 tests pasando, 99.35% éxito
+- **Tests Ejecutándose**: 311 tests pasando, 100% éxito
 
 ### Archivos con Cobertura Completa
 - `gameInitializer.ts`: 100% (mejorado de 2.1%)

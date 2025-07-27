@@ -440,7 +440,7 @@ export const DebugInfoContent = () => {
       )}
 
       <button
-        onClick={initializeGame}
+        onClick={() => initializeGame()}
         style={{
           background: COLORS.ui.debug.button,
           color: "white",

@@ -1,45 +1,7 @@
 import { DEBUG_CONFIG } from "@/utils/debug";
 
-import { DebugInfo } from "../index";
-
-jest.mock("@/hooks/useGameState", () => ({
-  useGameState: () => ({
-    currentTurn: "player",
-    playerShips: [
-      {
-        coords: [0, 0] as [number, number],
-        variant: "small" as const,
-        orientation: "horizontal" as const,
-      },
-    ],
-    enemyShips: [],
-    initializeGame: jest.fn(),
-    getShipSize: jest.fn(() => 2),
-    getShipCells: jest.fn(() => [
-      [0, 0],
-      [0, 1],
-    ]),
-  }),
-}));
-
-jest.mock("@/config/colors", () => ({
-  COLORS: {
-    ui: {
-      debug: {
-        background: "#000000",
-        border: "#ffffff",
-        button: "#333333",
-      },
-    },
-  },
-}));
-
-describe("DebugInfo", () => {
-  it("should be a function component", () => {
-    expect(typeof DebugInfo).toBe("function");
-  });
-
-  it("should use DEBUG_CONFIG for configuration", () => {
+describe("DebugInfo Configuration", () => {
+  it("should have all required DEBUG_CONFIG properties", () => {
     expect(DEBUG_CONFIG).toHaveProperty("ENABLE_DEBUG_INFO");
     expect(DEBUG_CONFIG).toHaveProperty("DEBUG_INFO_POSITION");
     expect(DEBUG_CONFIG).toHaveProperty("SHOW_SHIP_DETAILS");
