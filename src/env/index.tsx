@@ -15,7 +15,6 @@ const EnvironmentBox: React.FC<EnvironmentBoxProps> = ({ children }) => {
 
   return (
     <div style={{ position: "relative" }}>
-      <UIBox />
       <Canvas {...cameraProps}>
         <CameraController />
         <Lights />

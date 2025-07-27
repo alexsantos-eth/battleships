@@ -1,38 +1,16 @@
-import { useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import GameGrid from "@/components/GameGrid";
-import { DebugPanel } from "@/components/DebugPanel";
-import { GameOverModal } from "@/components/GameOverModal";
-import EnvironmentBox from "@/env";
-import { useGameStore } from "@/stores/gameStore";
-import UIBox from "@/ui";
+import Home from "@/pages/Home";
+import Match from "@/pages/Match";
 
 const App = () => {
-  const { initializeGame } = useGameStore();
-
-  useEffect(() => {
-    initializeGame();
-  }, [initializeGame]);
-
   return (
-    <>
-      <EnvironmentBox>
-        <GameGrid isPlayerBoard={true} />
-        <GameGrid
-          isPlayerBoard={false}
-          enablePressGrid
-          rotation={[0, 0, Math.PI]}
-          position={[0, 9, 0]}
-        />
-      </EnvironmentBox>
-      <UIBox />
-
-      {/* Centralized Debug Panel - Press P to toggle */}
-      <DebugPanel />
-      
-      {/* Game Over Modal */}
-      <GameOverModal />
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/match" element={<Match />} />
+      </Routes>
+    </Router>
   );
 };
 

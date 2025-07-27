@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 import { eventBus, EVENTS } from "@/utils/eventBus";
-import { GameInitializer } from "@/game/logic/gameInitializer";
+import { GameInitializer, type GameConfig } from "@/game/logic/gameInitializer";
 import { GAME_CONSTANTS } from "@/utils/constants";
 
 export type GameTurn = "PLAYER_TURN" | "ENEMY_TURN";
@@ -41,7 +41,7 @@ export interface GameState {
   setBoardDimensions: (width: number, height: number) => void;
   addPlayerShot: (shot: Shot) => void;
   addEnemyShot: (shot: Shot) => void;
-  initializeGame: () => void;
+  initializeGame: (config?: Partial<GameConfig>) => void;
   initializeRandomTurn: () => void;
   checkShot: (
     x: number,
@@ -223,18 +223,29 @@ export const useGameStore = create<GameState>((set, get) => ({
     });
   },
 
-  initializeGame: () => {
-    if (get().playerShips.length === 0) {
-      const initializer = new GameInitializer(GameInitializer.createClassicGameConfig());
-      const gameSetup = initializer.initializeGame();
-      set({ 
-        playerShips: gameSetup.playerShips,
-        enemyShips: gameSetup.enemyShips,
-        boardWidth: gameSetup.config.boardWidth,
-        boardHeight: gameSetup.config.boardHeight
-      });
-    }
-
-    get().initializeRandomTurn();
+  initializeGame: (config?: Partial<GameConfig>) => {
+    console.log("Store: Inicializando juego con configuración:", config);
+    const gameConfig = config || GameInitializer.createClassicGameConfig();
+    console.log("Store: Configuración final:", gameConfig);
+    const initializer = new GameInitializer(gameConfig);
+    const gameSetup = initializer.initializeGame();
+    console.log("Store: Setup del juego:", gameSetup);
+    
+    const newState = {
+      playerShips: gameSetup.playerShips,
+      enemyShips: gameSetup.enemyShips,
+      boardWidth: gameSetup.config.boardWidth,
+      boardHeight: gameSetup.config.boardHeight,
+      currentTurn: gameSetup.initialTurn,
+      isPlayerTurn: gameSetup.initialTurn === "PLAYER_TURN",
+      isEnemyTurn: gameSetup.initialTurn === "ENEMY_TURN",
+      playerShots: [],
+      enemyShots: [],
+      isGameOver: false,
+      winner: null
+    };
+    
+    console.log("Store: Nuevo estado:", newState);
+    set(newState);
   },
 }));
