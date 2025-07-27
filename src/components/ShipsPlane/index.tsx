@@ -9,7 +9,7 @@ interface ShipsPlaneProps {
 }
 
 const ShipsPlane = ({ isPlayerBoard = true }: ShipsPlaneProps) => {
-  const { playerShips, enemyShips, initializeGame } = useGameState();
+  const { playerShips, enemyShips, initializeGame, currentTurn } = useGameState();
 
   const ships = useMemo(() => {
     const currentShips = isPlayerBoard ? playerShips : enemyShips;
@@ -21,6 +21,17 @@ const ShipsPlane = ({ isPlayerBoard = true }: ShipsPlaneProps) => {
 
     return currentShips;
   }, [isPlayerBoard, playerShips, enemyShips, initializeGame]);
+
+  const shouldShowShips = useMemo(() => {
+    if (!isPlayerBoard) {
+      return currentTurn === "ENEMY_TURN";
+    }
+    return true;
+  }, [isPlayerBoard, currentTurn]);
+
+  if (!shouldShowShips) {
+    return null;
+  }
 
   return (
     <group>
