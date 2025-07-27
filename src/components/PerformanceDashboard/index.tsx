@@ -74,7 +74,6 @@ export const PerformanceDashboard = ({
         pointerEvents: 'auto'
       }}
     >
-      {/* Performance Summary */}
       <div
         style={{
           background: 'rgba(0, 0, 0, 0.8)',

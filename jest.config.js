@@ -4,6 +4,8 @@ export default {
   roots: ["<rootDir>/src"],
   testMatch: ["**/__tests__/**/*.test.ts", "**/__tests__/**/*.test.tsx"],
 
+  setupFilesAfterEnv: ["<rootDir>/src/test-setup.ts"],
+
   transform: {
     "^.+\\.tsx?$": [
       "ts-jest",

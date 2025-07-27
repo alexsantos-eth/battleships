@@ -48,11 +48,8 @@ const GameGrid = ({
         <TreePlane />
 
         <GridHelper />
-        {/* PressGrid para interacción del jugador */}
         {enablePressGrid && isPlayerTurn && !isPlayerBoard && <PressGrid />}
-        {/* PlayerShotsGrid para mostrar disparos del jugador */}
         {showShots && !isPlayerBoard && <PlayerShotsGrid />}
-        {/* EnemyShotsGrid para mostrar disparos del enemigo */}
         {showShots && isPlayerBoard && <EnemyShotsGrid />}
         {showShips && <ShipsPlane isPlayerBoard={isPlayerBoard} alwaysShowEnemyShips={alwaysShowEnemyShips} />}
       </group>

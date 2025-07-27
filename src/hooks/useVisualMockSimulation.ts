@@ -1,7 +1,6 @@
 import { useState, useCallback } from 'react';
 import { useGameStore } from '@/stores/gameStore';
-import { runMockSimulation } from '@/game/logic/examples/mockBattleSimulation';
-import type { MockBattleResult } from '@/game/logic/examples/mockBattleSimulation';
+import { runMockSimulation, type MockBattleResult } from '@/simulations';
 import { CoordinateUtils } from "@/utils/coordinates";
 
 export const useVisualMockSimulation = () => {
