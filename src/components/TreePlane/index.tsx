@@ -23,21 +23,7 @@ const trees = [
     variant: 1 as const,
   },
 
-  {
-    id: "tree-bottom-1",
-    position: [-3.3, 0, -1.2] as [number, number, number],
-    rotation: [0, -Math.PI, 0] as [number, number, number],
-    scale: [0.8, 0.8, 0.8] as [number, number, number],
-    variant: 3 as const,
-  },
 
-  {
-    id: "tree-right-1",
-    position: [-3.5, 0.2, 2.8] as [number, number, number],
-    rotation: [0, Math.PI / 2, 0] as [number, number, number],
-    scale: [0.8, 0.8, 0.8] as [number, number, number],
-    variant: 3 as const,
-  },
   {
     id: "tree-right-2",
     position: [-2, 0, 3] as [number, number, number],

@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import * as THREE from "three";
 
 import { useGameStore } from "@/stores/gameStore";
-import { useTestingStore } from "@/stores/testingStore";
+import { usePlaygroundStore } from "@/stores/playgroundStore";
 import { PLAYER_CAMERA_POSITION, ENEMY_CAMERA_POSITION, PLAYER_PERSPECTIVE_POSITION } from "@/utils/camera";
 import { eventBus, EVENTS } from "@/utils/eventBus";
 import { useFrame, useThree } from "@react-three/fiber";
@@ -38,9 +38,9 @@ export const useCameraEvents = (
 
   const { camera, gl } = useThree();
   const { isPlayerTurn } = useGameStore();
-  const { freeCameraMovement } = useTestingStore();
+  const { freeCameraMovement } = usePlaygroundStore();
   
-  const isTestingRoute = location.pathname === "/testing";
+  const isPlaygroundRoute = location.pathname === "/playground";
   const targetPosition = useRef(camera.position.clone());
   const targetRotation = useRef(camera.rotation.clone());
   const isAnimating = useRef(false);
@@ -222,7 +222,7 @@ export const useCameraEvents = (
   useFrame(() => {
     checkPerformance();
     
-    if (!isAnimating.current || (isTestingRoute && freeCameraMovement)) return;
+    if (!isAnimating.current || (isPlaygroundRoute && freeCameraMovement)) return;
 
     const currentPos = camera.position;
     const currentRot = camera.rotation;

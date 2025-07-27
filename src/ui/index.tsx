@@ -10,7 +10,7 @@ const UIBox: React.FC = () => {
   const [isPlayerPerspective, setIsPlayerPerspective] = useState(false);
   const { currentTurn, isPlayerTurn, toggleTurn } = useGameStore();
 
-  const isTestingRoute = location.pathname === "/testing";
+  const isPlaygroundRoute = location.pathname === "/playground";
 
   const handlePlayerCamera = () => {
     if (!isPlayerTurn) {
@@ -60,7 +60,7 @@ const UIBox: React.FC = () => {
         {isPlayerPerspective ? "Vista Enemigo" : "Vista Jugador"}
       </button>
 
-      {isTestingRoute && (
+      {isPlaygroundRoute && (
         <button
           onClick={toggleTurn}
           style={{

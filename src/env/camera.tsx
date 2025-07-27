@@ -1,15 +1,15 @@
 import { useLocation } from "react-router-dom";
 
-import { useTestingStore } from "@/stores/testingStore";
+import { usePlaygroundStore } from "@/stores/playgroundStore";
 import { DEBUG_CONFIG } from "@/utils/debug";
 import { OrbitControls } from "@react-three/drei";
 
 const Camera = () => {
   const location = useLocation();
-  const isTestingRoute = location.pathname === "/testing";
-  const { freeCameraMovement } = useTestingStore();
+  const isPlaygroundRoute = location.pathname === "/playground";
+  const { freeCameraMovement } = usePlaygroundStore();
 
-  if (!DEBUG_CONFIG.ENABLE_CAMERA_CONTROLS) {
+  if (!DEBUG_CONFIG.ENABLE_CAMERA_CONTROLS || !isPlaygroundRoute) {
     return null;
   }
 
@@ -19,15 +19,15 @@ const Camera = () => {
         onChange={() => {}}
         onStart={() => {}}
         onEnd={() => {}}
-        enablePan={isTestingRoute && freeCameraMovement}
-        enableZoom={isTestingRoute && freeCameraMovement}
-        enableRotate={isTestingRoute && freeCameraMovement}
-        maxDistance={isTestingRoute && freeCameraMovement ? 50 : 20}
-        minDistance={isTestingRoute && freeCameraMovement ? 1 : 5}
+        enablePan={isPlaygroundRoute && freeCameraMovement}
+        enableZoom={isPlaygroundRoute && freeCameraMovement}
+        enableRotate={isPlaygroundRoute && freeCameraMovement}
+        maxDistance={isPlaygroundRoute && freeCameraMovement ? 50 : 20}
+        minDistance={isPlaygroundRoute && freeCameraMovement ? 1 : 5}
         maxPolarAngle={
-          isTestingRoute && freeCameraMovement ? Math.PI : Math.PI / 2
+          isPlaygroundRoute && freeCameraMovement ? Math.PI : Math.PI / 2
         }
-        minPolarAngle={isTestingRoute && freeCameraMovement ? 0 : 0}
+        minPolarAngle={isPlaygroundRoute && freeCameraMovement ? 0 : 0}
       />
     </>
   );

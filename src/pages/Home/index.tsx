@@ -31,8 +31,8 @@ const Home = () => {
     navigate(`/match?${params.toString()}`);
   };
 
-  const handleGoToTesting = () => {
-    navigate("/testing");
+  const handleGoToPlayground = () => {
+    navigate("/playground");
   };
 
   return (
@@ -269,10 +269,10 @@ const Home = () => {
 
           <div className="border-t border-white/20 pt-4">
             <button
-              onClick={handleGoToTesting}
+              onClick={handleGoToPlayground}
               className="w-full font-bold py-2 px-4 rounded-lg transition-all duration-200 transform focus:outline-none focus:ring-2 focus:ring-purple-400 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 hover:scale-105 text-sm"
             >
-              🧪 Modo Testing
+              🚀 Playground
             </button>
           </div>
         </div>

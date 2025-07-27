@@ -12,7 +12,7 @@ export const DebugPanel = () => {
   const [isVisible, setIsVisible] = useState<boolean>(DEBUG_CONFIG.ENABLE_DEBUG_PANEL);
   const [isManuallyClosed, setIsManuallyClosed] = useState(false);
 
-  const isTestingRoute = location.pathname === "/testing";
+  const isPlaygroundRoute = location.pathname === "/playground";
 
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
@@ -29,7 +29,7 @@ export const DebugPanel = () => {
     }
   }, []);
 
-  if (!DEBUG_CONFIG.ENABLE_DEBUG_PANEL || isManuallyClosed || !isVisible || !isTestingRoute) {
+  if (!DEBUG_CONFIG.ENABLE_DEBUG_PANEL || isManuallyClosed || !isVisible || !isPlaygroundRoute) {
     return null;
   }
 
