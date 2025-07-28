@@ -1,6 +1,6 @@
 import React from "react";
 import { Rock } from "@/components/primitives/Rock";
-import type { RocksPlaneProps, RockConfig } from './RocksPlane.types';
+import type { RocksPlaneProps, RockConfig } from "./RocksPlane.types";
 
 const rocks: RockConfig[] = [
   {
@@ -36,19 +36,19 @@ const rocks: RockConfig[] = [
   {
     id: "rock-bottom-2",
     variant: 7,
-    position: [1.1, -3.3, -0.25],
-    rotation: [0, Math.PI / 2, 0],
+    position: [1.1, -3.1, 0],
+    rotation: [Math.PI / 4, Math.PI / 2, Math.PI / 2],
   },
   {
     id: "rock-bottom-3",
     variant: 4,
-    position: [2, -3.1, 0],
-    rotation: [0, Math.PI / 2, 0],
+    position: [2, -3.1, 0.06],
+    rotation: [0, -Math.PI / 2, 0],
   },
   {
     id: "rock-right-1",
     variant: 7,
-    position: [3.5, -1, 0],
+    position: [3.2, -1, 0],
     rotation: [Math.PI / 2, Math.PI / 2, 0],
   },
   {
@@ -78,4 +78,4 @@ export const RocksPlane: React.FC<RocksPlaneProps> = () => {
       ))}
     </group>
   );
-}; 
+};

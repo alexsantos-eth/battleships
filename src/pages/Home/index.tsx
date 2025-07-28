@@ -35,6 +35,10 @@ const Home = () => {
     navigate("/playground");
   };
 
+  const handleGoToMultiplayer = () => {
+    navigate("/multiplayer");
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 flex items-center justify-center">
       <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 shadow-2xl border border-white/20 max-w-md w-full mx-4">
@@ -267,7 +271,14 @@ const Home = () => {
             }
           </button>
 
-          <div className="border-t border-white/20 pt-4">
+          <div className="border-t border-white/20 pt-4 space-y-3">
+            <button
+              onClick={handleGoToMultiplayer}
+              className="w-full font-bold py-2 px-4 rounded-lg transition-all duration-200 transform focus:outline-none focus:ring-2 focus:ring-green-400 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 hover:scale-105 text-sm"
+            >
+              🎮 Multiplayer
+            </button>
+            
             <button
               onClick={handleGoToPlayground}
               className="w-full font-bold py-2 px-4 rounded-lg transition-all duration-200 transform focus:outline-none focus:ring-2 focus:ring-purple-400 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 hover:scale-105 text-sm"

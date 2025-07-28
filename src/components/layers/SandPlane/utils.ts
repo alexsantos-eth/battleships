@@ -4,7 +4,7 @@ interface TerrainOffset {
   x: number;
   z: number;
 }
-const holeRadius = 0.28;
+const holeRadius = 0.29;
 
 export const generateTerrain = (
   simplex: ReturnType<typeof createNoise2D>,

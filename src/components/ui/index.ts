@@ -15,3 +15,6 @@ export type { GameLoadingScreenProps } from "./GameLoadingScreen/GameLoadingScre
 
 export { GameScreen } from "../features/GameScreen";
 export type { GameScreenProps } from "../features/GameScreen/GameScreen.types";
+
+export { MultiplayerMenu } from "./MultiplayerMenu";
+export { RoomLobby } from "./RoomLobby";

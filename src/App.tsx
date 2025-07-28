@@ -6,6 +6,7 @@ import Home from "@/pages/Home";
 import Match from "@/pages/Match";
 import Playground from "@/pages/Playground";
 import UserProfilePage from "@/pages/UserProfile";
+import { MultiplayerPage } from "@/pages/Multiplayer";
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
           <Route path="/match" element={<Match />} />
           <Route path="/playground" element={<Playground />} />
           <Route path="/profile" element={<UserProfilePage />} />
+          <Route path="/multiplayer" element={<MultiplayerPage />} />
         </Routes>
       </Router>
     </AuthProvider>
