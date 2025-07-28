@@ -1,22 +1,27 @@
 import { useEffect, useState } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
+import { UnifiedDebugPanel } from "@/components/debug/UnifiedDebugPanel";
 import { GameGrid } from "@/components/features/GameGrid";
-import { DebugPanel } from "@/components/debug/DebugPanel";
 import { GameOverModal } from "@/components/layouts/GameOverModal";
 import { LoadingScreen } from "@/components/ui/LoadingScreen";
 import EnvironmentBox from "@/env";
-import UIBox from "@/components/ui/UIBox/UIBox";
-import type { GameConfig } from "@/game/logic/gameInitializer";
-import { useGameStore } from "@/stores/game";
 import { useEnemyAI } from "@/hooks/useEnemyAI";
+import { useGameStore } from "@/stores/game";
 
+import type { GameConfig } from "@/game/logic/gameInitializer";
 const Match = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [gameConfig, setGameConfig] = useState<Partial<GameConfig> | null>(null);
+  const [gameConfig, setGameConfig] = useState<Partial<GameConfig> | null>(
+    null
+  );
 
-  const mapUrlParamsToGameConfig = (gridSize: number, ships: Record<string, number>, difficulty: string): Partial<GameConfig> => {
+  const mapUrlParamsToGameConfig = (
+    gridSize: number,
+    ships: Record<string, number>,
+    difficulty: string
+  ): Partial<GameConfig> => {
     const shipCounts = {
       small: ships.small || 1,
       medium: ships.medium || 1,
@@ -39,15 +44,13 @@ const Match = () => {
   const [isInitialized, setIsInitialized] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { initializeGame } = useGameStore();
-  
+
   useEnemyAI();
 
   useEffect(() => {
     const gridSize = parseInt(searchParams.get("gridSize") || "10");
     const shipsParam = searchParams.get("ships");
     const difficulty = searchParams.get("difficulty") || "medium";
-
-
 
     if (!shipsParam) {
       console.error("Parámetros de barcos no encontrados");
@@ -58,12 +61,12 @@ const Match = () => {
     try {
       const ships = JSON.parse(shipsParam);
       const config = mapUrlParamsToGameConfig(gridSize, ships, difficulty);
-      
+
       setGameConfig(config);
-      
+
       if (!isInitialized) {
         setIsLoading(true);
-        
+
         try {
           initializeGame(config);
           setIsInitialized(true);
@@ -79,10 +82,6 @@ const Match = () => {
       navigate("/");
     }
   }, [searchParams, navigate, isInitialized, initializeGame]);
-
-  const handleBackToHome = () => {
-    navigate("/");
-  };
 
   if (!gameConfig) {
     return <LoadingScreen message="Cargando configuración..." />;
@@ -102,7 +101,6 @@ const Match = () => {
           </div>
           <button
             onClick={() => {
-
               setIsLoading(true);
               try {
                 initializeGame(gameConfig);
@@ -124,15 +122,6 @@ const Match = () => {
 
   return (
     <>
-      <div className="fixed top-4 left-4 z-50">
-        <button
-          onClick={handleBackToHome}
-          className="bg-white/10 backdrop-blur-md text-white px-4 py-2 rounded-lg border border-white/20 hover:bg-white/20 transition-all duration-200"
-        >
-          ← Volver al inicio
-        </button>
-      </div>
-
       <EnvironmentBox>
         <GameGrid isPlayerBoard={true} />
         <GameGrid
@@ -142,13 +131,12 @@ const Match = () => {
           position={[0, 9, 0]}
         />
       </EnvironmentBox>
-      <UIBox />
 
-      <DebugPanel />
-      
+      <UnifiedDebugPanel />
+
       <GameOverModal />
     </>
   );
 };
 
-export default Match; 
+export default Match;

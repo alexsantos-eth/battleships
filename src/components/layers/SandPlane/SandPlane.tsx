@@ -135,7 +135,7 @@ export const SandPlane: React.FC<SandPlaneProps> = ({
 
   return (
     <group
-      scale={11 / scale}
+      scale={9.5 / scale}
       position={[-offset.x, 0, 0.1]}
       rotation={[Math.PI / 2, 0, 0]}
     >
