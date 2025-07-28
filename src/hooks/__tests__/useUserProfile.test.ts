@@ -2,7 +2,7 @@ import { renderHook } from '@testing-library/react';
 import { useUserProfile } from '../useUserProfile';
 import { useUserProfileStore } from '@/stores/userProfile';
 
-jest.mock('@/stores/userProfileStore');
+jest.mock('@/stores/userProfile');
 
 describe('useUserProfile', () => {
   const mockUseUserProfileStore = useUserProfileStore as jest.MockedFunction<typeof useUserProfileStore>;

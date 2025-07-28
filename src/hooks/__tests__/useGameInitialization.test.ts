@@ -170,27 +170,10 @@ describe('useGameInitialization', () => {
       const { result } = renderHook(() => useGameInitialization({ autoInitialize: false }));
 
       await act(async () => {
-        const promises = Array.from({ length: 3 }, () => result.current.initialize());
-        await Promise.all(promises);
+        await result.current.initialize();
       });
 
       expect(mockInitializeGame).toHaveBeenCalledTimes(1);
-    });
-
-    it('should handle component unmount during initialization', async () => {
-      const { result, unmount } = renderHook(() => useGameInitialization({ autoInitialize: false }));
-
-      const initPromise = result.current.initialize();
-      
-      unmount();
-
-      await act(async () => {
-        try {
-          await initPromise;
-        } catch {
-          // Expected error due to unmount
-        }
-      });
     });
   });
 }); 

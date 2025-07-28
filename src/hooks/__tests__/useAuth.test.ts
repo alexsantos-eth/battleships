@@ -3,7 +3,7 @@ import { useAuth } from '../useAuth';
 import { useAuthStore } from '@/stores/auth';
 import type { User } from 'firebase/auth';
 
-jest.mock('@/stores/authStore');
+jest.mock('@/stores/auth');
 
 jest.mock('firebase/auth', () => ({
   signInAnonymously: jest.fn(),
