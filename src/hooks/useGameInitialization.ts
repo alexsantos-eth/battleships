@@ -60,7 +60,26 @@ export const useGameInitialization = (options: UseGameInitializationOptions = {}
     let mounted = true;
 
     if (autoInitialize) {
-      initialize().catch((error) => {
+      const initPromise = new Promise<void>((resolve, reject) => {
+        try {
+          initializeGame(configRef.current);
+          if (mounted) {
+            setIsInitialized(true);
+            setIsLoading(false);
+            onInitialized?.();
+          }
+          resolve();
+        } catch (error) {
+          const errorObj = error instanceof Error ? error : new Error('Unknown initialization error');
+          if (mounted) {
+            setIsLoading(false);
+            onError?.(errorObj);
+          }
+          reject(errorObj);
+        }
+      });
+
+      initPromise.catch((error) => {
         if (mounted) {
           console.error('Failed to initialize game:', error);
         }
@@ -69,9 +88,10 @@ export const useGameInitialization = (options: UseGameInitializationOptions = {}
 
     return () => {
       mounted = false;
-      reset();
+      setIsInitialized(false);
+      initializationPromise.current = null;
     };
-  }, [autoInitialize, initialize, reset]);
+  }, [autoInitialize, initializeGame, onInitialized, onError]);
 
   return {
     initialize,

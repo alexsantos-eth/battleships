@@ -2,7 +2,7 @@ import { renderHook, act } from '@testing-library/react';
 import { useUserProfileStore } from '../userProfile';
 import type { UserProfile, GameStats, UserPreferences, GameHistory } from '@/types/user';
 
-jest.mock('@/services/userService', () => ({
+jest.mock('@/services/user', () => ({
   userService: {
     getUserProfile: jest.fn(),
     createUser: jest.fn(),

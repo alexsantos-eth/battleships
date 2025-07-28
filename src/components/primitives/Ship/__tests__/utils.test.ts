@@ -36,11 +36,11 @@ describe('Ship Utils', () => {
     expect(SHIP_VARIANTS.xlarge.modelUrl).toBe('/assets/models/XLarge_Ship.glb');
     });
 
-    it('should have valid scale arrays for each variant', () => {
-      expect(SHIP_VARIANTS.small.scale).toEqual([0.2, 0.2, 0.2]);
-      expect(SHIP_VARIANTS.medium.scale).toEqual([0.2, 0.2, 0.2]);
-      expect(SHIP_VARIANTS.large.scale).toEqual([0.2, 0.2, 0.23]);
-      expect(SHIP_VARIANTS.xlarge.scale).toEqual([0.2, 0.2, 0.3]);
+    it('should have valid scale values for each variant', () => {
+      expect(SHIP_VARIANTS.small.scale).toBe(0.5);
+      expect(SHIP_VARIANTS.medium.scale).toBe(0.7);
+      expect(SHIP_VARIANTS.large.scale).toBe(0.9);
+      expect(SHIP_VARIANTS.xlarge.scale).toBe(1.1);
     });
 
     it('should have correct extraOffset values', () => {
@@ -193,7 +193,7 @@ describe('Ship Utils', () => {
     });
 
     it('should have consistent property structure across variants', () => {
-      const requiredProperties = ['size', 'url', 'scale', 'extraOffset', 'waveFrequency', 'waveAmplitude', 'color'];
+      const requiredProperties = ['size', 'modelUrl', 'scale', 'extraOffset', 'waveFrequency', 'waveAmplitude', 'color'];
       
       Object.values(SHIP_VARIANTS).forEach(variant => {
         requiredProperties.forEach(prop => {
