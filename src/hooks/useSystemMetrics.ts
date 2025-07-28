@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { GAME_CONSTANTS } from '@/utils/constants';
+import { GAME_CONSTANTS } from '@/constants/game';
 
 interface SystemMetrics {
   memory: {

@@ -1,4 +1,4 @@
-import { useGameStore } from "@/stores/gameStore";
+import { useGameStore } from "@/stores/game";
 
 export interface GridPosition {
   x: number;

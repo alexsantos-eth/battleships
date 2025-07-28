@@ -1,5 +1,5 @@
-import { useGameStore } from '@/stores/gameStore';
-import { GAME_CONSTANTS } from '@/utils/constants';
+import { useGameStore } from '@/stores/game';
+import { GAME_CONSTANTS } from '@/constants/game';
 
 export const GRID_SPACING = GAME_CONSTANTS.BOARD.GRID_SPACING;
 

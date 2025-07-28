@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserProfile } from "@/hooks/useUserProfile";
-import { LoadingScreen } from "@/components/LoadingScreen";
-import UserStats from "@/components/UserStats";
-import GameHistoryComponent from "@/components/GameHistory";
-import LogoutButton from "@/components/LogoutButton";
+import { LoadingScreen } from "@/components/ui/LoadingScreen";
+import { LogoutButton } from "@/components/ui/LogoutButton";
 import type { UserPreferences } from "@/types/user";
+import { GameHistory, UserStats } from "@/components/features";
 
 const UserProfilePage = () => {
   const { user } = useAuth();
@@ -290,7 +289,7 @@ const UserProfilePage = () => {
         <div className="mt-8">
           <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
             <h3 className="text-2xl font-bold text-white mb-6">Recent Games</h3>
-            <GameHistoryComponent />
+            <GameHistory />
           </div>
         </div>
 

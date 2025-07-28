@@ -1,5 +1,5 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
-import { useGameStore } from '@/stores/gameStore';
+import { useGameStore } from '@/stores/game';
 import type { GameConfig } from '@/game/logic/gameInitializer';
 
 interface UseGameInitializationOptions {

@@ -319,8 +319,6 @@ export function createQuickMockBattle(seed: number = 11111): MockBattleResult {
 export function runMockSimulation(
   type: "player-win" | "enemy-win" | "quick" | "random" = "quick"
 ): MockBattleResult {
-  console.log(`🎯 Ejecutando simulación mock: ${type}`);
-
   let result: MockBattleResult;
 
   switch (type) {
@@ -338,39 +336,6 @@ export function runMockSimulation(
       result = createQuickMockBattle();
       break;
   }
-
-  console.log("📊 Resultados de la simulación mock:");
-  console.log(`🏆 Ganador: ${result.winner}`);
-  console.log(`🔄 Total de turnos: ${result.totalTurns}`);
-  console.log(
-    `🎯 Disparos del jugador: ${result.playerShots} (${result.playerHits} aciertos)`
-  );
-  console.log(
-    `🎯 Disparos del enemigo: ${result.enemyShots} (${result.enemyHits} aciertos)`
-  );
-  console.log(
-    `📈 Precisión del jugador: ${(
-      (result.playerHits / result.playerShots) *
-      100
-    ).toFixed(1)}%`
-  );
-  console.log(
-    `📈 Precisión del enemigo: ${(
-      (result.enemyHits / result.enemyShots) *
-      100
-    ).toFixed(1)}%`
-  );
-
-  console.log("\n🎯 Historial de disparos:");
-  result.shotHistory.forEach((shot, index) => {
-    console.log(
-      `  ${index + 1}. ${shot.turn}: (${shot.position.x}, ${
-        shot.position.y
-      }) - ${shot.hit ? "✅ Hit" : "❌ Miss"}${
-        shot.shipDestroyed ? " 💥 Destroyed" : ""
-      }`
-    );
-  });
 
   return result;
 }

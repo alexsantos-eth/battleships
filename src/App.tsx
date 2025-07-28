@@ -1,11 +1,11 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import AuthProvider from "@/components/AuthProvider";
-import UserProfilePanel from "@/components/UserProfilePanel";
-import Navigation from "@/components/Navigation";
-import FloatingProfileButton from "@/components/FloatingProfileButton";
-import FloatingLogoutButton from "@/components/FloatingLogoutButton";
-import AuthDebug from "@/components/AuthDebug";
+import { AuthProvider } from "@/components/auth/AuthProvider";
+import { UserProfilePanel } from "@/components/ui/UserProfilePanel";
+import { Navigation } from "@/components/layouts/Navigation";
+import { FloatingProfileButton } from "@/components/ui/FloatingProfileButton";
+import { FloatingLogoutButton } from "@/components/ui/FloatingLogoutButton";
+import { AuthDebug } from "@/components/debug/AuthDebug";
 import Home from "@/pages/Home";
 import Match from "@/pages/Match";
 import Playground from "@/pages/Playground";

@@ -1,4 +1,4 @@
-import { GAME_CONSTANTS } from './constants';
+import { GAME_CONSTANTS } from "@/constants/game";
 
 export const DEBUG_CONFIG = {
   ENABLE_PERFORMANCE_MONITOR: true,

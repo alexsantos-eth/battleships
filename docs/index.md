@@ -4,6 +4,21 @@ Bienvenido a la documentación completa de **Armada.io**, un juego de armada inm
 
 ## 📖 Documentación Disponible
 
+### 🏗️ [Estándares y Buenas Prácticas](ESTANDARES_BUENAS_PRACTICAS.md)
+Guía completa de estándares y buenas prácticas para el desarrollo:
+- Estructura de directorios y organización
+- Convenciones de nomenclatura
+- Gestión de estado y componentes
+- Testing y performance
+- Documentación y mantenimiento
+
+### 🚀 [Plan de Implementación](PLAN_IMPLEMENTACION.md)
+Plan detallado para implementar los nuevos estándares:
+- Estado actual del proyecto
+- Fases de implementación
+- Cronograma y métricas
+- Comandos y recursos útiles
+
 ### 🎮 [Documentación Completa](DOCUMENTACION.md)
 Guía detallada que cubre todos los aspectos del juego:
 - Arquitectura y diseño del sistema
@@ -35,12 +50,12 @@ Guía de constantes y configuración del sistema:
 - Configuración de efectos visuales
 - Valores por defecto del sistema
 
-### 📊 [Performance Monitor](README.md)
-Documentación del sistema de monitoreo de rendimiento:
-- Componente PerformanceMonitor
-- Métricas y análisis de rendimiento
-- Herramientas de debugging
-- Optimización del sistema
+### 🧪 [Testing y Calidad](TEST_COVERAGE_IMPROVEMENTS.md)
+Documentación del sistema de pruebas:
+- **100% coverage** en GameInitializer
+- 25 pruebas unitarias para lógica principal
+- Validación robusta de configuraciones
+- Scripts de prueba optimizados
 
 ### 🎮 [Simulaciones](SIMULATIONS.md)
 Documentación de las simulaciones de batalla:
@@ -48,6 +63,15 @@ Documentación de las simulaciones de batalla:
 - Tipos de simulaciones disponibles
 - Uso en debug panel y testing
 - Configuración de parámetros
+
+### 📋 [Últimas Mejoras](LATEST_IMPROVEMENTS.md)
+Resumen de mejoras recientes implementadas:
+- Correcciones de errores y validación
+- Mejoras en testing y coverage
+- Optimizaciones de código y performance
+- Documentación actualizada
+
+
 
 ## 🚀 Inicio Rápido
 
@@ -66,6 +90,8 @@ Para comenzar a desarrollar con Armada.io:
 - **Sistema de Turnos**: Mecánica clásica de armada
 - **IA Enemiga**: Oponente con comportamiento inteligente
 - **Debug Tools**: Panel de debug y monitoreo de rendimiento
+- **Testing Completo**: 100% coverage en módulos críticos
+- **Validación Robusta**: Verificación de configuraciones y estados
 
 ## 🛠️ Stack Tecnológico
 

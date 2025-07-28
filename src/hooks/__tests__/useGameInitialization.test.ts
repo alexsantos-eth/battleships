@@ -1,93 +1,196 @@
 import { renderHook, act } from '@testing-library/react';
 import { useGameInitialization } from '../useGameInitialization';
-import { useGameStore } from '@/stores/gameStore';
+import { useGameStore } from '@/stores/game';
 
-jest.mock('@/stores/gameStore', () => ({
+jest.mock('@/stores/game', () => ({
   useGameStore: jest.fn(),
 }));
 
 describe('useGameInitialization', () => {
-  const mockInitializeGame = jest.fn();
   const mockUseGameStore = useGameStore as jest.MockedFunction<typeof useGameStore>;
+  let mockInitializeGame: jest.Mock;
 
   beforeEach(() => {
-    jest.clearAllMocks();
-    mockInitializeGame.mockResolvedValue(undefined);
+    mockInitializeGame = jest.fn();
     mockUseGameStore.mockReturnValue({
       initializeGame: mockInitializeGame,
-      isInitialized: false,
-      resetGame: jest.fn(),
     } as ReturnType<typeof useGameStore>);
   });
 
-  it('should return expected interface', () => {
-    const { result } = renderHook(() => useGameInitialization({
-      autoInitialize: false,
-    }));
-
-    expect(result.current).toHaveProperty('initialize');
-    expect(result.current).toHaveProperty('reset');
-    expect(result.current).toHaveProperty('isInitialized');
-    expect(result.current).toHaveProperty('isLoading');
-    expect(typeof result.current.initialize).toBe('function');
-    expect(typeof result.current.reset).toBe('function');
-    expect(typeof result.current.isInitialized).toBe('boolean');
-    expect(typeof result.current.isLoading).toBe('boolean');
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
-  it('should start with correct initial state', () => {
-    const { result } = renderHook(() => useGameInitialization({
-      autoInitialize: false,
-    }));
+  describe('initialization', () => {
+    it('should return expected interface', () => {
+      const { result } = renderHook(() => useGameInitialization({ autoInitialize: false }));
 
-    expect(result.current.isInitialized).toBe(false);
-    expect(result.current.isLoading).toBe(false);
-  });
-
-  it('should call initializeGame when initialize is called', async () => {
-    const { result } = renderHook(() => useGameInitialization({
-      autoInitialize: false,
-    }));
-
-    await act(async () => {
-      await result.current.initialize();
+      expect(result.current).toHaveProperty('initialize');
+      expect(result.current).toHaveProperty('reset');
+      expect(result.current).toHaveProperty('isInitialized');
+      expect(result.current).toHaveProperty('isLoading');
+      expect(typeof result.current.initialize).toBe('function');
+      expect(typeof result.current.reset).toBe('function');
+      expect(typeof result.current.isInitialized).toBe('boolean');
+      expect(typeof result.current.isLoading).toBe('boolean');
     });
 
-    expect(mockInitializeGame).toHaveBeenCalledTimes(1);
-  });
+    it('should start with correct initial state', () => {
+      const { result } = renderHook(() => useGameInitialization({ autoInitialize: false }));
 
-  it('should handle initialization errors', async () => {
-    const mockError = new Error('Initialization failed');
-    mockInitializeGame.mockImplementation(() => {
-      throw mockError;
+      expect(result.current.isInitialized).toBe(false);
+      expect(result.current.isLoading).toBe(false);
     });
 
-    const onError = jest.fn();
-    const { result } = renderHook(() => useGameInitialization({
-      autoInitialize: false,
-      onError,
-    }));
+    it('should initialize game with default config', async () => {
+      const { result } = renderHook(() => useGameInitialization({ autoInitialize: false }));
 
-    await act(async () => {
-      try {
+      await act(async () => {
         await result.current.initialize();
-      } catch {
-        // Expected error
-      }
+      });
+
+      expect(mockInitializeGame).toHaveBeenCalledWith(undefined);
+      expect(result.current.isInitialized).toBe(true);
+      expect(result.current.isLoading).toBe(false);
     });
 
-    expect(onError).toHaveBeenCalledWith(mockError);
+    it('should initialize game with custom config', async () => {
+      const customConfig = {
+        boardWidth: 8,
+        boardHeight: 8,
+        shipCounts: {
+          small: 2,
+          medium: 1,
+          large: 0,
+          xlarge: 0,
+        },
+        initialTurn: 'player' as const,
+        enemyAI: 'basic' as const,
+      };
+
+      const { result } = renderHook(() => useGameInitialization({ 
+        config: customConfig, 
+        autoInitialize: false 
+      }));
+
+      await act(async () => {
+        await result.current.initialize();
+      });
+
+      expect(mockInitializeGame).toHaveBeenCalledWith(customConfig);
+    });
+
+    it('should handle initialization errors gracefully', async () => {
+      const mockError = new Error('Invalid configuration');
+      mockInitializeGame.mockImplementation(() => {
+        throw mockError;
+      });
+
+      const onError = jest.fn();
+      const { result } = renderHook(() => useGameInitialization({ 
+        autoInitialize: false, 
+        onError 
+      }));
+
+      await act(async () => {
+        try {
+          await result.current.initialize();
+        } catch {
+          // Expected error
+        }
+      });
+
+      expect(onError).toHaveBeenCalledWith(mockError);
+      expect(result.current.isInitialized).toBe(false);
+      expect(result.current.isLoading).toBe(false);
+    });
+
+    it('should not reinitialize if already initialized', async () => {
+      const { result } = renderHook(() => useGameInitialization({ autoInitialize: false }));
+
+      await act(async () => {
+        await result.current.initialize();
+      });
+
+      expect(mockInitializeGame).toHaveBeenCalledTimes(1);
+
+      await act(async () => {
+        await result.current.initialize();
+      });
+
+      expect(mockInitializeGame).toHaveBeenCalledTimes(1);
+    });
+
+    it('should reset state when reset is called', async () => {
+      const { result } = renderHook(() => useGameInitialization({ autoInitialize: false }));
+
+      await act(async () => {
+        await result.current.initialize();
+      });
+
+      expect(result.current.isInitialized).toBe(true);
+
+      act(() => {
+        result.current.reset();
+      });
+
+      expect(result.current.isInitialized).toBe(false);
+    });
   });
 
-  it('should reset state when reset is called', () => {
-    const { result } = renderHook(() => useGameInitialization({
-      autoInitialize: false,
-    }));
+  describe('auto initialization', () => {
+    it('should auto initialize by default', async () => {
+      renderHook(() => useGameInitialization());
 
-    act(() => {
-      result.current.reset();
+      expect(mockInitializeGame).toHaveBeenCalled();
     });
 
-    expect(result.current.isInitialized).toBe(false);
+    it('should not auto initialize when disabled', () => {
+      renderHook(() => useGameInitialization({ autoInitialize: false }));
+
+      expect(mockInitializeGame).not.toHaveBeenCalled();
+    });
+
+    it('should call onInitialized callback when successful', async () => {
+      const onInitialized = jest.fn();
+      
+      renderHook(() => useGameInitialization({ onInitialized }));
+
+      await act(async () => {
+        // Wait for auto initialization
+        await new Promise(resolve => setTimeout(resolve, 0));
+      });
+
+      expect(onInitialized).toHaveBeenCalled();
+    });
+  });
+
+  describe('edge cases', () => {
+    it('should handle rapid initialization calls', async () => {
+      const { result } = renderHook(() => useGameInitialization({ autoInitialize: false }));
+
+      await act(async () => {
+        const promises = Array.from({ length: 3 }, () => result.current.initialize());
+        await Promise.all(promises);
+      });
+
+      expect(mockInitializeGame).toHaveBeenCalledTimes(1);
+    });
+
+    it('should handle component unmount during initialization', async () => {
+      const { result, unmount } = renderHook(() => useGameInitialization({ autoInitialize: false }));
+
+      const initPromise = result.current.initialize();
+      
+      unmount();
+
+      await act(async () => {
+        try {
+          await initPromise;
+        } catch {
+          // Expected error due to unmount
+        }
+      });
+    });
   });
 }); 

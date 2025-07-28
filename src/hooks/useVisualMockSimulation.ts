@@ -1,7 +1,6 @@
 import { useState, useCallback } from 'react';
-import { useGameStore } from '@/stores/gameStore';
+import { useGameStore } from '@/stores/game';
 import { runMockSimulation, type MockBattleResult } from '@/simulations';
-import { CoordinateUtils } from "@/utils/coordinates";
 
 export const useVisualMockSimulation = () => {
   const [isSimulating, setIsSimulating] = useState(false);
@@ -97,15 +96,7 @@ export const useVisualMockSimulation = () => {
         { coords: [0, 0] as [number, number], variant: 'small' as const, orientation: 'vertical' as const },
       ];
       
-      console.log('🚢 Barcos del jugador:', playerShips);
-      console.log('🚢 Barcos del enemigo:', enemyShips);
-      
-      console.log('🔍 Debug - Celdas de los barcos:');
-      enemyShips.forEach((ship, index) => {
-        const shipSize = ship.variant === 'small' ? 2 : ship.variant === 'medium' ? 3 : ship.variant === 'large' ? 4 : 5;
-        const cells = CoordinateUtils.getShipCells(ship.coords, ship.orientation, shipSize);
-        console.log(`  Barco enemigo ${index}: ${cells.map(cell => `[${cell.x},${cell.y}]`).join(', ')}`);
-      });
+
       
       setPlayerShips(playerShips);
       setEnemyShips(enemyShips);
@@ -125,7 +116,7 @@ export const useVisualMockSimulation = () => {
         );
       }
 
-      console.log('🎯 Disparos configurados:', shots);
+
 
       for (let i = 0; i < shots.length; i++) {
         const shot = shots[i];
@@ -135,7 +126,7 @@ export const useVisualMockSimulation = () => {
         await simulateQuickShot(shot, shotDelay);
       }
 
-      console.log(`🎯 Simulación visual de fin de juego completada! Ganador: ${winner}`);
+
       
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error desconocido');
@@ -169,7 +160,7 @@ export const useVisualMockSimulation = () => {
         await simulateShot(shot, shotDelay);
       }
 
-      console.log('🎯 Simulación visual completada!');
+
       
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error desconocido');
