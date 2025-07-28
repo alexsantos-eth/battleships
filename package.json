@@ -11,8 +11,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "test:memory": "node --max-old-space-size=4096 node_modules/.bin/jest --coverage",
-    "run:deterministic": "tsc -p tsconfig.script.json && node dist/examples/runDeterministicExample.js"
+    "test:memory": "node --max-old-space-size=4096 node_modules/.bin/jest --coverage"
   },
   "dependencies": {
     "@react-spring/three": "^10.0.1",

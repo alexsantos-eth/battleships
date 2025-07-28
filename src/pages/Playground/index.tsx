@@ -55,16 +55,14 @@ const Playground = () => {
   useEffect(() => {
     if (!isInitialized) {
       setIsLoading(true);
-      setTimeout(() => {
-        try {
-          initializeGame(defaultConfig);
-          setIsInitialized(true);
-        } catch (error) {
-          console.error("Error al inicializar el juego:", error);
-        } finally {
-          setIsLoading(false);
-        }
-      }, 200);
+      try {
+        initializeGame(defaultConfig);
+        setIsInitialized(true);
+      } catch (error) {
+        console.error("Error al inicializar el juego:", error);
+      } finally {
+        setIsLoading(false);
+      }
     }
   }, [isInitialized, initializeGame]);
 
@@ -91,16 +89,14 @@ const Playground = () => {
           <button
             onClick={() => {
               setIsLoading(true);
-              setTimeout(() => {
-                try {
-                  initializeGame(defaultConfig);
-                  setIsInitialized(true);
-                } catch (error) {
-                  console.error("Error:", error);
-                } finally {
-                  setIsLoading(false);
-                }
-              }, 100);
+              try {
+                initializeGame(defaultConfig);
+                setIsInitialized(true);
+              } catch (error) {
+                console.error("Error:", error);
+              } finally {
+                setIsLoading(false);
+              }
             }}
             className="mt-4 bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg"
           >

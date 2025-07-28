@@ -72,7 +72,7 @@ export const userService = {
   
     } catch (error) {
       console.warn('Firestore createUser failed, using localStorage fallback:', error);
-      const mockProfile: UserProfile = {
+      const defaultProfile: UserProfile = {
         uid: userData.uid,
         displayName: userData.displayName,
         email: userData.email || undefined,
@@ -86,7 +86,7 @@ export const userService = {
         lastLoginAt: new Date()
       };
       
-      localStorage.setItem(`user_profile_${userData.uid}`, JSON.stringify(mockProfile));
+      localStorage.setItem(`user_profile_${userData.uid}`, JSON.stringify(defaultProfile));
   
     }
   },
