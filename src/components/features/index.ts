@@ -4,6 +4,9 @@ export type { GameBoardProps, CellData } from "./GameBoard/GameBoard.types";
 export { GameGrid } from "./GameGrid";
 export type { GameGridProps } from "./GameGrid/GameGrid.types";
 
+export { Game } from "./Game";
+export type { GameProps } from "./Game/Game.types";
+
 export { PressGrid } from "./PressGrid";
 export type { PressGridProps, ShotResult } from "./PressGrid/PressGrid.types";
 

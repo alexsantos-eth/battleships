@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { UnifiedDebugPanel } from "@/components/debug/UnifiedDebugPanel";
-import { GameGrid } from "@/components/features/GameGrid";
-import EnvironmentBox from "@/env";
+import { Game } from "@/components/features/Game";
 import { useGameStore } from "@/stores/game";
 
 import type { GameConfig } from "@/game/logic/gameInitializer";
@@ -78,27 +77,21 @@ const Playground = () => {
 
   return (
     <>
-      <EnvironmentBox>
-        {showPlayerBoard && (
-          <GameGrid
-            isPlayerBoard={true}
-            showShips={showShips}
-            showShots={showShots}
-            alwaysShowEnemyShips={alwaysShowEnemyShips}
-          />
-        )}
-        {showEnemyBoard && (
-          <GameGrid
-            isPlayerBoard={false}
-            enablePressGrid={false}
-            rotation={[0, 0, Math.PI]}
-            position={[0, 9, 0]}
-            showShips={showShips}
-            showShots={showShots}
-            alwaysShowEnemyShips={alwaysShowEnemyShips}
-          />
-        )}
-      </EnvironmentBox>
+      <Game
+        showPlayerBoard={showPlayerBoard}
+        showEnemyBoard={showEnemyBoard}
+        playerBoardProps={{
+          showShips,
+          showShots,
+          alwaysShowEnemyShips,
+        }}
+        enemyBoardProps={{
+          enablePressGrid: false,
+          showShips,
+          showShots,
+          alwaysShowEnemyShips,
+        }}
+      />
 
       <UnifiedDebugPanel
         showPlayerBoard={showPlayerBoard}
