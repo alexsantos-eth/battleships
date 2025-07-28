@@ -1,4 +1,4 @@
-# Armada.io - Documentación Completa
+# Armada.io - Documentación Técnica
 
 ## 🎯 Descripción General
 
@@ -7,21 +7,12 @@
 ## 📚 Índice de Documentación
 
 ### 🏗️ **Arquitectura y Estructura**
-- [Plan de Implementación](./PLAN_IMPLEMENTACION.md) - Estrategia de desarrollo
-- [Resumen de Implementación](./RESUMEN_IMPLEMENTACION.md) - Estado actual del proyecto
 - [Diagrama de Flujo](./DIAGRAMA_FLUJO.md) - Flujo del juego con Mermaid
 - [Estándares y Buenas Prácticas](./ESTANDARES_BUENAS_PRACTICAS.md) - Guías de desarrollo
 
 ### 🔧 **Componentes y Lógica**
 - [Agrupación de Componentes](./AGRUPACION_COMPONENTES_COMPLETADA.md) - Estructura de componentes
-- [Refactorización Completada](./REFACTORIZACION_COMPLETADA.md) - Mejoras de código
-- [Limpieza de Código](./LIMPIEZA_CODIGO_COMPLETADA.md) - Optimizaciones realizadas
-- [Migración Completada](./MIGRACION_COMPLETADA.md) - Cambios de arquitectura
-
-### 🧪 **Testing y Calidad**
-- [Mejoras en Cobertura de Pruebas](./TEST_COVERAGE_IMPROVEMENTS.md) - **100% coverage en GameInitializer**
-- [Correcciones de GameInitializer](./GAME_INITIALIZER_FIXES.md) - Errores corregidos
-- [Simulaciones](./SIMULATIONS.md) - Sistema de simulaciones
+- [Limpieza de Código](./LIMPIEZA_CODIGO_COMPLETADA.md) - Optimizaciones y eliminación de archivos innecesarios
 
 ### 📖 **Referencias Técnicas**
 - [API Reference](./API_REFERENCE.md) - Documentación completa de APIs
@@ -98,93 +89,50 @@ Destruir todos los barcos enemigos antes de que destruyan los tuyos.
 ```bash
 # Clonar repositorio
 git clone [repository-url]
-cd battleships
+cd armada-io
 
 # Instalar dependencias
 npm install
 
-# Usar Node 20 (recomendado)
-nvm use 20
-
-# Ejecutar en desarrollo
+# Iniciar servidor de desarrollo
 npm run dev
 ```
 
-### **Scripts Disponibles**
+### **Comandos de Desarrollo**
 ```bash
-# Desarrollo
-npm run dev          # Servidor de desarrollo
-npm run build        # Build de producción
-npm run preview      # Preview de build
-
-# Testing
-npm test             # Ejecutar pruebas
-npm run test:coverage # Pruebas con coverage
-npm run test:memory  # Pruebas con más memoria
-npm run test:watch   # Modo watch
-
-# Linting
-npm run lint         # Verificar código
+npm run dev              # Servidor de desarrollo
+npm run build            # Build de producción
+npm run preview          # Preview del build
+npm run test             # Ejecutar tests
+npm run test:watch       # Tests en modo watch
+npm run test:coverage    # Tests con cobertura
+npm run lint             # Verificar código
 ```
+
+## 📝 **Notas de Desarrollo**
 
 ### **Estructura del Proyecto**
-```
-src/
-├── components/      # Componentes React
-│   ├── features/   # Funcionalidades del juego
-│   ├── ui/         # Componentes de UI
-│   ├── primitives/ # Primitivas 3D
-│   └── planes/     # Planos del juego
-├── game/logic/     # Lógica del juego
-├── hooks/          # Custom hooks
-├── stores/         # Estado global (Zustand)
-├── services/       # Servicios externos
-└── utils/          # Utilidades
-```
+- **`/src/components/`** - Componentes React organizados por funcionalidad
+- **`/src/game/logic/`** - Lógica del juego y algoritmos
+- **`/src/hooks/`** - Hooks personalizados
+- **`/src/stores/`** - Gestión de estado con Zustand
+- **`/src/types/`** - Definiciones de tipos TypeScript
 
-## 📈 **Roadmap**
-
-### **Próximas Mejoras**
-- [ ] **Pruebas de Componentes React**: Extender coverage a UI
-- [ ] **Pruebas de Integración**: Flujos completos del juego
-- [ ] **Pruebas de Performance**: Optimización de rendimiento
-- [ ] **Pruebas de Accesibilidad**: Navegación por teclado
-- [ ] **Multiplayer**: Soporte para múltiples jugadores
-
-### **Optimizaciones Planificadas**
-- [ ] **Lazy Loading**: Carga bajo demanda de componentes
-- [ ] **Code Splitting**: División de bundles
-- [ ] **PWA**: Progressive Web App
-- [ ] **Offline Support**: Juego sin conexión
+### **Convenciones de Código**
+- **TypeScript**: Tipado estático completo
+- **ESLint**: Reglas estrictas de calidad
+- **Componentes**: Funcionales con hooks
+- **Estado**: Zustand para gestión global
+- **Testing**: Jest + React Testing Library
 
 ## 🤝 **Contribución**
 
-### **Guías de Contribución**
-1. Leer [Estándares y Buenas Prácticas](./ESTANDARES_BUENAS_PRACTICAS.md)
-2. Seguir el [Plan de Implementación](./PLAN_IMPLEMENTACION.md)
-3. Mantener 100% coverage en nuevos módulos
-4. Documentar cambios en CHANGELOG.md
-
-### **Proceso de Desarrollo**
-1. **Fork** del repositorio
-2. **Branch** para nueva funcionalidad
-3. **Desarrollo** siguiendo estándares
-4. **Tests** con coverage completo
-5. **Pull Request** con documentación
+1. Fork el proyecto
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
 
 ## 📄 **Licencia**
 
-Este proyecto está bajo la licencia MIT. Ver [LICENSE](../LICENSE) para más detalles.
-
-## 🙏 **Agradecimientos**
-
-- **React Team** por el framework
-- **Three.js Community** por los gráficos 3D
-- **Jest Team** por el sistema de pruebas
-- **Contribuidores** del proyecto
-
----
-
-**Última actualización**: Enero 2024  
-**Versión**: 0.1.0  
-**Estado**: En desarrollo activo 
+Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles. 

@@ -146,21 +146,19 @@ export class GameService {
     return { hit: false };
   }
 
-  isShipDestroyed(shipId: string, shots: Shot[]): boolean {
+  isShipDestroyed(shipId: string, shots: Shot[], ships: Ship[]): boolean {
     const shipShots = shots.filter(shot => shot.shipId === shipId);
     const hitShots = shipShots.filter(shot => shot.hit);
     
-    const ship = this.findShipById(shipId);
+    const ship = this.findShipById(shipId, ships);
     if (!ship) return false;
 
     const shipSize = GAME_CONSTANTS.SHIPS.SIZES[ship.variant];
     return hitShots.length >= shipSize;
   }
 
-  private findShipById(_shipId: string): Ship | undefined {
-    // TODO: Implement ship finding logic
-    // This method would need access to all ships to find by ID
-    return undefined;
+  private findShipById(shipId: string, ships: Ship[]): Ship | undefined {
+    return ships.find(ship => ship.id === shipId);
   }
 
   checkGameOver(playerShips: Ship[], enemyShips: Ship[], playerShots: Shot[], enemyShots: Shot[]): {
@@ -168,11 +166,11 @@ export class GameService {
     winner: 'player' | 'enemy' | null;
   } {
     const allPlayerShipsDestroyed = playerShips.every(ship => 
-      this.isShipDestroyed(ship.id, enemyShots)
+      this.isShipDestroyed(ship.id, enemyShots, playerShips)
     );
 
     const allEnemyShipsDestroyed = enemyShips.every(ship => 
-      this.isShipDestroyed(ship.id, playerShots)
+      this.isShipDestroyed(ship.id, playerShots, enemyShips)
     );
 
     if (allPlayerShipsDestroyed) {

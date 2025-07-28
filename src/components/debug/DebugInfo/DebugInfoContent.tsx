@@ -1,7 +1,5 @@
 import { COLORS } from "@/config/colors";
 import { useGameState } from "@/hooks/useGameState";
-import { useMockSimulation } from "@/hooks/useMockSimulation";
-import { useVisualMockSimulation } from "@/hooks/useVisualMockSimulation";
 import { useGameStore } from "@/stores/game";
 import { DEBUG_CONFIG } from "@/utils/debug";
 
@@ -17,24 +15,6 @@ export const DebugInfoContent: React.FC<DebugInfoContentProps> = ({ className = 
     getShipSize,
     getShipCells,
   } = useGameState();
-
-  const {
-    isRunning,
-    lastResult,
-    error,
-    runSimulation,
-    clearResult
-  } = useMockSimulation();
-
-  const {
-    isSimulating,
-    currentStep,
-    simulationResult,
-    error: visualError,
-    runVisualSimulation,
-    runQuickGameOverSimulation,
-    resetSimulation,
-  } = useVisualMockSimulation();
 
   const { isGameOver, winner, resetGame } = useGameStore();
 
@@ -74,207 +54,6 @@ export const DebugInfoContent: React.FC<DebugInfoContentProps> = ({ className = 
           </div>
         );
       })}
-    </div>
-  );
-
-  const renderGameOverButtons = () => (
-    <div style={{ marginBottom: "15px" }}>
-      <h4 style={{ margin: "0 0 8px 0", fontSize: "12px" }}>🏁 Fin de Juego Visual</h4>
-      
-      <div style={{ display: "flex", gap: "4px", flexWrap: "wrap", marginBottom: "8px" }}>
-        <button
-          onClick={() => runQuickGameOverSimulation('player')}
-          disabled={isSimulating}
-          style={{
-            background: "#4CAF50",
-            color: "white",
-            border: "none",
-            padding: "4px 8px",
-            borderRadius: "3px",
-            cursor: isSimulating ? "not-allowed" : "pointer",
-            fontSize: "9px",
-            opacity: isSimulating ? 0.6 : 1,
-          }}
-        >
-          {isSimulating ? '⏳' : '🎬'} Visual Jugador Gana
-        </button>
-        
-        <button
-          onClick={() => runQuickGameOverSimulation('enemy')}
-          disabled={isSimulating}
-          style={{
-            background: "#F44336",
-            color: "white",
-            border: "none",
-            padding: "4px 8px",
-            borderRadius: "3px",
-            cursor: isSimulating ? "not-allowed" : "pointer",
-            fontSize: "9px",
-            opacity: isSimulating ? 0.6 : 1,
-          }}
-        >
-          {isSimulating ? '⏳' : '🎬'} Visual Enemigo Gana
-        </button>
-        
-        <button
-          onClick={() => runQuickGameOverSimulation('player')}
-          disabled={isSimulating}
-          style={{
-            background: "#FF9800",
-            color: "white",
-            border: "none",
-            padding: "4px 8px",
-            borderRadius: "3px",
-            cursor: isSimulating ? "not-allowed" : "pointer",
-            fontSize: "9px",
-            opacity: isSimulating ? 0.6 : 1,
-          }}
-        >
-          {isSimulating ? '⏳' : '🎬'} Visual Empate (Player)
-        </button>
-      </div>
-      
-      <button
-        onClick={resetSimulation}
-        disabled={isSimulating}
-        style={{
-          background: "#607D8B",
-          color: "white",
-          border: "none",
-          padding: "4px 8px",
-          borderRadius: "3px",
-          cursor: isSimulating ? "not-allowed" : "pointer",
-          fontSize: "9px",
-          opacity: isSimulating ? 0.6 : 1,
-        }}
-      >
-        🔄 Reset Simulación
-      </button>
-    </div>
-  );
-
-  const renderMockSimulationResults = () => {
-    if (!lastResult) return null;
-
-    return (
-      <div style={{ marginBottom: "15px" }}>
-        <h4 style={{ margin: "0 0 8px 0", fontSize: "12px" }}>📊 Resultados Simulación</h4>
-        <div style={{ fontSize: "10px", marginBottom: "8px" }}>
-          <div>Ganador: {lastResult.winner}</div>
-          <div>Turnos: {lastResult.totalTurns}</div>
-          <div>Disparos Jugador: {lastResult.playerShots}</div>
-          <div>Disparos Enemigo: {lastResult.enemyShots}</div>
-        </div>
-        <button
-          onClick={clearResult}
-          style={{
-            background: "#607D8B",
-            color: "white",
-            border: "none",
-            padding: "4px 8px",
-            borderRadius: "3px",
-            cursor: "pointer",
-            fontSize: "9px",
-          }}
-        >
-          🗑️ Limpiar
-        </button>
-      </div>
-    );
-  };
-
-  const renderVisualSimulationStatus = () => {
-    if (!isSimulating && !simulationResult) return null;
-
-    return (
-      <div style={{ marginBottom: "15px" }}>
-        <h4 style={{ margin: "0 0 8px 0", fontSize: "12px" }}>🎬 Simulación Visual</h4>
-        
-        {isSimulating && (
-          <div style={{ fontSize: "10px", marginBottom: "8px" }}>
-            <div>⏳ Simulando... Paso {currentStep}</div>
-          </div>
-        )}
-        
-        {visualError && (
-          <div style={{ fontSize: "10px", marginBottom: "8px", color: "#F44336" }}>
-            ❌ Error: {visualError}
-          </div>
-        )}
-        
-                 {simulationResult && !isSimulating && (
-           <div style={{ fontSize: "10px", marginBottom: "8px" }}>
-             <div>✅ Completada</div>
-             <div>Ganador: {simulationResult.winner}</div>
-             <div>Turnos: {simulationResult.totalTurns}</div>
-           </div>
-         )}
-      </div>
-    );
-  };
-
-  const renderMockSimulationButtons = () => (
-    <div style={{ marginBottom: "15px" }}>
-      <h4 style={{ margin: "0 0 8px 0", fontSize: "12px" }}>🧪 Simulación Mock</h4>
-      
-      <div style={{ display: "flex", gap: "4px", flexWrap: "wrap", marginBottom: "8px" }}>
-        <button
-          onClick={() => runSimulation('quick')}
-          disabled={isRunning}
-          style={{
-            background: "#2196F3",
-            color: "white",
-            border: "none",
-            padding: "4px 8px",
-            borderRadius: "3px",
-            cursor: isRunning ? "not-allowed" : "pointer",
-            fontSize: "9px",
-            opacity: isRunning ? 0.6 : 1,
-          }}
-        >
-          {isRunning ? '⏳' : '⚡'} Quick Game
-        </button>
-        
-        <button
-          onClick={() => runSimulation('random')}
-          disabled={isRunning}
-          style={{
-            background: "#9C27B0",
-            color: "white",
-            border: "none",
-            padding: "4px 8px",
-            borderRadius: "3px",
-            cursor: isRunning ? "not-allowed" : "pointer",
-            fontSize: "9px",
-            opacity: isRunning ? 0.6 : 1,
-          }}
-        >
-          {isRunning ? '⏳' : '🎲'} Random Game
-        </button>
-        
-        <button
-          onClick={() => runVisualSimulation()}
-          disabled={isSimulating || isRunning}
-          style={{
-            background: "#FF5722",
-            color: "white",
-            border: "none",
-            padding: "4px 8px",
-            borderRadius: "3px",
-            cursor: (isSimulating || isRunning) ? "not-allowed" : "pointer",
-            fontSize: "9px",
-            opacity: (isSimulating || isRunning) ? 0.6 : 1,
-          }}
-        >
-          {(isSimulating || isRunning) ? '⏳' : '🎬'} Visual Sim
-        </button>
-      </div>
-      
-      {error && (
-        <div style={{ fontSize: "10px", marginBottom: "8px", color: "#F44336" }}>
-          ❌ Error: {error}
-        </div>
-      )}
     </div>
   );
 
@@ -340,11 +119,6 @@ export const DebugInfoContent: React.FC<DebugInfoContentProps> = ({ className = 
           </button>
         </div>
       )}
-
-      {renderGameOverButtons()}
-      {renderMockSimulationButtons()}
-      {renderMockSimulationResults()}
-      {renderVisualSimulationStatus()}
 
       {renderShipInfo(playerShips, "Barcos del Jugador")}
       {renderShipInfo(enemyShips, "Barcos del Enemigo")}

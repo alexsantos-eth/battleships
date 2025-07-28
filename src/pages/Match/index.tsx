@@ -64,17 +64,15 @@ const Match = () => {
       if (!isInitialized) {
         setIsLoading(true);
         
-        setTimeout(() => {
-          try {
-            initializeGame(config);
-            setIsInitialized(true);
-          } catch (error) {
-            console.error("Error al inicializar el juego:", error);
-            navigate("/");
-          } finally {
-            setIsLoading(false);
-          }
-        }, 200);
+        try {
+          initializeGame(config);
+          setIsInitialized(true);
+        } catch (error) {
+          console.error("Error al inicializar el juego:", error);
+          navigate("/");
+        } finally {
+          setIsLoading(false);
+        }
       }
     } catch (error) {
       console.error("Error al parsear configuración de barcos:", error);
@@ -106,16 +104,14 @@ const Match = () => {
             onClick={() => {
 
               setIsLoading(true);
-              setTimeout(() => {
-                try {
-                  initializeGame(gameConfig);
-                  setIsInitialized(true);
-                } catch (error) {
-                  console.error("Error:", error);
-                } finally {
-                  setIsLoading(false);
-                }
-              }, 100);
+              try {
+                initializeGame(gameConfig);
+                setIsInitialized(true);
+              } catch (error) {
+                console.error("Error:", error);
+              } finally {
+                setIsLoading(false);
+              }
             }}
             className="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
           >
