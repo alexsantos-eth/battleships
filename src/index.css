@@ -8,3 +8,8 @@ body,
   height: 100dvh;
   margin: unset;
 }
+
+/* Padding para compensar la barra de navegación */
+main {
+  padding-top: 3rem; /* 48px para la barra de navegación de 12 (h-12) */
+}

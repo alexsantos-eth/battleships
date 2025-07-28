@@ -1,12 +1,11 @@
 import React from "react";
 import type { GameLayoutProps } from "./GameLayout.types";
-import { DebugPanel, PerformanceMonitor } from "@/components/debug";
+import { UnifiedDebugPanel } from "@/components/debug/UnifiedDebugPanel";
 
 export const GameLayout: React.FC<GameLayoutProps> = ({
   children,
   className = "",
   showDebugPanel = false,
-  showPerformanceMonitor = false,
 }) => {
   return (
     <div
@@ -30,18 +29,12 @@ export const GameLayout: React.FC<GameLayoutProps> = ({
               <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
                 <h2 className="text-xl font-semibold text-white mb-4">
                   Panel de Debug
-                  <DebugPanel />
                 </h2>
+                <UnifiedDebugPanel />
               </div>
             </aside>
           )}
         </main>
-
-        {showPerformanceMonitor && (
-          <div className="fixed bottom-4 right-4 bg-black/50 backdrop-blur-sm rounded-lg p-2">
-            <PerformanceMonitor />
-          </div>
-        )}
       </div>
     </div>
   );

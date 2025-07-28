@@ -1,6 +1,3 @@
-export { AuthDebug } from './AuthDebug';
-export type { AuthDebugProps } from './AuthDebug/AuthDebug.types';
-
 export { DebugInfo, DebugInfoContent } from './DebugInfo';
 export type { DebugInfoProps, DebugInfoContentProps } from './DebugInfo/DebugInfo.types';
 
@@ -10,11 +7,7 @@ export type { SystemMetricsProps, ProgressBarProps } from './SystemMetrics/Syste
 export { PerformanceDashboard, PerformanceContent } from './PerformanceDashboard';
 export type { PerformanceDashboardProps, PerformanceContentProps } from './PerformanceDashboard/PerformanceDashboard.types';
 
-export { DebugPanel, GameInitializerPanel } from './DebugPanel';
-export type { DebugPanelProps, PanelStyles } from './DebugPanel/DebugPanel.types';
+export { GameInitializerPanel } from './DebugPanel/GameInitializerPanel';
 
-export { TestingInfo } from './TestingInfo';
-export type { TestingInfoProps } from './TestingInfo/TestingInfo.types';
-
-export { PerformanceMonitor } from './PerformanceMonitor';
-export type { PerformanceMonitorProps } from './PerformanceMonitor/PerformanceMonitor.types'; 
+export { UnifiedDebugPanel } from './UnifiedDebugPanel';
+export type { UnifiedDebugPanelProps } from './UnifiedDebugPanel/UnifiedDebugPanel.types'; 

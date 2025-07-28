@@ -32,11 +32,11 @@ export const cameraProps: CanvasProps = {
     precision: "lowp",
     powerPreference: "high-performance",
     antialias: false,
-    alpha: false,
+    alpha: true,
     depth: true,
     stencil: false,
     preserveDrawingBuffer: false,
     logarithmicDepthBuffer: false,
   },
-  style: { background: "white", height: "100dvh" },
+  style: { background: "#a4d15d", height: "100dvh" },
 };
