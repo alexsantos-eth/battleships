@@ -2,7 +2,7 @@ import { renderHook, act } from '@testing-library/react';
 import { useEnemyAI } from '../useEnemyAI';
 import { useGameStore } from '@/stores/game';
 
-jest.mock('@/stores/gameStore', () => ({
+jest.mock('@/stores/game', () => ({
   useGameStore: jest.fn(),
 }));
 

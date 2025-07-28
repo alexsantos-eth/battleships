@@ -119,12 +119,8 @@ describe('Ship Utils', () => {
 
     it('should have consistent scale structure', () => {
       Object.values(SHIP_VARIANTS).forEach(variant => {
-        expect(Array.isArray(variant.scale)).toBe(true);
-        expect(variant.scale).toHaveLength(3);
-        variant.scale.forEach(scaleValue => {
-          expect(typeof scaleValue).toBe('number');
-          expect(scaleValue).toBeGreaterThan(0);
-        });
+        expect(typeof variant.scale).toBe('number');
+        expect(variant.scale).toBeGreaterThan(0);
       });
     });
 

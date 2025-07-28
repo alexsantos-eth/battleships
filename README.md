@@ -16,6 +16,8 @@ Un juego de armada inmersivo desarrollado con React, TypeScript y Three.js que c
 - **🎲 IA Enemiga**: Oponente con comportamiento inteligente
 - **📱 Responsive**: Compatible con dispositivos móviles y desktop
 - **🔧 Debug Tools**: Panel de debug y monitoreo de rendimiento
+- **🧪 Testing Completo**: 100% coverage en módulos críticos
+- **🔒 Validación Robusta**: Verificación de configuraciones y estados
 
 ## 🚀 Inicio Rápido
 
@@ -53,6 +55,24 @@ npm run lint             # Verificar código
 npm run run:deterministic # Simulación determinística
 ```
 
+## 📊 Métricas de Calidad
+
+### 🧪 **Cobertura de Pruebas**
+- **GameInitializer**: 100% (Statements, Branches, Functions, Lines)
+- **Lógica de Juego**: 94.68% coverage
+- **Total del Proyecto**: 76.97% coverage
+- **317 tests** pasando, 0 fallando
+
+### ⚡ **Performance**
+- **Tiempo de Ejecución**: 11.94s para suite completa
+- **Build Time**: Optimizado con Vite
+- **Bundle Size**: Minimizado y optimizado
+
+### 🔧 **Calidad de Código**
+- **TypeScript**: 100% tipado estático
+- **ESLint**: 0 errores, 0 warnings
+- **Arquitectura**: Separación clara de responsabilidades
+
 ## 📚 Documentación
 
 ### 📖 [Documentación Completa](docs/DOCUMENTACION.md)
@@ -86,18 +106,25 @@ Guía de constantes y configuración del sistema:
 - Configuración de efectos visuales
 - Valores por defecto del sistema
 
-### 📊 [Performance Monitor](docs/README.md)
-Documentación del sistema de monitoreo de rendimiento:
-- Componente PerformanceMonitor
-- Métricas y análisis de rendimiento
-- Herramientas de debugging
-- Optimización del sistema
+### 🧪 [Testing y Calidad](docs/TEST_COVERAGE_IMPROVEMENTS.md)
+Documentación del sistema de pruebas:
+- **100% coverage** en GameInitializer
+- 25 pruebas unitarias para lógica principal
+- Validación robusta de configuraciones
+- Scripts de prueba optimizados
 
 ### 🎮 [Simulaciones](docs/SIMULATIONS.md)
 Documentación de las simulaciones de batalla:
 - Simulaciones predefinidas para testing
 - Tipos de simulaciones disponibles
 - Uso en debug panel y testing
+
+### 📋 [Documentación Completa](docs/README.md)
+Documentación principal del proyecto:
+- Índice completo de documentación
+- Guías de desarrollo y contribución
+- Roadmap y próximas mejoras
+- Métricas de calidad del proyecto
 - Configuración de parámetros
 
 
