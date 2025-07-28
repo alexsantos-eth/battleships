@@ -1,5 +1,3 @@
-import type { Ship, Shot } from "@/stores/game";
-
 export interface TestingInfoProps {
   className?: string;
 }
@@ -12,4 +10,4 @@ export interface ShotInfo {
 
 export interface ShipCounts {
   [key: string]: number;
-} 
+}
