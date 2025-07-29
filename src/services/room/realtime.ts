@@ -1,5 +1,7 @@
-import type { GameRoom, RoomPlayer, GameConfig, GameState } from "@/types/game/common";
 import { dbUtils } from "@/network/realtime/controller";
+import type { GameState } from "@/types/game/common";
+import type { GameConfig } from "@/types/game/config";
+import type { GameRoom, RoomPlayer } from "@/types/game/room";
 
 export class RoomService {
   private static instance: RoomService;
@@ -182,66 +184,81 @@ export class RoomService {
     return dbUtils.subscribeToDocument(`rooms/${roomId}`, callback);
   }
 
-  async sendMessage(roomId: string, message: {
-    id: string;
-    senderId: string;
-    senderName: string;
-    message: string;
-    timestamp: number;
-  }): Promise<void> {
+  async sendMessage(
+    roomId: string,
+    message: {
+      id: string;
+      senderId: string;
+      senderName: string;
+      message: string;
+      timestamp: number;
+    }
+  ): Promise<void> {
     try {
-      console.log('📤 Enviando mensaje:', message);
-      
+      console.log("📤 Enviando mensaje:", message);
+
       const room = await this.getRoom(roomId);
       if (!room) {
-        throw new Error('Sala no encontrada');
+        throw new Error("Sala no encontrada");
       }
 
       const messages = room.messages || [];
       const updatedMessages = [...messages, message];
-      
-      console.log('📝 Mensajes actuales:', messages.length);
-      console.log('📝 Mensajes después de agregar:', updatedMessages.length);
+
+      console.log("📝 Mensajes actuales:", messages.length);
+      console.log("📝 Mensajes después de agregar:", updatedMessages.length);
 
       await dbUtils.updateDocument(`rooms/${roomId}`, {
-        messages: updatedMessages
+        messages: updatedMessages,
       });
-      
-      console.log('✅ Mensaje enviado exitosamente');
+
+      console.log("✅ Mensaje enviado exitosamente");
     } catch (error) {
-      console.error('❌ Error enviando mensaje:', error);
+      console.error("❌ Error enviando mensaje:", error);
       throw new Error(`Error sending message: ${error}`);
     }
   }
 
   subscribeToMessages(
     roomId: string,
-    callback: (messages: Array<{
-      id: string;
-      senderId: string;
-      senderName: string;
-      message: string;
-      timestamp: number;
-    }>) => void
+    callback: (
+      messages: Array<{
+        id: string;
+        senderId: string;
+        senderName: string;
+        message: string;
+        timestamp: number;
+      }>
+    ) => void
   ): () => void {
-    console.log('📡 Service: Configurando suscripción a mensajes para sala:', roomId);
-    
-    const unsubscribe = dbUtils.subscribeToDocument<GameRoom>(`rooms/${roomId}`, (room) => {
-      if (room) {
-        console.log('📨 Service: Mensajes recibidos en suscripción:', room.messages?.length || 0);
-        console.log('📨 Service: Contenido de mensajes:', room.messages);
-        callback(room.messages || []);
-      } else {
-        console.log('📨 Service: No hay sala, enviando array vacío');
-        callback([]);
-      }
-    }, {
-      errorHandler: (error) => {
-        console.error('❌ Service: Error en suscripción a mensajes:', error);
-      }
-    });
+    console.log(
+      "📡 Service: Configurando suscripción a mensajes para sala:",
+      roomId
+    );
 
-    console.log('✅ Service: Suscripción a mensajes configurada');
+    const unsubscribe = dbUtils.subscribeToDocument<GameRoom>(
+      `rooms/${roomId}`,
+      (room) => {
+        if (room) {
+          console.log(
+            "📨 Service: Mensajes recibidos en suscripción:",
+            room.messages?.length || 0
+          );
+          console.log("📨 Service: Contenido de mensajes:", room.messages);
+          callback(room.messages || []);
+        } else {
+          console.log("📨 Service: No hay sala, enviando array vacío");
+          callback([]);
+        }
+      },
+      {
+        errorHandler: (error) => {
+          console.error("❌ Service: Error en suscripción a mensajes:", error);
+        },
+      }
+    );
+
+    console.log("✅ Service: Suscripción a mensajes configurada");
     return unsubscribe;
   }
 

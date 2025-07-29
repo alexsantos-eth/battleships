@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "@/auth/hooks/data/useAuth";
 import { roomService } from "@/services/room/realtime";
 import type { GameRoom, RoomPlayer } from "@/types/game/room";
-import type { GameConfig } from "@/game/manager/initializer";
+import type { GameConfig } from "@/types/game/config";
 
 export const useRoom = (roomId?: string) => {
   const [room, setRoom] = useState<GameRoom | null>(null);

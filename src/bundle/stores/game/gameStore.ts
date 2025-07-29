@@ -2,7 +2,8 @@ import { create } from "zustand";
 
 import { GAME_CONSTANTS } from "@/constants/game/board";
 import { CAMERA_EVENTS, cameraEventBus } from "@/events/camera/bus";
-import { type GameConfig, GameInitializer } from "@/game/manager/initializer";
+import { GameInitializer } from "@/game/manager/initializer";
+import type { GameConfig } from "@/types/game/config";
 
 export type GameTurn = "PLAYER_TURN" | "ENEMY_TURN";
 

@@ -1,4 +1,4 @@
-import type { GameConfig } from "@/game/manager/initializer";
+import type { GameConfig } from "@/types/game/config";
 
 export interface RoomLobbyProps {
   roomId: string;

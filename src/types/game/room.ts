@@ -1,5 +1,5 @@
-import type { GameConfig } from "@/game/manager/initializer";
 import type { GameState, PlayerRole } from "./common";
+import type { GameConfig } from "./config";
 
 export type RoomStatus = "waiting" | "playing" | "finished";
 export interface RoomPlayer {

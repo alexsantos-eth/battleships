@@ -1,23 +1,24 @@
-import { GameInitializer, type GameConfig } from '../initializer';
-import { GAME_CONSTANTS, GAME_CONFIGS } from '@/constants/game/board';
+import type { GameConfig } from "@/types/game/config";
+import { GameInitializer } from "../initializer";
+import { GAME_CONSTANTS, GAME_CONFIGS } from "@/constants/game/board";
 
-describe('GameInitializer', () => {
+describe("GameInitializer", () => {
   let initializer: GameInitializer;
 
   beforeEach(() => {
     initializer = new GameInitializer();
   });
 
-  describe('constructor', () => {
-    it('should create instance with default config', () => {
+  describe("constructor", () => {
+    it("should create instance with default config", () => {
       expect(initializer).toBeInstanceOf(GameInitializer);
     });
 
-    it('should merge custom config with defaults', () => {
+    it("should merge custom config with defaults", () => {
       const customConfig: Partial<GameConfig> = {
         boardWidth: 8,
         boardHeight: 8,
-        initialTurn: 'player',
+        initialTurn: "player",
       };
 
       const customInitializer = new GameInitializer(customConfig);
@@ -25,11 +26,13 @@ describe('GameInitializer', () => {
 
       expect(setup.config.boardWidth).toBe(8);
       expect(setup.config.boardHeight).toBe(8);
-      expect(setup.config.initialTurn).toBe('player');
-      expect(setup.config.shipCounts).toEqual(GAME_CONSTANTS.SHIPS.DEFAULT_COUNTS);
+      expect(setup.config.initialTurn).toBe("player");
+      expect(setup.config.shipCounts).toEqual(
+        GAME_CONSTANTS.SHIPS.DEFAULT_COUNTS
+      );
     });
 
-    it('should validate config and throw error for invalid board width', () => {
+    it("should validate config and throw error for invalid board width", () => {
       const invalidConfig: Partial<GameConfig> = {
         boardWidth: 3, // Below minimum
       };
@@ -39,7 +42,7 @@ describe('GameInitializer', () => {
       );
     });
 
-    it('should validate config and throw error for invalid board height', () => {
+    it("should validate config and throw error for invalid board height", () => {
       const invalidConfig: Partial<GameConfig> = {
         boardHeight: 20, // Above maximum
       };
@@ -49,17 +52,17 @@ describe('GameInitializer', () => {
       );
     });
 
-    it('should validate config and throw error for negative min ship distance', () => {
+    it("should validate config and throw error for negative min ship distance", () => {
       const invalidConfig: Partial<GameConfig> = {
         minShipDistance: -1,
       };
 
       expect(() => new GameInitializer(invalidConfig)).toThrow(
-        'Minimum ship distance cannot be negative'
+        "Minimum ship distance cannot be negative"
       );
     });
 
-    it('should validate config and throw error for too many ships', () => {
+    it("should validate config and throw error for too many ships", () => {
       const invalidConfig: Partial<GameConfig> = {
         boardWidth: 5,
         boardHeight: 5,
@@ -72,109 +75,123 @@ describe('GameInitializer', () => {
       };
 
       expect(() => new GameInitializer(invalidConfig)).toThrow(
-        'Too many ships for board size'
+        "Too many ships for board size"
       );
     });
   });
 
-  describe('initializeGame', () => {
-    it('should return valid game setup', () => {
+  describe("initializeGame", () => {
+    it("should return valid game setup", () => {
       const setup = initializer.initializeGame();
 
-      expect(setup).toHaveProperty('playerShips');
-      expect(setup).toHaveProperty('enemyShips');
-      expect(setup).toHaveProperty('initialTurn');
-      expect(setup).toHaveProperty('config');
+      expect(setup).toHaveProperty("playerShips");
+      expect(setup).toHaveProperty("enemyShips");
+      expect(setup).toHaveProperty("initialTurn");
+      expect(setup).toHaveProperty("config");
 
       expect(Array.isArray(setup.playerShips)).toBe(true);
       expect(Array.isArray(setup.enemyShips)).toBe(true);
-      expect(['PLAYER_TURN', 'ENEMY_TURN']).toContain(setup.initialTurn);
+      expect(["PLAYER_TURN", "ENEMY_TURN"]).toContain(setup.initialTurn);
     });
 
-    it('should generate correct number of ships', () => {
+    it("should generate correct number of ships", () => {
       const setup = initializer.initializeGame();
-      const expectedTotalShips = Object.values(GAME_CONSTANTS.SHIPS.DEFAULT_COUNTS).reduce((a: number, b: number) => a + b, 0);
+      const expectedTotalShips = Object.values(
+        GAME_CONSTANTS.SHIPS.DEFAULT_COUNTS
+      ).reduce((a: number, b: number) => a + b, 0);
 
-      expect(setup.playerShips.length).toBeGreaterThanOrEqual(expectedTotalShips * 0.8);
-      expect(setup.enemyShips.length).toBeGreaterThanOrEqual(expectedTotalShips * 0.8);
-      
+      expect(setup.playerShips.length).toBeGreaterThanOrEqual(
+        expectedTotalShips * 0.8
+      );
+      expect(setup.enemyShips.length).toBeGreaterThanOrEqual(
+        expectedTotalShips * 0.8
+      );
+
       const validVariants = Object.keys(GAME_CONSTANTS.SHIPS.DEFAULT_COUNTS);
-      setup.playerShips.forEach(ship => {
+      setup.playerShips.forEach((ship) => {
         expect(validVariants).toContain(ship.variant);
       });
-      setup.enemyShips.forEach(ship => {
+      setup.enemyShips.forEach((ship) => {
         expect(validVariants).toContain(ship.variant);
       });
     });
 
-    it('should generate ships with correct variants', () => {
+    it("should generate ships with correct variants", () => {
       const setup = initializer.initializeGame();
-      const playerVariants = setup.playerShips.map(ship => ship.variant);
-      const enemyVariants = setup.enemyShips.map(ship => ship.variant);
+      const playerVariants = setup.playerShips.map((ship) => ship.variant);
+      const enemyVariants = setup.enemyShips.map((ship) => ship.variant);
 
       const validVariants = Object.keys(GAME_CONSTANTS.SHIPS.DEFAULT_COUNTS);
-      [...playerVariants, ...enemyVariants].forEach(variant => {
+      [...playerVariants, ...enemyVariants].forEach((variant) => {
         expect(validVariants).toContain(variant);
       });
-      
-      const expectedTotalShips = Object.values(GAME_CONSTANTS.SHIPS.DEFAULT_COUNTS).reduce((a: number, b: number) => a + b, 0);
-      expect(setup.playerShips.length + setup.enemyShips.length).toBeGreaterThanOrEqual(expectedTotalShips * 1.6);
-      
+
+      const expectedTotalShips = Object.values(
+        GAME_CONSTANTS.SHIPS.DEFAULT_COUNTS
+      ).reduce((a: number, b: number) => a + b, 0);
+      expect(
+        setup.playerShips.length + setup.enemyShips.length
+      ).toBeGreaterThanOrEqual(expectedTotalShips * 1.6);
+
       expect(setup.playerShips.length).toBeGreaterThan(0);
       expect(setup.enemyShips.length).toBeGreaterThan(0);
     });
 
-    it('should respect initialTurn configuration', () => {
-      const playerFirstInitializer = new GameInitializer({ initialTurn: 'player' });
-      const enemyFirstInitializer = new GameInitializer({ initialTurn: 'enemy' });
+    it("should respect initialTurn configuration", () => {
+      const playerFirstInitializer = new GameInitializer({
+        initialTurn: "player",
+      });
+      const enemyFirstInitializer = new GameInitializer({
+        initialTurn: "enemy",
+      });
 
       const playerSetup = playerFirstInitializer.initializeGame();
       const enemySetup = enemyFirstInitializer.initializeGame();
 
-      expect(playerSetup.initialTurn).toBe('PLAYER_TURN');
-      expect(enemySetup.initialTurn).toBe('ENEMY_TURN');
+      expect(playerSetup.initialTurn).toBe("PLAYER_TURN");
+      expect(enemySetup.initialTurn).toBe("ENEMY_TURN");
     });
 
-    it('should handle random initial turn', () => {
-      const randomInitializer = new GameInitializer({ initialTurn: 'random' });
+    it("should handle random initial turn", () => {
+      const randomInitializer = new GameInitializer({ initialTurn: "random" });
       const setup = randomInitializer.initializeGame();
 
-      expect(['PLAYER_TURN', 'ENEMY_TURN']).toContain(setup.initialTurn);
+      expect(["PLAYER_TURN", "ENEMY_TURN"]).toContain(setup.initialTurn);
     });
   });
 
-  describe('static factory methods', () => {
-    it('should create quick game config', () => {
+  describe("static factory methods", () => {
+    it("should create quick game config", () => {
       const config = GameInitializer.createQuickGameConfig();
       expect(config.boardWidth).toBe(8);
       expect(config.boardHeight).toBe(8);
-      expect(config.initialTurn).toBe('player');
-      expect(config.enemyAI).toBe('basic');
+      expect(config.initialTurn).toBe("player");
+      expect(config.enemyAI).toBe("basic");
     });
 
-    it('should create classic game config', () => {
+    it("should create classic game config", () => {
       const config = GameInitializer.createClassicGameConfig();
       expect(config.boardWidth).toBe(10);
       expect(config.boardHeight).toBe(10);
-      expect(config.initialTurn).toBe('player');
-      expect(config.enemyAI).toBe('basic');
+      expect(config.initialTurn).toBe("player");
+      expect(config.enemyAI).toBe("basic");
     });
 
-    it('should create challenging game config', () => {
+    it("should create challenging game config", () => {
       const config = GameInitializer.createChallengingGameConfig();
       expect(config.boardWidth).toBe(12);
       expect(config.boardHeight).toBe(12);
-      expect(config.initialTurn).toBe('player');
-      expect(config.enemyAI).toBe('basic');
+      expect(config.initialTurn).toBe("player");
+      expect(config.enemyAI).toBe("basic");
     });
   });
 
-  describe('ship generation with custom configs', () => {
-    it('should work with quick game config', () => {
+  describe("ship generation with custom configs", () => {
+    it("should work with quick game config", () => {
       const quickConfig = {
         ...GAME_CONFIGS.QUICK,
-        initialTurn: 'player' as const,
-        enemyAI: 'basic' as const
+        initialTurn: "player" as const,
+        enemyAI: "basic" as const,
       };
       const quickInitializer = new GameInitializer(quickConfig);
       const setup = quickInitializer.initializeGame();
@@ -187,11 +204,11 @@ describe('GameInitializer', () => {
       expect(setup.config.shipCounts.xlarge).toBe(0);
     });
 
-    it('should work with challenging game config', () => {
+    it("should work with challenging game config", () => {
       const challengingConfig = {
         ...GAME_CONFIGS.CHALLENGING,
-        initialTurn: 'player' as const,
-        enemyAI: 'basic' as const
+        initialTurn: "player" as const,
+        enemyAI: "basic" as const,
       };
       const challengingInitializer = new GameInitializer(challengingConfig);
       const setup = challengingInitializer.initializeGame();
@@ -205,8 +222,8 @@ describe('GameInitializer', () => {
     });
   });
 
-  describe('ship placement validation', () => {
-    it('should generate ships within board boundaries', () => {
+  describe("ship placement validation", () => {
+    it("should generate ships within board boundaries", () => {
       const setup = initializer.initializeGame();
       const allShips = [...setup.playerShips, ...setup.enemyShips];
 
@@ -214,7 +231,7 @@ describe('GameInitializer', () => {
         const size = GAME_CONSTANTS.SHIPS.SIZES[ship.variant];
         const [x, y] = ship.coords;
 
-        if (ship.orientation === 'horizontal') {
+        if (ship.orientation === "horizontal") {
           expect(x).toBeGreaterThanOrEqual(0);
           expect(x + size).toBeLessThanOrEqual(setup.config.boardWidth);
           expect(y).toBeGreaterThanOrEqual(0);
@@ -228,17 +245,17 @@ describe('GameInitializer', () => {
       }
     });
 
-    it('should respect minimum ship distance', () => {
+    it("should respect minimum ship distance", () => {
       const setup = initializer.initializeGame();
       const allShips = [...setup.playerShips, ...setup.enemyShips];
 
       const maxShipsToTest = Math.min(allShips.length, 5);
-      
+
       for (let i = 0; i < maxShipsToTest; i++) {
         for (let j = i + 1; j < maxShipsToTest; j++) {
           const ship1 = allShips[i];
           const ship2 = allShips[j];
-          
+
           const cells1 = getShipCells(ship1);
           const cells2 = getShipCells(ship2);
 
@@ -248,37 +265,39 @@ describe('GameInitializer', () => {
           for (const [x1, y1] of testCells1) {
             for (const [x2, y2] of testCells2) {
               const distance = Math.max(Math.abs(x1 - x2), Math.abs(y1 - y2));
-              expect(distance).toBeGreaterThanOrEqual(setup.config.minShipDistance);
+              expect(distance).toBeGreaterThanOrEqual(
+                setup.config.minShipDistance
+              );
             }
           }
         }
       }
     });
 
-    it('should generate ships with valid orientations', () => {
+    it("should generate ships with valid orientations", () => {
       const setup = initializer.initializeGame();
       const allShips = [...setup.playerShips, ...setup.enemyShips];
 
-      allShips.forEach(ship => {
-        expect(['horizontal', 'vertical']).toContain(ship.orientation);
+      allShips.forEach((ship) => {
+        expect(["horizontal", "vertical"]).toContain(ship.orientation);
       });
     });
 
-    it('should generate ships with valid coordinates', () => {
+    it("should generate ships with valid coordinates", () => {
       const setup = initializer.initializeGame();
       const allShips = [...setup.playerShips, ...setup.enemyShips];
 
-      allShips.forEach(ship => {
+      allShips.forEach((ship) => {
         expect(Array.isArray(ship.coords)).toBe(true);
         expect(ship.coords).toHaveLength(2);
-        expect(typeof ship.coords[0]).toBe('number');
-        expect(typeof ship.coords[1]).toBe('number');
+        expect(typeof ship.coords[0]).toBe("number");
+        expect(typeof ship.coords[1]).toBe("number");
       });
     });
   });
 
-  describe('edge cases', () => {
-    it('should handle empty ship counts', () => {
+  describe("edge cases", () => {
+    it("should handle empty ship counts", () => {
       const emptyConfig: Partial<GameConfig> = {
         shipCounts: {
           small: 0,
@@ -295,7 +314,7 @@ describe('GameInitializer', () => {
       expect(setup.enemyShips.length).toBe(0);
     });
 
-    it('should handle very small board', () => {
+    it("should handle very small board", () => {
       const smallBoardConfig: Partial<GameConfig> = {
         boardWidth: 5,
         boardHeight: 5,
@@ -314,7 +333,7 @@ describe('GameInitializer', () => {
       expect(setup.enemyShips.length).toBeGreaterThanOrEqual(0);
     });
 
-    it('should handle large minimum ship distance', () => {
+    it("should handle large minimum ship distance", () => {
       const largeDistanceConfig: Partial<GameConfig> = {
         minShipDistance: 5,
         shipCounts: {
@@ -333,20 +352,29 @@ describe('GameInitializer', () => {
     });
   });
 
-  describe('configuration validation', () => {
-    it('should accept valid enemyAI types', () => {
-      const validAITypes: Array<GameConfig['enemyAI']> = ['random', 'smart', 'deterministic', 'basic'];
-      
-      validAITypes.forEach(aiType => {
+  describe("configuration validation", () => {
+    it("should accept valid enemyAI types", () => {
+      const validAITypes: Array<GameConfig["enemyAI"]> = [
+        "random",
+        "smart",
+        "deterministic",
+        "basic",
+      ];
+
+      validAITypes.forEach((aiType) => {
         const config: Partial<GameConfig> = { enemyAI: aiType };
         expect(() => new GameInitializer(config)).not.toThrow();
       });
     });
 
-    it('should accept valid initialTurn types', () => {
-      const validTurnTypes: Array<GameConfig['initialTurn']> = ['player', 'enemy', 'random'];
-      
-      validTurnTypes.forEach(turnType => {
+    it("should accept valid initialTurn types", () => {
+      const validTurnTypes: Array<GameConfig["initialTurn"]> = [
+        "player",
+        "enemy",
+        "random",
+      ];
+
+      validTurnTypes.forEach((turnType) => {
         const config: Partial<GameConfig> = { initialTurn: turnType };
         expect(() => new GameInitializer(config)).not.toThrow();
       });
@@ -354,13 +382,20 @@ describe('GameInitializer', () => {
   });
 });
 
-function getShipCells(ship: { variant: string; coords: [number, number]; orientation: string }): [number, number][] {
+function getShipCells(ship: {
+  variant: string;
+  coords: [number, number];
+  orientation: string;
+}): [number, number][] {
   const cells: [number, number][] = [];
-  const size = GAME_CONSTANTS.SHIPS.SIZES[ship.variant as keyof typeof GAME_CONSTANTS.SHIPS.SIZES];
+  const size =
+    GAME_CONSTANTS.SHIPS.SIZES[
+      ship.variant as keyof typeof GAME_CONSTANTS.SHIPS.SIZES
+    ];
   const [x, y] = ship.coords;
 
   for (let i = 0; i < size; i++) {
-    if (ship.orientation === 'horizontal') {
+    if (ship.orientation === "horizontal") {
       cells.push([x + i, y]);
     } else {
       cells.push([x, y + i]);
@@ -368,4 +403,4 @@ function getShipCells(ship: { variant: string; coords: [number, number]; orienta
   }
 
   return cells;
-} 
+}

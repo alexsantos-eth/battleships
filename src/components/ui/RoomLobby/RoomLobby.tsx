@@ -5,7 +5,7 @@ import { useRoom } from "@/network/multiplayer/hooks/useRoom";
 import { Button } from "../Button";
 
 import type { RoomLobbyProps } from "./RoomLobby.types";
-import type { GameConfig } from "@/game/manager/initializer";
+import type { GameConfig } from "@/types/game/config";
 
 export const RoomLobby = ({
   roomId,

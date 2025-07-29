@@ -6,8 +6,8 @@ import type {
   ShipOrientation,
 } from "@/types/game/common";
 import { GAME_CONSTANTS, SHIP_VARIANTS_CONFIG } from "@/constants/game/board";
-import type { GameConfig } from "@/game/manager/initializer";
 
+import type { GameConfig } from "@/types/game/config";
 export class GameService {
   private static instance: GameService;
 
