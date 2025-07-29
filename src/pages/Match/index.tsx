@@ -4,6 +4,8 @@ import { useMatchConnection } from '@/hooks/useMatchConnection';
 import { LoadingScreen } from '@/components/ui/LoadingScreen';
 import { Button } from '@/components/ui/Button';
 import { ConnectionDebug } from '@/components/ui/ConnectionDebug';
+import { GameScreen } from '@/components/features/GameScreen';
+import { useEnemyAI } from '@/hooks/useEnemyAI';
 
 const Match = () => {
   const {
@@ -21,6 +23,9 @@ const Match = () => {
   const { roomId } = useParams<{ roomId: string }>();
 
   const [newMessage, setNewMessage] = useState('');
+  const [isGameActive, setIsGameActive] = useState(false);
+
+  useEnemyAI();
 
   const handleSendMessage = () => {
     if (newMessage.trim()) {
@@ -68,6 +73,8 @@ const Match = () => {
     );
   }
 
+  const bothPlayersReady = room.host.isReady && room.guest?.isReady;
+
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       {/* Header */}
@@ -98,10 +105,10 @@ const Match = () => {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto p-4">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="max-w-7xl mx-auto p-4">
+        <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
           {/* Panel de Jugadores */}
-          <div className="lg:col-span-1">
+          <div className="xl:col-span-1">
             <div className="bg-gray-800 rounded-lg p-6">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-semibold">Jugadores</h2>
@@ -156,24 +163,112 @@ const Match = () => {
                   {room.status === 'finished' && 'Finalizada'}
                 </p>
               </div>
+
+              {/* Botones de Prueba */}
+              <div className="mt-4 bg-gray-700 rounded-lg p-4">
+                <h3 className="font-medium mb-3 text-sm">Pruebas de Conexión</h3>
+                <div className="space-y-2">
+                  <Button
+                    variant="secondary"
+                    size="small"
+                    onClick={() => sendMessage('¡Hola! ¿Cómo estás?')}
+                    className="w-full text-xs"
+                  >
+                    Mensaje de Saludo
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    size="small"
+                    onClick={() => sendMessage('Probando conexión en tiempo real...')}
+                    className="w-full text-xs"
+                  >
+                    Test Conexión
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    size="small"
+                    onClick={() => sendMessage(`Soy ${currentPlayer.displayName} y estoy conectado!`)}
+                    className="w-full text-xs"
+                  >
+                    Identificarse
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    size="small"
+                    onClick={() => setPlayerReady(!currentPlayer.isReady)}
+                    className="w-full text-xs"
+                  >
+                    Cambiar Estado
+                  </Button>
+                </div>
+              </div>
+
+              {/* Botón para iniciar juego */}
+              {bothPlayersReady && (
+                <div className="mt-4 bg-green-800 rounded-lg p-4">
+                  <h3 className="font-medium mb-3 text-green-200 text-sm">¡Ambos listos!</h3>
+                  <Button
+                    onClick={() => setIsGameActive(true)}
+                    className="bg-green-600 hover:bg-green-700 w-full text-sm"
+                  >
+                    🎮 Iniciar Juego
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Chat y Mensajes */}
-          <div className="lg:col-span-2">
+          {/* Área del Juego */}
+          <div className="xl:col-span-2">
+            {isGameActive || bothPlayersReady ? (
+              <div className="bg-gray-800 rounded-lg p-4">
+                <div className="mb-4">
+                  <h2 className="text-lg font-semibold mb-2">🎮 Juego Multiplayer</h2>
+                  <p className="text-sm text-gray-400">
+                    {isGameActive ? 'Juego en progreso' : 'Ambos jugadores listos - Inicia el juego'}
+                  </p>
+                </div>
+                <div className="h-[600px] bg-gray-900 rounded-lg overflow-hidden">
+                  <GameScreen />
+                </div>
+              </div>
+            ) : (
+              <div className="bg-gray-800 rounded-lg p-8 flex items-center justify-center">
+                <div className="text-center">
+                  <h2 className="text-xl font-semibold mb-4">Esperando jugadores...</h2>
+                  <p className="text-gray-400 mb-4">
+                    Ambos jugadores deben marcar "Listo" para iniciar el juego
+                  </p>
+                  <div className="flex items-center justify-center gap-4">
+                    <div className={`w-4 h-4 rounded-full ${room.host.isReady ? 'bg-green-500' : 'bg-gray-500'}`} />
+                    <span className="text-sm">{room.host.displayName}</span>
+                    {room.guest && (
+                      <>
+                        <div className={`w-4 h-4 rounded-full ${room.guest.isReady ? 'bg-green-500' : 'bg-gray-500'}`} />
+                        <span className="text-sm">{room.guest.displayName}</span>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Chat */}
+          <div className="xl:col-span-1">
             <div className="bg-gray-800 rounded-lg h-[600px] flex flex-col">
               {/* Header del Chat */}
               <div className="p-4 border-b border-gray-700">
-                <h2 className="text-lg font-semibold">Chat de la Sala</h2>
-                <p className="text-sm text-gray-400">Prueba la conexión en tiempo real</p>
+                <h2 className="text-lg font-semibold">Chat</h2>
+                <p className="text-sm text-gray-400">Comunícate con tu oponente</p>
               </div>
 
               {/* Mensajes */}
               <div className="flex-1 overflow-y-auto p-4 space-y-3">
                 {messages.length === 0 ? (
                   <div className="text-center text-gray-400 py-8">
-                    <p>No hay mensajes aún</p>
-                    <p className="text-sm">Envía un mensaje para probar la conexión</p>
+                    <p className="text-sm">No hay mensajes aún</p>
+                    <p className="text-xs">Envía un mensaje para empezar</p>
                   </div>
                 ) : (
                   messages.map((message) => (
@@ -182,7 +277,7 @@ const Match = () => {
                       className={`flex ${message.senderId === currentPlayer.uid ? 'justify-end' : 'justify-start'}`}
                     >
                       <div
-                        className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
+                        className={`max-w-full px-3 py-2 rounded-lg text-sm ${
                           message.senderId === currentPlayer.uid
                             ? 'bg-blue-600 text-white'
                             : 'bg-gray-700 text-gray-200'
@@ -196,7 +291,7 @@ const Match = () => {
                             {new Date(message.timestamp).toLocaleTimeString()}
                           </span>
                         </div>
-                        <p className="text-sm">{message.message}</p>
+                        <p className="text-xs">{message.message}</p>
                       </div>
                     </div>
                   ))
@@ -212,52 +307,12 @@ const Match = () => {
                     onChange={(e) => setNewMessage(e.target.value)}
                     onKeyPress={handleKeyPress}
                     placeholder="Escribe un mensaje..."
-                    className="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-400 focus:outline-none focus:border-blue-500"
+                    className="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 text-sm"
                   />
-                  <Button onClick={handleSendMessage} disabled={!newMessage.trim()}>
+                  <Button onClick={handleSendMessage} disabled={!newMessage.trim()} size="small">
                     Enviar
                   </Button>
                 </div>
-              </div>
-            </div>
-
-            {/* Botones de Prueba */}
-            <div className="mt-4 bg-gray-800 rounded-lg p-4">
-              <h3 className="font-medium mb-3">Pruebas de Conexión</h3>
-              <div className="flex flex-wrap gap-2">
-                <Button
-                  variant="secondary"
-                  onClick={() => sendMessage('¡Hola! ¿Cómo estás?')}
-                >
-                  Mensaje de Saludo
-                </Button>
-                <Button
-                  variant="secondary"
-                  onClick={() => sendMessage('Probando conexión en tiempo real...')}
-                >
-                  Test Conexión
-                </Button>
-                <Button
-                  variant="secondary"
-                  onClick={() => sendMessage(`Soy ${currentPlayer.displayName} y estoy conectado!`)}
-                >
-                  Identificarse
-                </Button>
-                <Button
-                  variant="secondary"
-                  onClick={() => setPlayerReady(!currentPlayer.isReady)}
-                >
-                  Cambiar Estado
-                </Button>
-                <Button
-                  variant="secondary"
-                  onClick={() => {
-                    console.log('🔍 Estado actual de mensajes:', messages);
-                    console.log('🔍 Estado actual de la sala:', room);
-                  }}
-                >
-                  Debug Estado
-                </Button>
               </div>
             </div>
           </div>
@@ -278,5 +333,7 @@ const Match = () => {
     </div>
   );
 };
+
+
 
 export default Match;
