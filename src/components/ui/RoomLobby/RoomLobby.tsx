@@ -57,6 +57,10 @@ export const RoomLobby = ({ roomId, onGameStart, onLeaveRoom }: RoomLobbyProps) 
     }
   };
 
+  const handleGoToMatch = () => {
+    window.location.href = `/match/${roomId}`;
+  };
+
   const handleLeaveRoom = async () => {
     try {
       await leaveRoom();
@@ -151,6 +155,15 @@ export const RoomLobby = ({ roomId, onGameStart, onLeaveRoom }: RoomLobbyProps) 
             className="w-full"
           >
             {currentPlayer.isReady ? 'No Estoy Listo' : 'Estoy Listo'}
+          </Button>
+        )}
+
+        {bothPlayersReady && (
+          <Button
+            onClick={handleGoToMatch}
+            className="w-full bg-blue-600 hover:bg-blue-700"
+          >
+            Ir al Match (Prueba Conexión)
           </Button>
         )}
 

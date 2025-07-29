@@ -11,6 +11,7 @@ const firebaseConfig = {
   messagingSenderId:
     import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "123456789",
   appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:123456789:web:abcdef123456",
+  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL || "https://demo-project-id-default-rtdb.firebaseio.com",
 };
 
 export const app = initializeApp(firebaseConfig);

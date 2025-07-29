@@ -15,7 +15,7 @@ const App = () => {
         <Navigation />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/match" element={<Match />} />
+          <Route path="/match/:roomId" element={<Match />} />
           <Route path="/playground" element={<Playground />} />
           <Route path="/profile" element={<UserProfilePage />} />
           <Route path="/multiplayer" element={<MultiplayerPage />} />

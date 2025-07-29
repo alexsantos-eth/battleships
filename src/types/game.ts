@@ -84,4 +84,11 @@ export interface GameRoom {
   updatedAt: number;
   gameConfig?: GameConfig;
   gameState?: GameState;
+  messages?: Array<{
+    id: string;
+    senderId: string;
+    senderName: string;
+    message: string;
+    timestamp: number;
+  }>;
 } 
