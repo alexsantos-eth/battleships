@@ -1,16 +1,18 @@
-import { useState } from 'react';
-import { useRoom } from '@/hooks/useRoom';
-import { Button } from '../Button';
+import { useState } from "react";
 
-interface MultiplayerMenuProps {
-  onRoomCreated?: (roomId: string) => void;
-  onRoomJoined?: (roomId: string) => void;
-}
+import { useRoom } from "@/network/multiplayer/hooks/useRoom";
 
-export const MultiplayerMenu = ({ onRoomCreated, onRoomJoined }: MultiplayerMenuProps) => {
-  const [mode, setMode] = useState<'menu' | 'create' | 'join'>('menu');
-  const [displayName, setDisplayName] = useState('');
-  const [roomCode, setRoomCode] = useState('');
+import { Button } from "../Button";
+
+import type { MultiplayerMenuProps } from "./Multiplayer.types";
+
+export const MultiplayerMenu = ({
+  onRoomCreated,
+  onRoomJoined,
+}: MultiplayerMenuProps) => {
+  const [mode, setMode] = useState<"menu" | "create" | "join">("menu");
+  const [displayName, setDisplayName] = useState("");
+  const [roomCode, setRoomCode] = useState("");
   const [isCreating, setIsCreating] = useState(false);
   const [isJoining, setIsJoining] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -19,7 +21,7 @@ export const MultiplayerMenu = ({ onRoomCreated, onRoomJoined }: MultiplayerMenu
 
   const handleCreateRoom = async () => {
     if (!displayName.trim()) {
-      setError('Por favor ingresa tu nombre');
+      setError("Por favor ingresa tu nombre");
       return;
     }
 
@@ -30,7 +32,7 @@ export const MultiplayerMenu = ({ onRoomCreated, onRoomJoined }: MultiplayerMenu
       const room = await createRoom(displayName.trim());
       onRoomCreated?.(room.id);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al crear la sala');
+      setError(err instanceof Error ? err.message : "Error al crear la sala");
     } finally {
       setIsCreating(false);
     }
@@ -38,12 +40,12 @@ export const MultiplayerMenu = ({ onRoomCreated, onRoomJoined }: MultiplayerMenu
 
   const handleJoinRoom = async () => {
     if (!displayName.trim()) {
-      setError('Por favor ingresa tu nombre');
+      setError("Por favor ingresa tu nombre");
       return;
     }
 
     if (!roomCode.trim() || roomCode.trim().length !== 5) {
-      setError('El código de sala debe tener 5 caracteres');
+      setError("El código de sala debe tener 5 caracteres");
       return;
     }
 
@@ -51,29 +53,37 @@ export const MultiplayerMenu = ({ onRoomCreated, onRoomJoined }: MultiplayerMenu
     setError(null);
 
     try {
-      const room = await joinRoom(roomCode.trim().toUpperCase(), displayName.trim());
+      const room = await joinRoom(
+        roomCode.trim().toUpperCase(),
+        displayName.trim()
+      );
       onRoomJoined?.(room.id);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al unirse a la sala');
+      setError(
+        err instanceof Error ? err.message : "Error al unirse a la sala"
+      );
     } finally {
       setIsJoining(false);
     }
   };
 
   const resetForm = () => {
-    setDisplayName('');
-    setRoomCode('');
+    setDisplayName("");
+    setRoomCode("");
     setError(null);
   };
 
-  if (mode === 'create') {
+  if (mode === "create") {
     return (
       <div className="bg-white rounded-lg shadow-lg p-6 max-w-md mx-auto">
         <h2 className="text-2xl font-bold text-gray-800 mb-4">Crear Sala</h2>
-        
+
         <div className="space-y-4">
           <div>
-            <label htmlFor="displayName" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="displayName"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Tu Nombre
             </label>
             <input
@@ -87,9 +97,7 @@ export const MultiplayerMenu = ({ onRoomCreated, onRoomJoined }: MultiplayerMenu
             />
           </div>
 
-          {error && (
-            <div className="text-red-600 text-sm">{error}</div>
-          )}
+          {error && <div className="text-red-600 text-sm">{error}</div>}
 
           <div className="flex space-x-3">
             <Button
@@ -97,12 +105,12 @@ export const MultiplayerMenu = ({ onRoomCreated, onRoomJoined }: MultiplayerMenu
               disabled={isCreating}
               className="flex-1"
             >
-              {isCreating ? 'Creando...' : 'Crear Sala'}
+              {isCreating ? "Creando..." : "Crear Sala"}
             </Button>
-            
+
             <Button
               onClick={() => {
-                setMode('menu');
+                setMode("menu");
                 resetForm();
               }}
               variant="secondary"
@@ -116,14 +124,17 @@ export const MultiplayerMenu = ({ onRoomCreated, onRoomJoined }: MultiplayerMenu
     );
   }
 
-  if (mode === 'join') {
+  if (mode === "join") {
     return (
       <div className="bg-white rounded-lg shadow-lg p-6 max-w-md mx-auto">
         <h2 className="text-2xl font-bold text-gray-800 mb-4">Unirse a Sala</h2>
-        
+
         <div className="space-y-4">
           <div>
-            <label htmlFor="joinDisplayName" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="joinDisplayName"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Tu Nombre
             </label>
             <input
@@ -138,7 +149,10 @@ export const MultiplayerMenu = ({ onRoomCreated, onRoomJoined }: MultiplayerMenu
           </div>
 
           <div>
-            <label htmlFor="roomCode" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="roomCode"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Código de Sala
             </label>
             <input
@@ -149,13 +163,11 @@ export const MultiplayerMenu = ({ onRoomCreated, onRoomJoined }: MultiplayerMenu
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-center text-lg tracking-wider"
               placeholder="ABCDE"
               maxLength={5}
-              style={{ letterSpacing: '0.5em' }}
+              style={{ letterSpacing: "0.5em" }}
             />
           </div>
 
-          {error && (
-            <div className="text-red-600 text-sm">{error}</div>
-          )}
+          {error && <div className="text-red-600 text-sm">{error}</div>}
 
           <div className="flex space-x-3">
             <Button
@@ -163,12 +175,12 @@ export const MultiplayerMenu = ({ onRoomCreated, onRoomJoined }: MultiplayerMenu
               disabled={isJoining}
               className="flex-1"
             >
-              {isJoining ? 'Uniéndose...' : 'Unirse'}
+              {isJoining ? "Uniéndose..." : "Unirse"}
             </Button>
-            
+
             <Button
               onClick={() => {
-                setMode('menu');
+                setMode("menu");
                 resetForm();
               }}
               variant="secondary"
@@ -184,18 +196,20 @@ export const MultiplayerMenu = ({ onRoomCreated, onRoomJoined }: MultiplayerMenu
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-6 max-w-md mx-auto">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Multiplayer</h2>
-      
+      <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+        Multiplayer
+      </h2>
+
       <div className="space-y-4">
         <Button
-          onClick={() => setMode('create')}
+          onClick={() => setMode("create")}
           className="w-full py-3 text-lg"
         >
           Crear Nueva Sala
         </Button>
-        
+
         <Button
-          onClick={() => setMode('join')}
+          onClick={() => setMode("join")}
           variant="secondary"
           className="w-full py-3 text-lg"
         >
@@ -204,4 +218,4 @@ export const MultiplayerMenu = ({ onRoomCreated, onRoomJoined }: MultiplayerMenu
       </div>
     </div>
   );
-}; 
+};

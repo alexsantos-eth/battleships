@@ -1,4 +1,4 @@
-import type { GameConfig } from "@/game/logic/gameInitializer";
+import type { GameConfig } from "@/game/manager/initializer";
 
 export interface GameLoadingScreenProps {
   isLoading: boolean;

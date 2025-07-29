@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 
-import { COLORS } from "@/config/colors";
-import { useGameStore } from "@/stores/game";
-import { eventBus, EVENTS } from "@/utils/eventBus";
+import { COLORS } from "@/config/colors/palette";
+import { useGameStore } from "@/bundle/stores/game/gameStore";
+import { cameraEventBus, CAMERA_EVENTS } from "@/events/camera/bus";
 
 const UIBox: React.FC = () => {
   const location = useLocation();
@@ -15,7 +15,7 @@ const UIBox: React.FC = () => {
   const handlePlayerCamera = () => {
     if (!isPlayerTurn) {
       setIsPlayerPerspective(!isPlayerPerspective);
-      eventBus.emit(EVENTS.CAMERA_TOGGLE_PLAYER_PERSPECTIVE, {
+      cameraEventBus.emit(CAMERA_EVENTS.CAMERA_TOGGLE_PLAYER_PERSPECTIVE, {
         isPlayerPerspective: !isPlayerPerspective,
       });
     }

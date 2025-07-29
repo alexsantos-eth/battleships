@@ -1,15 +1,17 @@
-import { useState } from 'react';
-import { useRoom } from '@/hooks/useRoom';
-import { Button } from '../Button';
-import type { GameConfig } from '@/types/game';
+import { useState } from "react";
 
-interface RoomLobbyProps {
-  roomId: string;
-  onGameStart?: (gameConfig: GameConfig) => void;
-  onLeaveRoom?: () => void;
-}
+import { useRoom } from "@/network/multiplayer/hooks/useRoom";
 
-export const RoomLobby = ({ roomId, onGameStart, onLeaveRoom }: RoomLobbyProps) => {
+import { Button } from "../Button";
+
+import type { RoomLobbyProps } from "./RoomLobby.types";
+import type { GameConfig } from "@/game/manager/initializer";
+
+export const RoomLobby = ({
+  roomId,
+  onGameStart,
+  onLeaveRoom,
+}: RoomLobbyProps) => {
   const [isStarting, setIsStarting] = useState(false);
   const [gameConfig] = useState<GameConfig>({
     boardWidth: 10,
@@ -18,8 +20,12 @@ export const RoomLobby = ({ roomId, onGameStart, onLeaveRoom }: RoomLobbyProps) 
       small: 2,
       medium: 2,
       large: 1,
-      xlarge: 1
-    }
+      xlarge: 1,
+    },
+    initialTurn: "player",
+    allowShipOverlap: false,
+    minShipDistance: 1,
+    enemyAI: "random",
   });
 
   const {
@@ -30,16 +36,16 @@ export const RoomLobby = ({ roomId, onGameStart, onLeaveRoom }: RoomLobbyProps) 
     startGame,
     leaveRoom,
     isHost,
-    currentPlayer
+    currentPlayer,
   } = useRoom(roomId);
 
   const handleReadyToggle = async () => {
     if (!currentPlayer) return;
-    
+
     try {
       await setPlayerReady(!currentPlayer.isReady);
     } catch (err) {
-      console.error('Error al cambiar estado de listo:', err);
+      console.error("Error al cambiar estado de listo:", err);
     }
   };
 
@@ -51,7 +57,7 @@ export const RoomLobby = ({ roomId, onGameStart, onLeaveRoom }: RoomLobbyProps) 
       await startGame(gameConfig);
       onGameStart?.(gameConfig);
     } catch (err) {
-      console.error('Error al iniciar el juego:', err);
+      console.error("Error al iniciar el juego:", err);
     } finally {
       setIsStarting(false);
     }
@@ -66,7 +72,7 @@ export const RoomLobby = ({ roomId, onGameStart, onLeaveRoom }: RoomLobbyProps) 
       await leaveRoom();
       onLeaveRoom?.();
     } catch (err) {
-      console.error('Error al salir de la sala:', err);
+      console.error("Error al salir de la sala:", err);
     }
   };
 
@@ -98,7 +104,9 @@ export const RoomLobby = ({ roomId, onGameStart, onLeaveRoom }: RoomLobbyProps) 
   return (
     <div className="bg-white rounded-lg shadow-lg p-6 max-w-lg mx-auto">
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">Sala de Espera</h2>
+        <h2 className="text-2xl font-bold text-gray-800 mb-2">
+          Sala de Espera
+        </h2>
         <div className="bg-gray-100 rounded-lg p-3">
           <p className="text-sm text-gray-600 mb-1">Código de Sala</p>
           <p className="text-2xl font-mono font-bold text-blue-600 tracking-wider">
@@ -125,7 +133,9 @@ export const RoomLobby = ({ roomId, onGameStart, onLeaveRoom }: RoomLobbyProps) 
         {room.guest ? (
           <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
             <div>
-              <p className="font-medium text-gray-800">{room.guest.displayName}</p>
+              <p className="font-medium text-gray-800">
+                {room.guest.displayName}
+              </p>
               <p className="text-sm text-gray-600">Invitado</p>
             </div>
             <div className="flex items-center space-x-2">
@@ -138,7 +148,9 @@ export const RoomLobby = ({ roomId, onGameStart, onLeaveRoom }: RoomLobbyProps) 
           </div>
         ) : (
           <div className="p-3 bg-gray-50 rounded-lg text-center">
-            <p className="text-gray-500">Esperando que se una otro jugador...</p>
+            <p className="text-gray-500">
+              Esperando que se una otro jugador...
+            </p>
           </div>
         )}
       </div>
@@ -154,7 +166,7 @@ export const RoomLobby = ({ roomId, onGameStart, onLeaveRoom }: RoomLobbyProps) 
             variant={currentPlayer.isReady ? "secondary" : "primary"}
             className="w-full"
           >
-            {currentPlayer.isReady ? 'No Estoy Listo' : 'Estoy Listo'}
+            {currentPlayer.isReady ? "No Estoy Listo" : "Estoy Listo"}
           </Button>
         )}
 
@@ -173,7 +185,7 @@ export const RoomLobby = ({ roomId, onGameStart, onLeaveRoom }: RoomLobbyProps) 
             disabled={isStarting}
             className="w-full bg-green-600 hover:bg-green-700"
           >
-            {isStarting ? 'Iniciando...' : 'Iniciar Juego'}
+            {isStarting ? "Iniciando..." : "Iniciar Juego"}
           </Button>
         )}
 
@@ -187,4 +199,4 @@ export const RoomLobby = ({ roomId, onGameStart, onLeaveRoom }: RoomLobbyProps) 
       </div>
     </div>
   );
-}; 
+};

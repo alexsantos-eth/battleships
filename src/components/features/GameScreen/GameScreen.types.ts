@@ -1,1 +1,0 @@
-export type GameScreenProps = Record<string, never>; 

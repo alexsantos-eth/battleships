@@ -1,5 +1,5 @@
-import { userService } from '../user';
-import type { UserProfile, GameStats, GameHistory } from '@/types/user';
+import { userService } from '../user/data';
+import type { UserProfile, GameStats, GameHistory } from '@/types/user/profile';
 
 jest.mock('firebase/firestore', () => ({
   doc: jest.fn(),

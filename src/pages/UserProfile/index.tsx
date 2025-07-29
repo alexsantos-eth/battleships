@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { useAuth } from "@/hooks/useAuth";
-import { useUserProfile } from "@/hooks/useUserProfile";
+
+import { useAuth } from "@/auth/hooks/data/useAuth";
+import { GameHistory } from "@/components/ui/GameHistory";
 import { LoadingScreen } from "@/components/ui/LoadingScreen";
 import { LogoutButton } from "@/components/ui/LogoutButton";
-import type { UserPreferences } from "@/types/user";
-import { GameHistory, UserStats } from "@/components/features";
+import { UserStats } from "@/components/ui/UserStats";
+import { useUserProfile } from "@/user/hooks/profile/useUserProfile";
 
+import type { UserPreferences } from "@/types/user/profile";
 const UserProfilePage = () => {
   const { user } = useAuth();
   const { profile, isLoading, error, updatePreferences } = useUserProfile();
@@ -19,6 +21,7 @@ const UserProfilePage = () => {
   if (error) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 flex items-center justify-center">
+        ±
         <div className="bg-red-500/20 backdrop-blur-sm rounded-lg p-6 border border-red-500/30">
           <h2 className="text-red-400 text-xl font-bold mb-2">Error</h2>
           <p className="text-red-300">{error}</p>
