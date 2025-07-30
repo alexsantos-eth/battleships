@@ -25,7 +25,7 @@ export interface ExplosionPattern {
   drops: DropletDirection[];
 }
 
-export const DROPLET_COUNT = GAME_CONSTANTS.ANIMATIONS.DROPLET.count;
+export const DROPLET_COUNT = GAME_CONSTANTS.ANIMATIONS.DROPLET.COUNT;
 
 export const generateRandomAngle = (): number => {
   return Math.random() * Math.PI * 2;

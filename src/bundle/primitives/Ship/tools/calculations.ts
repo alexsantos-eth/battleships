@@ -114,10 +114,10 @@ export const calculateWaveAnimation = (
   amplitude: number,
   coords: [number, number]
 ): WaveAnimation => {
-  const phase = (coords[0] + coords[1]) * GAME_CONSTANTS.ANIMATIONS.WAVE.phaseMultiplier;
+  const phase = (coords[0] + coords[1]) * GAME_CONSTANTS.ANIMATIONS.WAVE.PAHSE_MULTIPLIER;
 
   const waveY = Math.sin(time * frequency + phase) * amplitude;
-  const waveZ = Math.cos(time * frequency * GAME_CONSTANTS.ANIMATIONS.WAVE.frequencyMultiplier + phase) * (amplitude * GAME_CONSTANTS.ANIMATIONS.WAVE.amplitudeMultiplier);
+  const waveZ = Math.cos(time * frequency * GAME_CONSTANTS.ANIMATIONS.WAVE.FREQUENCY_MULTIPLIER + phase) * (amplitude * GAME_CONSTANTS.ANIMATIONS.WAVE.AMPLITUDE_MULTIPLIER);
 
   return {
     y: waveY,
@@ -152,11 +152,11 @@ export const calculateShipAnimation = (
   const rotation = calculateShipRotation(orientation);
   const scale = calculateShipScale(variant);
 
-  const phase = (coords[0] + coords[1]) * GAME_CONSTANTS.ANIMATIONS.WAVE.phaseMultiplier;
+  const phase = (coords[0] + coords[1]) * GAME_CONSTANTS.ANIMATIONS.WAVE.PAHSE_MULTIPLIER;
   const frequency = variant === "small" ? 3.5 : variant === "medium" ? 3.0 : variant === "large" ? 2.5 : 2.0;
   const amplitude = variant === "small" ? 0.02 : variant === "medium" ? 0.025 : variant === "large" ? 0.03 : 0.035;
 
-  const waveZ = Math.cos(time * frequency * GAME_CONSTANTS.ANIMATIONS.WAVE.frequencyMultiplier + phase) * (amplitude * GAME_CONSTANTS.ANIMATIONS.WAVE.amplitudeMultiplier);
+  const waveZ = Math.cos(time * frequency * GAME_CONSTANTS.ANIMATIONS.WAVE.FREQUENCY_MULTIPLIER + phase) * (amplitude * GAME_CONSTANTS.ANIMATIONS.WAVE.AMPLITUDE_MULTIPLIER);
 
   return {
     position: { ...position, z: position.z + waveZ },

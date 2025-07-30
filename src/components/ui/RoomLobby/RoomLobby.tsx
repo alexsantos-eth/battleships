@@ -23,9 +23,6 @@ export const RoomLobby = ({
       xlarge: 1,
     },
     initialTurn: "player",
-    allowShipOverlap: false,
-    minShipDistance: 1,
-    enemyAI: "random",
   });
 
   const {

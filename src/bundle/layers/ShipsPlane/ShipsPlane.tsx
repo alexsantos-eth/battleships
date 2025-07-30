@@ -1,42 +1,19 @@
-import React, { useMemo } from "react";
+import React from "react";
 
-import { useGameState } from "@/bundle/hooks/game/useGameState";
 import { Ship } from "@/bundle/primitives";
+import { useGameStore } from "@/bundle/stores/game/gameStore";
 
-import type { Ship as ShipType } from "@/bundle/stores/game/gameStore";
+import type { GameShip } from "@/types/game/common";
 import type { ShipsPlaneProps } from "./ShipsPlane.types";
-export const ShipsPlane: React.FC<ShipsPlaneProps> = ({
-  isPlayerBoard = true,
-  alwaysShowEnemyShips = false,
-}) => {
-  const { playerShips, enemyShips, initializeGame, currentTurn } =
-    useGameState();
 
-  const ships = useMemo(() => {
-    const currentShips = isPlayerBoard ? playerShips : enemyShips;
+export const ShipsPlane: React.FC<ShipsPlaneProps> = ({ isPlayerBoard }) => {
+  const { playerShips, enemyShips } = useGameStore();
 
-    if (!currentShips || currentShips.length === 0) {
-      initializeGame();
-      return [];
-    }
-
-    return currentShips;
-  }, [isPlayerBoard, playerShips, enemyShips, initializeGame]);
-
-  const shouldShowShips = useMemo(() => {
-    if (!isPlayerBoard) {
-      return currentTurn === "ENEMY_TURN" || alwaysShowEnemyShips;
-    }
-    return true;
-  }, [isPlayerBoard, currentTurn, alwaysShowEnemyShips]);
-
-  if (!shouldShowShips) {
-    return null;
-  }
+  const ships = isPlayerBoard ? playerShips : enemyShips;
 
   return (
     <group>
-      {ships.map((ship: ShipType, idx) => (
+      {ships.map((ship: GameShip, idx) => (
         <Ship
           key={idx}
           coords={ship.coords}

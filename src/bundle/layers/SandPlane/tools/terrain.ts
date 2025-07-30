@@ -1,10 +1,11 @@
+import { GAME_CONSTANTS } from "@/constants/game/board";
 import { createNoise2D } from "simplex-noise";
 
 interface TerrainOffset {
   x: number;
   z: number;
 }
-const holeRadius = 0.29;
+const holeRadius = GAME_CONSTANTS.TERRAIN.SAND.HOLE_RADIUS;
 
 export const generateTerrain = (
   simplex: ReturnType<typeof createNoise2D>,

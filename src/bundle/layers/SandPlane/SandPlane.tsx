@@ -15,16 +15,16 @@ import { useLoader } from "@react-three/fiber";
 import { generateTerrain } from "./tools/terrain";
 
 import type { SandPlaneProps } from "./SandPlane.types";
+import { GAME_CONSTANTS } from "@/constants/game/board";
 
 export const SandPlane: React.FC<SandPlaneProps> = ({
-  seed = 1,
-  size = 64,
-  height = 0.02,
-  levels = 1,
-  scale = 5,
-  offset = { x: 0, z: 0 },
+  size = GAME_CONSTANTS.TERRAIN.GRASS.SIZE,
+  height = GAME_CONSTANTS.TERRAIN.SAND.DEFAULT_HEIGHT,
+  levels = GAME_CONSTANTS.TERRAIN.SAND.DEFAULT_LEVELS,
+  scale = GAME_CONSTANTS.TERRAIN.SAND.DEFAULT_SCALE,
+  offset = GAME_CONSTANTS.TERRAIN.SAND.DEFAULT_OFFSET,
 }) => {
-  const simplex = useMemo(() => createNoise2D(), [seed]);
+  const simplex = useMemo(() => createNoise2D(), []);
   const ref = useRef<BufferGeometry>(null!);
 
   const sandTexture = useLoader(
@@ -136,9 +136,9 @@ export const SandPlane: React.FC<SandPlaneProps> = ({
 
   return (
     <group
-      scale={9.5 / scale}
-      position={[-offset.x, 0, 0.1]}
-      rotation={[Math.PI / 2, 0, 0]}
+      scale={GAME_CONSTANTS.TERRAIN.SAND.GROUP_SCALE / scale}
+      position={[-offset.x, 0, GAME_CONSTANTS.TERRAIN.SAND.GROUP_POSITION_Y]}
+      rotation={[GAME_CONSTANTS.TERRAIN.SAND.GROUP_ROTATION, 0, 0]}
     >
       <mesh>
         <planeGeometry args={[1, 1, size - 1, size - 1]} ref={ref} />

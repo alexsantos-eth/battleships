@@ -1,4 +1,3 @@
-import { app } from "@/config/database/firebase";
 import {
   Database,
   endAt,
@@ -23,6 +22,8 @@ import {
   startAt,
   update,
 } from "firebase/database";
+
+import { app } from "@/config/database/firebase";
 
 import type { DatabaseReference, Query, Unsubscribe } from "firebase/database";
 export interface RealtimeOptions {

@@ -14,7 +14,6 @@ export const Game: React.FC<GameProps> = ({
 }) => {
   const defaultEnemyBoardProps = {
     isPlayerBoard: false,
-    enablePressGrid: true,
     rotation: [0, 0, Math.PI] as [number, number, number],
     position: [0, 9, 0] as [number, number, number],
     ...enemyBoardProps,

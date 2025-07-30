@@ -1,6 +1,7 @@
 import type { GameConfig } from "@/types/game/config";
 import { GameInitializer } from "../initializer";
 import { GAME_CONSTANTS, GAME_CONFIGS } from "@/constants/game/board";
+import { getShipCellsFromShip } from "@/utils/shipCalculations";
 
 describe("GameInitializer", () => {
   let initializer: GameInitializer;
@@ -256,8 +257,8 @@ describe("GameInitializer", () => {
           const ship1 = allShips[i];
           const ship2 = allShips[j];
 
-          const cells1 = getShipCells(ship1);
-          const cells2 = getShipCells(ship2);
+                const cells1 = getShipCellsFromShip(ship1);
+      const cells2 = getShipCellsFromShip(ship2);
 
           const testCells1 = cells1.slice(0, 2);
           const testCells2 = cells2.slice(0, 2);
@@ -382,25 +383,4 @@ describe("GameInitializer", () => {
   });
 });
 
-function getShipCells(ship: {
-  variant: string;
-  coords: [number, number];
-  orientation: string;
-}): [number, number][] {
-  const cells: [number, number][] = [];
-  const size =
-    GAME_CONSTANTS.SHIPS.SIZES[
-      ship.variant as keyof typeof GAME_CONSTANTS.SHIPS.SIZES
-    ];
-  const [x, y] = ship.coords;
 
-  for (let i = 0; i < size; i++) {
-    if (ship.orientation === "horizontal") {
-      cells.push([x + i, y]);
-    } else {
-      cells.push([x, y + i]);
-    }
-  }
-
-  return cells;
-}

@@ -1,49 +1,35 @@
 import { create } from "zustand";
 
 import { GAME_CONSTANTS } from "@/constants/game/board";
-import { CAMERA_EVENTS, cameraEventBus } from "@/events/camera/bus";
 import { GameInitializer } from "@/game/manager/initializer";
-import type { GameConfig } from "@/types/game/config";
 
+import type { GameConfig } from "@/types/game/config";
+import type { GameShip, Shot, Winner } from "@/types/game/common";
 export type GameTurn = "PLAYER_TURN" | "ENEMY_TURN";
 
 export type ShipVariant = "small" | "medium" | "large" | "xlarge";
-
-export interface Ship {
-  coords: [number, number];
-  variant: ShipVariant;
-  orientation: "horizontal" | "vertical";
-}
-
-export interface Shot {
-  x: number;
-  y: number;
-  hit: boolean;
-  shipId?: number;
-}
 
 export interface GameState {
   currentTurn: GameTurn;
   isPlayerTurn: boolean;
   isEnemyTurn: boolean;
-  playerShips: Ship[];
-  enemyShips: Ship[];
+  playerShips: GameShip[];
+  enemyShips: GameShip[];
   playerShots: Shot[];
   enemyShots: Shot[];
   isGameOver: boolean;
-  winner: "player" | "enemy" | null;
+  winner: Winner;
   boardWidth: number;
   boardHeight: number;
   setPlayerTurn: () => void;
   setEnemyTurn: () => void;
   toggleTurn: () => void;
-  setPlayerShips: (ships: Ship[]) => void;
-  setEnemyShips: (ships: Ship[]) => void;
+  setPlayerShips: (ships: GameShip[]) => void;
+  setEnemyShips: (ships: GameShip[]) => void;
   setBoardDimensions: (width: number, height: number) => void;
   addPlayerShot: (shot: Shot) => void;
   addEnemyShot: (shot: Shot) => void;
   initializeGame: (config?: Partial<GameConfig>) => void;
-  initializeRandomTurn: () => void;
   checkShot: (
     x: number,
     y: number,
@@ -88,18 +74,16 @@ export const useGameStore = create<GameState>((set, get) => ({
     const { currentTurn } = get();
     if (currentTurn === "PLAYER_TURN") {
       get().setEnemyTurn();
-      cameraEventBus.emit(CAMERA_EVENTS.CAMERA_SHOOT_END);
     } else {
       get().setPlayerTurn();
-      cameraEventBus.emit(CAMERA_EVENTS.CAMERA_SHOOT_START);
     }
   },
 
-  setPlayerShips: (ships: Ship[]) => {
+  setPlayerShips: (ships: GameShip[]) => {
     set({ playerShips: ships });
   },
 
-  setEnemyShips: (ships: Ship[]) => {
+  setEnemyShips: (ships: GameShip[]) => {
     set({ enemyShips: ships });
   },
 
@@ -119,19 +103,6 @@ export const useGameStore = create<GameState>((set, get) => ({
       enemyShots: [...state.enemyShots, shot],
     }));
     get().checkGameOver();
-  },
-
-  initializeRandomTurn: () => {
-    const randomTurn =
-      Math.random() < GAME_CONSTANTS.GAME_LOGIC.BATTLE.RANDOM_TURN_THRESHOLD
-        ? "PLAYER_TURN"
-        : "ENEMY_TURN";
-
-    set({
-      currentTurn: randomTurn,
-      isPlayerTurn: randomTurn === "PLAYER_TURN",
-      isEnemyTurn: randomTurn === "ENEMY_TURN",
-    });
   },
 
   checkShot: (x: number, y: number, isPlayerShot: boolean) => {
@@ -203,7 +174,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     );
 
     if (areAllPlayerShipsDestroyed || areAllEnemyShipsDestroyed) {
-      const winner = areAllPlayerShipsDestroyed ? "enemy" : "player";
+      const winner: Winner = areAllPlayerShipsDestroyed ? "enemy" : "player";
       set({
         isGameOver: true,
         winner,
@@ -228,9 +199,8 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   initializeGame: (config?: Partial<GameConfig>) => {
-    const gameConfig = config || GameInitializer.createClassicGameConfig();
-    const initializer = new GameInitializer(gameConfig);
-    const gameSetup = initializer.initializeGame();
+    const initializer = new GameInitializer(config);
+    const gameSetup = initializer.initializeGame(config?.initialTurn);
 
     const newState = {
       playerShips: gameSetup.playerShips,

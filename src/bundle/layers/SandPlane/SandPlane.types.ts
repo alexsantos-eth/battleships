@@ -1,5 +1,4 @@
 export interface SandPlaneProps {
-  seed?: number;
   size?: number;
   height?: number;
   levels?: number;
@@ -14,7 +13,6 @@ export interface TerrainOffset {
 }
 
 export interface TerrainConfig {
-  seed: number;
   size: number;
   height: number;
   levels: number;

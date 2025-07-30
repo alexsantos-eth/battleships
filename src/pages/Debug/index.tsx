@@ -1,9 +1,19 @@
-import { Game } from "@/bundle/components/Game";
-import { useEnemyAI } from "@/bundle/controller/enemy/hooks/useEnemyAI";
+import GameScene from "@/bundle/scene/Scene";
 
 const Debug = () => {
-  useEnemyAI();
-  return <Game />;
+  return <GameScene 
+    config={{
+      boardHeight: 8,
+      boardWidth: 8,
+      initialTurn: "player",
+      shipCounts: {
+        small: 2,
+        medium: 2,
+        large: 1,
+        xlarge: 1,
+      },
+    }}
+  />;
 };
 
 export default Debug;

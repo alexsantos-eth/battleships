@@ -1,29 +1,27 @@
 export type GameTurn = "PLAYER_TURN" | "ENEMY_TURN";
-export type Winner = "player" | "enemy" | null;
+export type PlayerName = "player" | "enemy";
+export type Winner = PlayerName | null;
 export type ShipVariant = "small" | "medium" | "large" | "xlarge";
 export type ShipOrientation = "horizontal" | "vertical";
 
-export interface Ship {
-  id: string;
+export interface GameShip {
   coords: [number, number];
   variant: ShipVariant;
   orientation: ShipOrientation;
-  health: number;
+  shipId?: string;
 }
 
 export interface Shot {
-  id: string;
   x: number;
   y: number;
   hit: boolean;
-  shipId?: string;
-  timestamp: number;
+  shipId?: number;
 }
 
 export interface GameState {
   currentTurn: GameTurn;
-  playerShips: Ship[];
-  enemyShips: Ship[];
+  playerShips: GameShip[];
+  enemyShips: GameShip[];
   playerShots: Shot[];
   enemyShots: Shot[];
   isGameOver: boolean;
@@ -33,7 +31,7 @@ export interface GameState {
 }
 
 export interface ShipPlacement {
-  ship: Ship;
+  ship: GameShip;
   cells: [number, number][];
 }
 

@@ -1,3 +1,5 @@
+import type { PlayerName } from "./common";
+
 export interface GameConfig {
   boardWidth: number;
   boardHeight: number;
@@ -9,13 +11,5 @@ export interface GameConfig {
     xlarge: number;
   };
 
-  initialTurn: "player" | "enemy" | "random";
-
-  seed?: number;
-  allowShipOverlap: boolean;
-  minShipDistance: number;
-
-  enemyAI: "random" | "smart" | "deterministic" | "basic";
-
-  turnTimeLimit?: number;
+  initialTurn: PlayerName | "random";
 }

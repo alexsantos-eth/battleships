@@ -4,7 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "@/auth/hooks/data/useAuth";
 import { roomService } from "@/services/room/realtime";
 
-import type { GameRoom, RoomPlayer } from "@/types/game/common";
+import type { GameRoom, RoomPlayer } from "@/types/game/room";
+
 export interface MatchMessage {
   id: string;
   senderId: string;

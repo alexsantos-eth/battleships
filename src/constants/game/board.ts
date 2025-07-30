@@ -1,5 +1,3 @@
-import type { ShipVariant } from '@/types/game/common';
-
 export const GAME_CONSTANTS = {
   BOARD: {
     DEFAULT_WIDTH: 10,
@@ -8,6 +6,14 @@ export const GAME_CONSTANTS = {
     MAX_SIZE: 15,
     GRID_SPACING: 0.5,
     SHIP_SPACING: 0.5,
+    PLANE_GEOMETRY: {
+      SEGMENTS: 10,
+      MIN_SIZE: 5,
+    },
+    GRID_HELPER: {
+      ROTATION: [-Math.PI / 2, 0, 0] as [number, number, number],
+      POSITION: [0, 0, 0.21] as [number, number, number],
+    },
   },
 
   SHIPS: {
@@ -18,9 +24,9 @@ export const GAME_CONSTANTS = {
       xlarge: 5,
     } as const,
     DEFAULT_COUNTS: {
-      small: 4,
-      medium: 3,
-      large: 2,
+      small: 1,
+      medium: 2,
+      large: 1,
       xlarge: 1,
     } as const,
     MIN_DISTANCE: 2,
@@ -65,12 +71,6 @@ export const GAME_CONSTANTS = {
       positionThreshold: 0.00001,
       rotationThreshold: 0.005,
     },
-    PERFORMANCE: {
-      slowDeviceCores: 4,
-      pixelRatioReduction: 0.8,
-      fpsWarningThreshold: 20,
-      ratioReductionFactor: 0.9,
-    },
     TRANSITION_DURATION: 1000,
     LOOK_AT: [0, 0, 0] as [number, number, number],
   },
@@ -92,78 +92,25 @@ export const GAME_CONSTANTS = {
 
   ANIMATIONS: {
     DROPLET: {
-      distance: 0.5,
-      startZ: 0.15,
-      endZ: 0.5,
-      startOpacity: 1,
-      endOpacity: 0,
-      duration: 400,
-      count: 10,
+      DISTANCE: 0.5,
+      START_Z: 0.15,
+      END_Z: 0.5,
+      START_OPACITY: 1,
+      END_OPACITY: 0,
+      DURATION: 400,
+      COUNT: 10,
     },
     SHOT: {
-      defaultDelay: 500,
-      hitDelay: 1000,
-      missDelay: 600,
-      visualHitDelay: 1200,
-      visualMissDelay: 800,
+      DEFAULT_DELAY: 500,
+      HIT_DELAY: 1000,
+      MISS_DELAY: 600,
+      VISUAL_HIT_DELAY: 1200,
+      VISUAL_MISS_DELAY: 800,
     },
     WAVE: {
-      frequencyMultiplier: 0.7,
-      amplitudeMultiplier: 0.5,
-      phaseMultiplier: 0.5,
-    },
-  },
-
-  PERFORMANCE: {
-    TARGET_FPS: 60,
-    DEFAULT_FPS: 60,
-    DEFAULT_RENDER_TIME: 16,
-    LOW_PERFORMANCE_THRESHOLD: 0.8,
-    MEMORY: {
-      DEFAULT_USED: 100 * 1024 * 1024,
-      DEFAULT_TOTAL: 512 * 1024 * 1024,
-      WARNING_THRESHOLD: 80,
-    },
-    CPU: {
-      BASE_USAGE: 5,
-      MAX_USAGE: 30,
-      ACTIVITY_BONUS: 20,
-      VARIATION: 2,
-      WARNING_THRESHOLD: 70,
-    },
-    SYSTEM: {
-      UPDATE_INTERVAL: 2000,
-      ACTIVITY_TIMEOUT: 1000,
-      FRAME_RATE_DIVISOR: 10,
-      BYTES_BASE: 1024,
-    },
-  },
-
-  UI: {
-    POSITIONS: {
-      TOP_LEFT: "top-left",
-      TOP_RIGHT: "top-right",
-      BOTTOM_LEFT: "bottom-left",
-      BOTTOM_RIGHT: "bottom-right",
-    },
-    SPACING: {
-      SMALL: "10px",
-      MEDIUM: "8px",
-      LARGE: "4px",
-    },
-    Z_INDEX: {
-      STATS_PANEL: "1000",
-    },
-    DIMENSIONS: {
-      DEBUG_INFO_MAX_WIDTH: 400,
-      DEBUG_INFO_MAX_HEIGHT: "80vh",
-      MOBILE_ZOOM_MULTIPLIER: 0.19,
-      DESKTOP_ZOOM: 140,
-    },
-    COLORS: {
-      SUCCESS: "#4CAF50",
-      WARNING: "#FF9800",
-      DANGER: "#F44336",
+      FREQUENCY_MULTIPLIER: 0.7,
+      AMPLITUDE_MULTIPLIER: 0.5,
+      PAHSE_MULTIPLIER: 0.5,
     },
   },
 
@@ -177,29 +124,22 @@ export const GAME_CONSTANTS = {
       ORIENTATION_RANDOM_THRESHOLD: 0.5,
       QUADRANT_SIZE_DIVISOR: 2,
     },
-    DETERMINISTIC: {
-      LCG_MULTIPLIER: 1103515245,
-      LCG_INCREMENT: 12345,
-      LCG_MASK: 0x7fffffff,
-      BOOLEAN_THRESHOLD: 0.5,
-    },
   },
 
   TERRAIN: {
     SAND: {
-      holeRadius: 0.28,
+      HOLE_RADIUS: 0.29,
+      DEFAULT_HEIGHT: 0.02,
+      DEFAULT_LEVELS: 1,
+      DEFAULT_SCALE: 5,
+      DEFAULT_OFFSET: { x: 0, z: 0 },
+      GROUP_SCALE: 9.5,
+      GROUP_POSITION_Y: 0.1,
+      GROUP_ROTATION: Math.PI / 2,
     },
     GRASS: {
-      size: 64,
+      SIZE: 64,
     },
-  },
-
-  SIMULATION: {
-    DEFAULT_SEED: 12345,
-    DEFAULT_BOARD_SIZE: 10,
-    MAX_SIMULATION_TURNS: 20,
-    QUICK_GAME_TURNS: 2,
-    RANDOM_GAME_MAX_TURNS: 15,
   },
 } as const;
 
@@ -261,48 +201,3 @@ export const SHIP_VARIANTS_CONFIG = {
     waveAmplitude: 0.035,
   },
 } as const;
-
-export const GAME_CONFIGS = {
-  QUICK: {
-    boardWidth: 8,
-    boardHeight: 8,
-    shipCounts: {
-      small: 2,
-      medium: 1,
-      large: 1,
-      xlarge: 0,
-    } as Record<ShipVariant, number>,
-    initialTurn: 'PLAYER_TURN' as const,
-    allowShipOverlap: false,
-    minShipDistance: 2,
-    enemyAI: 'basic' as const,
-  },
-  CLASSIC: {
-    boardWidth: 10,
-    boardHeight: 10,
-    shipCounts: {
-      small: 4,
-      medium: 3,
-      large: 2,
-      xlarge: 1,
-    } as Record<ShipVariant, number>,
-    initialTurn: 'PLAYER_TURN' as const,
-    allowShipOverlap: false,
-    minShipDistance: 2,
-    enemyAI: 'basic' as const,
-  },
-  CHALLENGING: {
-    boardWidth: 12,
-    boardHeight: 12,
-    shipCounts: {
-      small: 6,
-      medium: 4,
-      large: 3,
-      xlarge: 2,
-    } as Record<ShipVariant, number>,
-    initialTurn: 'PLAYER_TURN' as const,
-    allowShipOverlap: false,
-    minShipDistance: 2,
-    enemyAI: 'basic' as const,
-  },
-} as const; 

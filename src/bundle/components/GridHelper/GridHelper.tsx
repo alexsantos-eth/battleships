@@ -1,5 +1,6 @@
 import React from "react";
 
+import { GAME_CONSTANTS } from "@/constants/game/board";
 import { useGridDimensions } from "@/bundle/hooks/grid/useGridDimensions";
 import { COLORS } from "@/config/colors/palette";
 
@@ -25,8 +26,8 @@ export const GridHelper: React.FC<GridHelperProps> = () => {
         COLORS.grid.lines,
         COLORS.grid.lines,
       ]}
-      rotation={[-Math.PI / 2, 0, 0]}
-      position={[0, 0, 0.21]}
+      rotation={GAME_CONSTANTS.BOARD.GRID_HELPER.ROTATION}
+      position={GAME_CONSTANTS.BOARD.GRID_HELPER.POSITION}
     />
   );
 };
