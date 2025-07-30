@@ -1,6 +1,9 @@
 import { useGameStore } from "@/bundle/stores/game/gameStore";
 import { useGridDimensions } from "@/bundle/hooks/grid/useGridDimensions";
-import { generatePlayerGridCells, generateEnemyGridCells } from "@/bundle/tools/grid/calculations";
+import {
+  generatePlayerGridCells,
+  generateEnemyGridCells,
+} from "@/bundle/tools/grid/calculations";
 
 export const useCellPositions = (isPlayerGrid: boolean = true) => {
   const gameStore = useGameStore();
@@ -50,14 +53,17 @@ export const useCellPositions = (isPlayerGrid: boolean = true) => {
 
     const [gridX, gridY] = worldToGridCoordinates(pos);
 
-    if (!isValidGridPosition(gridX, gridY)) return;
-    if (isCellShot(gridX, gridY, true)) return;
+    const x = boardWidth - 1 - gridX;
+    const y = boardHeight - 1 - gridY;
 
-    const { hit, shipId } = checkShot(gridX, gridY, true);
+    if (!isValidGridPosition(x, y)) return;
+    if (isCellShot(x, y, true)) return;
+
+    const { hit, shipId } = checkShot(x, y, true);
 
     const shot = {
-      x: gridX,
-      y: gridY,
+      x,
+      y,
       hit,
       shipId,
     };
@@ -66,7 +72,8 @@ export const useCellPositions = (isPlayerGrid: boolean = true) => {
 
     if (hit) {
       const shipDestroyed =
-        shipId !== undefined && isShipDestroyed(shipId, true);
+        shipId !== undefined && shipId !== -1 && isShipDestroyed(shipId, true);
+
       if (shipDestroyed) {
         setEnemyTurn();
       }
@@ -82,4 +89,4 @@ export const useCellPositions = (isPlayerGrid: boolean = true) => {
     boardHeight,
     isPlayerTurn,
   };
-}; 
+};

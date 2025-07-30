@@ -15,3 +15,6 @@ export type { GameLoadingScreenProps } from "./GameLoadingScreen/GameLoadingScre
 
 export { MultiplayerMenu } from "./MultiplayerMenu";
 export { RoomLobby } from "./RoomLobby";
+
+export { ShotCounter } from "./ShotCounter";
+export type { ShotCounterProps } from "./ShotCounter/ShotCounter.types";

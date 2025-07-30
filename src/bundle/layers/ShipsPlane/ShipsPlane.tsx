@@ -4,14 +4,9 @@ import { Ship } from "@/bundle/primitives";
 import { useGameStore } from "@/bundle/stores/game/gameStore";
 
 import type { GameShip } from "@/types/game/common";
-import type { ShipsPlaneProps } from "./ShipsPlane.types";
 
-export const ShipsPlane: React.FC<ShipsPlaneProps> = ({ isPlayerBoard }) => {
+export const ShipsPlane: React.FC = () => {
   const { playerShips } = useGameStore();
-
-  if (!isPlayerBoard) {
-    return null;
-  }
 
   return (
     <group>

@@ -21,6 +21,7 @@ export interface GameState {
   winner: Winner;
   boardWidth: number;
   boardHeight: number;
+  shotCount: number;
   setPlayerTurn: () => void;
   setEnemyTurn: () => void;
   toggleTurn: () => void;
@@ -29,6 +30,8 @@ export interface GameState {
   setBoardDimensions: (width: number, height: number) => void;
   addPlayerShot: (shot: Shot) => void;
   addEnemyShot: (shot: Shot) => void;
+  incrementShotCount: () => void;
+  getShotCount: () => number;
   initializeGame: (gameSetup: GameSetup) => void;
   checkShot: (
     x: number,
@@ -53,6 +56,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   winner: null,
   boardWidth: GAME_CONSTANTS.BOARD.DEFAULT_WIDTH,
   boardHeight: GAME_CONSTANTS.BOARD.DEFAULT_HEIGHT,
+  shotCount: 0,
 
   setPlayerTurn: () => {
     set({
@@ -94,6 +98,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   addPlayerShot: (shot: Shot) => {
     set((state) => ({
       playerShots: [...state.playerShots, shot],
+      shotCount: state.shotCount + 1,
     }));
     get().checkGameOver();
   },
@@ -101,11 +106,29 @@ export const useGameStore = create<GameState>((set, get) => ({
   addEnemyShot: (shot: Shot) => {
     set((state) => ({
       enemyShots: [...state.enemyShots, shot],
+      shotCount: state.shotCount + 1,
     }));
     get().checkGameOver();
   },
 
-  checkShot: (x: number, y: number, isPlayerShot: boolean) => {
+  incrementShotCount: () => {
+    set((state) => ({
+      shotCount: state.shotCount + 1,
+    }));
+  },
+
+  getShotCount: () => {
+    return get().shotCount;
+  },
+
+  checkShot: (posX: number, posY: number, isPlayerShot: boolean) => {
+    const x = isPlayerShot
+      ? posX
+      : GAME_CONSTANTS.BOARD.DEFAULT_WIDTH - 1 - posX;
+    const y = isPlayerShot
+      ? posY
+      : GAME_CONSTANTS.BOARD.DEFAULT_HEIGHT - 1 - posY;
+
     const ships = isPlayerShot ? get().enemyShips : get().playerShips;
 
     for (let i = 0; i < ships.length; i++) {
@@ -130,7 +153,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       }
     }
 
-    return { hit: false };
+    return { hit: false, shipId: -1 };
   },
 
   isCellShot: (x: number, y: number, isPlayerShot: boolean) => {
@@ -195,6 +218,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       winner: null,
       boardWidth: GAME_CONSTANTS.BOARD.DEFAULT_WIDTH,
       boardHeight: GAME_CONSTANTS.BOARD.DEFAULT_HEIGHT,
+      shotCount: 0,
     });
   },
 
@@ -211,6 +235,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       enemyShots: [],
       isGameOver: false,
       winner: null,
+      shotCount: 0,
     };
 
     set(newState);

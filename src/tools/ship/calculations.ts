@@ -107,7 +107,7 @@ export function generateShip(
       coords,
       variant,
       orientation,
-      shipId: `${variant}-${coords[0]}-${coords[1]}`,
+      shipId: existingShips.length,
     };
 
     if (isValidShipPlacement(ship, existingShips, boardWidth, boardHeight)) {
