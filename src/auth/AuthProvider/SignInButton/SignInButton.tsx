@@ -18,7 +18,7 @@ export const SignInButton: React.FC<SignInButtonProps> = ({
       setError(null);
       await signInAnonymously();
     } catch (error) {
-      console.error("Sign in error:", error);
+      console.warn("Sign in error:", error);
       setError("Failed to sign in. Please try again.");
     } finally {
       setIsLoading(false);

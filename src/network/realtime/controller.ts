@@ -378,7 +378,7 @@ export class RealtimeDatabase {
         if (errorHandler) {
           errorHandler(error);
         } else {
-          console.error("Document subscription error:", error);
+          console.warn("Document subscription error:", error);
         }
       }
     );
@@ -415,7 +415,7 @@ export class RealtimeDatabase {
         if (errorHandler) {
           errorHandler(error);
         } else {
-          console.error("Collection subscription error:", error);
+          console.warn("Collection subscription error:", error);
         }
       }
     );
@@ -448,7 +448,7 @@ export class RealtimeDatabase {
             if (errorHandler) {
               errorHandler(error);
             } else {
-              console.error("Child added subscription error:", error);
+              console.warn("Child added subscription error:", error);
             }
           }
         )
@@ -469,7 +469,7 @@ export class RealtimeDatabase {
             if (errorHandler) {
               errorHandler(error);
             } else {
-              console.error("Child changed subscription error:", error);
+              console.warn("Child changed subscription error:", error);
             }
           }
         )
@@ -490,7 +490,7 @@ export class RealtimeDatabase {
             if (errorHandler) {
               errorHandler(error);
             } else {
-              console.error("Child removed subscription error:", error);
+              console.warn("Child removed subscription error:", error);
             }
           }
         )

@@ -16,7 +16,7 @@ export const LogoutButton: React.FC<LogoutButtonProps> = ({
       setIsLoading(true);
       await signOut();
     } catch (error) {
-      console.error("Error signing out:", error);
+      console.warn("Error signing out:", error);
     } finally {
       setIsLoading(false);
     }

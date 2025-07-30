@@ -243,8 +243,6 @@ export class RoomService {
     }
   ): Promise<void> {
     try {
-      console.log("📤 Enviando mensaje:", message);
-
       const room = await this.getRoom(roomId);
       if (!room) {
         throw new Error("Sala no encontrada");
@@ -253,16 +251,10 @@ export class RoomService {
       const messages = room.messages || [];
       const updatedMessages = [...messages, message];
 
-      console.log("📝 Mensajes actuales:", messages.length);
-      console.log("📝 Mensajes después de agregar:", updatedMessages.length);
-
       await dbUtils.updateDocument(`rooms/${roomId}`, {
         messages: updatedMessages,
       });
-
-      console.log("✅ Mensaje enviado exitosamente");
     } catch (error) {
-      console.error("❌ Error enviando mensaje:", error);
       throw new Error(`Error sending message: ${error}`);
     }
   }
@@ -279,34 +271,22 @@ export class RoomService {
       }>
     ) => void
   ): () => void {
-    console.log(
-      "📡 Service: Configurando suscripción a mensajes para sala:",
-      roomId
-    );
-
     const unsubscribe = dbUtils.subscribeToDocument<GameRoom>(
       `rooms/${roomId}`,
       (room) => {
         if (room) {
-          console.log(
-            "📨 Service: Mensajes recibidos en suscripción:",
-            room.messages?.length || 0
-          );
-          console.log("📨 Service: Contenido de mensajes:", room.messages);
           callback(room.messages || []);
         } else {
-          console.log("📨 Service: No hay sala, enviando array vacío");
           callback([]);
         }
       },
       {
         errorHandler: (error) => {
-          console.error("❌ Service: Error en suscripción a mensajes:", error);
+          console.warn("Error en suscripción a mensajes:", error);
         },
       }
     );
 
-    console.log("✅ Service: Suscripción a mensajes configurada");
     return unsubscribe;
   }
 
