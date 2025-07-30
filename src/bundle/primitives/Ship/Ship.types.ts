@@ -34,6 +34,6 @@ export interface WaveAnimation {
 
 export interface ShipProps {
   coords: [number, number];
-  variant: "small" | "medium" | "large" | "xlarge";
   orientation?: "horizontal" | "vertical";
+  variant: "small" | "medium" | "large" | "xlarge";
 }

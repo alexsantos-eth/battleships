@@ -77,9 +77,12 @@ export class GameInitializer {
     }
   }
 
-  public initializeGame(startTurn?: PlayerName | "random"): GameSetup {
-    const playerShips = generateShipsUtil(this.config);
-    const enemyShips = generateShipsUtil(this.config);
+  public initializeGame(
+    startTurn?: PlayerName | "random",
+    ships?: { playerShips: GameShip[]; enemyShips: GameShip[] }
+  ): GameSetup {
+    const playerShips = ships?.playerShips ?? generateShipsUtil(this.config);
+    const enemyShips = ships?.enemyShips ?? generateShipsUtil(this.config);
 
     const nexTurn: GameTurn | undefined =
       startTurn === "player"

@@ -1,5 +1,5 @@
-import type { GameConfig } from "@/types/game/config";
+import type { GameSetup } from "@/game/manager/initializer";
 
 export type SceneProps = {
-  config?: Partial<GameConfig>;
+  gameSetup?: Partial<GameSetup>;
 };

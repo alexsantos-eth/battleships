@@ -7,9 +7,13 @@ import type { GameShip } from "@/types/game/common";
 import type { ShipsPlaneProps } from "./ShipsPlane.types";
 
 export const ShipsPlane: React.FC<ShipsPlaneProps> = ({ isPlayerBoard }) => {
-  const { playerShips, enemyShips } = useGameStore();
+  const { playerShips, enemyShips, isPlayerTurn } = useGameStore();
 
   const ships = isPlayerBoard ? playerShips : enemyShips;
+
+  if (isPlayerTurn) {
+    return null;
+  }
 
   return (
     <group>

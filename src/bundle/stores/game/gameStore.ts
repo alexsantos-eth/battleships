@@ -1,10 +1,10 @@
 import { create } from "zustand";
 
 import { GAME_CONSTANTS } from "@/constants/game/board";
-import { GameInitializer } from "@/game/manager/initializer";
 
-import type { GameConfig } from "@/types/game/config";
 import type { GameShip, Shot, Winner } from "@/types/game/common";
+import type { GameSetup } from "@/game/manager/initializer";
+
 export type GameTurn = "PLAYER_TURN" | "ENEMY_TURN";
 
 export type ShipVariant = "small" | "medium" | "large" | "xlarge";
@@ -29,7 +29,7 @@ export interface GameState {
   setBoardDimensions: (width: number, height: number) => void;
   addPlayerShot: (shot: Shot) => void;
   addEnemyShot: (shot: Shot) => void;
-  initializeGame: (config?: Partial<GameConfig>) => void;
+  initializeGame: (gameSetup: GameSetup) => void;
   checkShot: (
     x: number,
     y: number,
@@ -198,10 +198,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     });
   },
 
-  initializeGame: (config?: Partial<GameConfig>) => {
-    const initializer = new GameInitializer(config);
-    const gameSetup = initializer.initializeGame(config?.initialTurn);
-
+  initializeGame: (gameSetup: GameSetup) => {
     const newState = {
       playerShips: gameSetup.playerShips,
       enemyShips: gameSetup.enemyShips,
