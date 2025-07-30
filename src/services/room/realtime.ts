@@ -70,6 +70,7 @@ export class RoomService {
       roomCode,
       status: "waiting",
       initialTurn,
+      currentTurn: initialTurn,
       gameConfig: {
         boardHeight: gameConfig.boardHeight,
         boardWidth: gameConfig.boardWidth,
