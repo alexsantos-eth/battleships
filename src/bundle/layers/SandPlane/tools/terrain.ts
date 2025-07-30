@@ -57,7 +57,7 @@ export const generateTerrain = (
           v = (i - 2) / 3;
           return (offset.z + Math.floor(v / size) / size - 0.5) * scale;
         default:
-          console.error("Can't happen");
+          console.warn("Can't happen");
           return 0;
       }
     }),

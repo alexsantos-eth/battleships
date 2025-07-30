@@ -32,9 +32,13 @@ export const Navigation: React.FC<NavigationProps> = ({ className = "" }) => {
     try {
       await signOut();
     } catch (error) {
-      console.error("Error signing out:", error);
+      console.warn("Error signing out:", error);
     }
   };
+
+  if (location.pathname.startsWith("/match")) {
+    return null;
+  }
 
   return (
     <nav

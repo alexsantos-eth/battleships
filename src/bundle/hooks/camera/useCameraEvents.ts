@@ -7,6 +7,7 @@ import {
   PLAYER_CAMERA_POSITION,
   PLAYER_PERSPECTIVE_POSITION,
 } from "@/constants/camera/offset";
+import { DEBUG_CONFIG } from "@/constants/debug/settings";
 import { CAMERA_EVENTS, cameraEventBus } from "@/events/camera/bus";
 import { useFrame, useThree } from "@react-three/fiber";
 
@@ -94,6 +95,8 @@ export const useCameraEvents = (
 
   const setPlayerCameraPosition = useCallback(
     (usePlayerPerspective: boolean) => {
+      if (DEBUG_CONFIG.ENABLE_CAMERA_CONTROLS) return;
+      
       throttledEvent(() => {
         if (usePlayerPerspective) {
           targetPosition.current.set(
@@ -128,6 +131,16 @@ export const useCameraEvents = (
     (...args: unknown[]) => {
       const data = args[0] as CameraEventData;
 
+      if (DEBUG_CONFIG.ENABLE_CAMERA_CONTROLS) {
+        setIsShooting(true);
+        setShootData(data);
+
+        if (onShootStart) {
+          onShootStart(data);
+        }
+        return;
+      }
+
       targetPosition.current.set(
         ENEMY_CAMERA_POSITION.position[0],
         ENEMY_CAMERA_POSITION.position[1],
@@ -158,6 +171,13 @@ export const useCameraEvents = (
   const handleShootEnd = useCallback(
     (...args: unknown[]) => {
       const data = args[0] as CameraEventData;
+
+      if (DEBUG_CONFIG.ENABLE_CAMERA_CONTROLS) {
+        if (onShootEnd) {
+          onShootEnd(data);
+        }
+        return;
+      }
 
       if (isPlayerPerspective) {
         targetPosition.current.set(
@@ -211,7 +231,7 @@ export const useCameraEvents = (
   const triggerShoot = useCallback(() => {}, []);
 
   useFrame(() => {
-    if (!isAnimating.current) return;
+    if (!isAnimating.current || DEBUG_CONFIG.ENABLE_CAMERA_CONTROLS) return;
 
     const currentPos = camera.position;
     const currentRot = camera.rotation;

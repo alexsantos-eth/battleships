@@ -42,7 +42,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         console.warn("Failed to create user profile:", profileError);
       }
     } catch (error) {
-      console.error("Error signing in anonymously:", error);
+      console.warn("Error signing in anonymously:", error);
       set({ isLoading: false });
       throw error;
     }
@@ -58,7 +58,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         isLoading: false,
       });
     } catch (error) {
-      console.error("Error signing out:", error);
+      console.warn("Error signing out:", error);
       set({ isLoading: false });
       throw error;
     }

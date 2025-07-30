@@ -42,7 +42,7 @@ export const RoomLobby = ({
     try {
       await setPlayerReady(!currentPlayer.isReady);
     } catch (err) {
-      console.error("Error al cambiar estado de listo:", err);
+      console.warn("Error al cambiar estado de listo:", err);
     }
   };
 
@@ -54,7 +54,7 @@ export const RoomLobby = ({
       await startGame();
       onGameStart?.(gameConfig);
     } catch (err) {
-      console.error("Error al iniciar el juego:", err);
+      console.warn("Error al iniciar el juego:", err);
     } finally {
       setIsStarting(false);
     }
@@ -69,7 +69,7 @@ export const RoomLobby = ({
       await leaveRoom();
       onLeaveRoom?.();
     } catch (err) {
-      console.error("Error al salir de la sala:", err);
+      console.warn("Error al salir de la sala:", err);
     }
   };
 
