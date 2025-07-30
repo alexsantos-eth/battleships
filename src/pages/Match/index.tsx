@@ -1,10 +1,13 @@
 import { useState } from "react";
 
-import Game from "@/bundle";
-import { useEnemyAI } from "@/bundle/controller/enemy/hooks/useEnemyAI";
+import GameScene from "@/bundle/scene/Scene";
 import { Button } from "@/components/ui/Button";
 import { LoadingScreen } from "@/components/ui/LoadingScreen";
+import { ShotCounter } from "@/components/ui/ShotCounter";
+import { GameInitializer, type GameSetup } from "@/game/manager/initializer";
 import { useMatchConnection } from "@/network/multiplayer/hooks/useMatchConnection";
+import { useMatchGameStateConnection } from "@/network/multiplayer/hooks/useMatchGameStateConnection";
+import { useMatchTurnHandler } from "@/network/multiplayer/hooks/useMatchTurnHandler";
 
 const Match = () => {
   const {
@@ -19,10 +22,37 @@ const Match = () => {
     setPlayerReady,
   } = useMatchConnection();
 
+  useMatchGameStateConnection();
+  useMatchTurnHandler();
+
+  const bothPlayersReady = room?.host.isReady && room?.guest?.isReady;
+  const gameStarted = room?.status === "playing" && bothPlayersReady;
+
+  const initializer = new GameInitializer(room?.gameConfig);
+  const playerStarts =
+    room?.initialTurn === "host" && currentPlayer?.role === "host";
+
+  const enemyShips =
+    currentPlayer?.role === "host"
+      ? room?.initialState?.enemyShips ?? []
+      : room?.initialState?.playerShips ?? [];
+
+  const gameSetup: GameSetup = {
+    config: {
+      ...initializer.getDefaultConfig(),
+      ...room?.gameConfig,
+      initialTurn: playerStarts ? "player" : "enemy",
+    },
+    initialTurn: playerStarts ? "PLAYER_TURN" : "ENEMY_TURN",
+    playerShips:
+      currentPlayer?.role === "host"
+        ? room?.initialState?.playerShips ?? []
+        : room?.initialState?.enemyShips ?? [],
+    enemyShips,
+  };
+
   const [newMessage, setNewMessage] = useState("");
   const [isGameActive, setIsGameActive] = useState(false);
-
-  useEnemyAI();
 
   const handleSendMessage = () => {
     if (newMessage.trim()) {
@@ -71,8 +101,6 @@ const Match = () => {
       </div>
     );
   }
-
-  const bothPlayersReady = room.host.isReady && room.guest?.isReady;
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
@@ -261,7 +289,7 @@ const Match = () => {
 
           {/* Área del Juego */}
           <div className="xl:col-span-2">
-            {isGameActive || bothPlayersReady ? (
+            {gameStarted ? (
               <div className="bg-gray-800 rounded-lg p-4">
                 <div className="mb-4">
                   <h2 className="text-lg font-semibold mb-2">
@@ -273,12 +301,15 @@ const Match = () => {
                       : "Ambos jugadores listos - Inicia el juego"}
                   </p>
                 </div>
-                <div className="h-[600px] bg-gray-900 rounded-lg overflow-hidden">
-                  <Game />
+                <div className="h-[600px] bg-gray-900 rounded-lg overflow-hidden relative">
+                  <GameScene gameSetup={gameSetup} />
+                  <div className="absolute top-4 right-4 z-10">
+                    <ShotCounter />
+                  </div>
                 </div>
               </div>
             ) : (
-              <div className="bg-gray-800 rounded-lg p-8 flex items-center justify-center">
+              <div className="bg-gray-800 rounded-lg p-8 flex items-center justify-center relative">
                 <div className="text-center">
                   <h2 className="text-xl font-semibold mb-4">
                     Esperando jugadores...
@@ -306,6 +337,9 @@ const Match = () => {
                       </>
                     )}
                   </div>
+                </div>
+                <div className="absolute top-4 right-4">
+                  <ShotCounter />
                 </div>
               </div>
             )}

@@ -8,7 +8,7 @@ export interface GameShip {
   coords: [number, number];
   variant: ShipVariant;
   orientation: ShipOrientation;
-  shipId?: string;
+  shipId?: number;
 }
 
 export interface Shot {
@@ -28,6 +28,7 @@ export interface GameState {
   winner: Winner;
   boardWidth: number;
   boardHeight: number;
+  shotCount: number;
 }
 
 export interface ShipPlacement {

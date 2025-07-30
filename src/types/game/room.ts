@@ -1,4 +1,4 @@
-import type { GameState, PlayerRole } from "./common";
+import type { GameState, PlayerRole, Shot } from "./common";
 import type { GameConfig } from "./config";
 
 export type RoomStatus = "waiting" | "playing" | "finished";
@@ -16,10 +16,17 @@ export interface GameRoom {
   status: RoomStatus;
   host: RoomPlayer;
   guest?: RoomPlayer;
+  initialTurn: PlayerRole;
   createdAt: number;
   updatedAt: number;
-  gameConfig?: GameConfig;
-  gameState?: GameState;
+  gameConfig?: Omit<GameConfig, "initialTurn">;
+
+  hostShots?: Shot[];
+  guestShots?: Shot[];
+  shotCount?: number;
+
+  initialState?: Partial<GameState>;
+  currentTurn?: PlayerRole;
   messages?: Array<{
     id: string;
     senderId: string;

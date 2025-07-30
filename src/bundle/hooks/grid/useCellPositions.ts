@@ -1,10 +1,18 @@
 import { useGameStore } from "@/bundle/stores/game/gameStore";
 import { useGridDimensions } from "@/bundle/hooks/grid/useGridDimensions";
-import { generatePlayerGridCells, generateEnemyGridCells } from "@/bundle/tools/grid/calculations";
+import {
+  generatePlayerGridCells,
+  generateEnemyGridCells,
+} from "@/bundle/tools/grid/calculations";
+import { roomService } from "@/services/room/realtime";
+import { useMatchConnection } from "@/network/multiplayer/hooks/useMatchConnection";
 
 export const useCellPositions = (isPlayerGrid: boolean = true) => {
   const gameStore = useGameStore();
   const gridDimensions = useGridDimensions();
+
+  const { room, currentPlayer } = useMatchConnection();
+  const isHost = currentPlayer?.role === "host";
 
   const {
     boardWidth,
@@ -50,28 +58,39 @@ export const useCellPositions = (isPlayerGrid: boolean = true) => {
 
     const [gridX, gridY] = worldToGridCoordinates(pos);
 
-    if (!isValidGridPosition(gridX, gridY)) return;
-    if (isCellShot(gridX, gridY, true)) return;
+    const x = boardWidth - 1 - gridX;
+    const y = boardHeight - 1 - gridY;
 
-    const { hit, shipId } = checkShot(gridX, gridY, true);
+    if (!isValidGridPosition(x, y)) return;
+    if (isCellShot(x, y, true)) return;
+
+    const { hit, shipId } = checkShot(x, y, true);
 
     const shot = {
-      x: gridX,
-      y: gridY,
+      x,
+      y,
       hit,
       shipId,
     };
 
     addPlayerShot(shot);
+    const savedShot = () => {
+      setEnemyTurn();
+
+      if (room?.id) {
+        roomService.updateCurrentTurn(room?.id, isHost ? "guest" : "host");
+      }
+    };
 
     if (hit) {
       const shipDestroyed =
-        shipId !== undefined && isShipDestroyed(shipId, true);
+        shipId !== undefined && shipId !== -1 && isShipDestroyed(shipId, true);
+
       if (shipDestroyed) {
-        setEnemyTurn();
+        savedShot();
       }
     } else {
-      setEnemyTurn();
+      savedShot();
     }
   };
 
@@ -82,4 +101,4 @@ export const useCellPositions = (isPlayerGrid: boolean = true) => {
     boardHeight,
     isPlayerTurn,
   };
-}; 
+};

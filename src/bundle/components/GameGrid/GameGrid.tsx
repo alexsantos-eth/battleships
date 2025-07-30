@@ -28,11 +28,22 @@ export const GameGrid: React.FC<GameGridProps> = ({
 
   const gridWidth = calculateTotalGridWidth();
   const gridHeight = calculateTotalGridHeight();
-  const planeSize = Math.max(gridWidth, gridHeight, GAME_CONSTANTS.BOARD.PLANE_GEOMETRY.MIN_SIZE);
+  const planeSize = Math.max(
+    gridWidth,
+    gridHeight,
+    GAME_CONSTANTS.BOARD.PLANE_GEOMETRY.MIN_SIZE
+  );
 
   return (
     <mesh rotation={rotation} position={position}>
-      <planeGeometry args={[planeSize, planeSize, GAME_CONSTANTS.BOARD.PLANE_GEOMETRY.SEGMENTS, GAME_CONSTANTS.BOARD.PLANE_GEOMETRY.SEGMENTS]} />
+      <planeGeometry
+        args={[
+          planeSize,
+          planeSize,
+          GAME_CONSTANTS.BOARD.PLANE_GEOMETRY.SEGMENTS,
+          GAME_CONSTANTS.BOARD.PLANE_GEOMETRY.SEGMENTS,
+        ]}
+      />
       <meshStandardMaterial color="lightblue" wireframe={false} />
 
       <group>
@@ -42,10 +53,11 @@ export const GameGrid: React.FC<GameGridProps> = ({
         <TreePlane />
 
         <GridHelper />
+
         {isPlayerTurn && !isPlayerBoard && <PressGrid />}
         {showShots && !isPlayerBoard && <PlayerShotsGrid />}
         {showShots && isPlayerBoard && <EnemyShotsGrid />}
-        {showShips && <ShipsPlane isPlayerBoard={isPlayerBoard} />}
+        {showShips && isPlayerBoard && <ShipsPlane />}
       </group>
     </mesh>
   );

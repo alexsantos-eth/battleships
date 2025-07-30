@@ -1,5 +1,7 @@
 import { dbUtils } from "@/network/realtime/controller";
-import type { GameState } from "@/types/game/common";
+import { generateShips } from "@/tools/ship/calculations";
+
+import type { GameShip, PlayerRole, Shot } from "@/types/game/common";
 import type { GameConfig } from "@/types/game/config";
 import type { GameRoom, RoomPlayer } from "@/types/game/room";
 
@@ -47,10 +49,36 @@ export class RoomService {
     const roomId = dbUtils.generateUniqueId();
     const now = Date.now();
 
+    const initialTurn = Math.random() < 0.5 ? "host" : "guest";
+    const gameConfig: GameConfig = {
+      initialTurn: "random",
+      boardHeight: 10,
+      boardWidth: 10,
+      shipCounts: {
+        small: 1,
+        medium: 2,
+        large: 1,
+        xlarge: 1,
+      },
+    };
+
+    const playerShips: GameShip[] = generateShips(gameConfig);
+    const enemyShips: GameShip[] = generateShips(gameConfig);
+
     const room: GameRoom = {
       id: roomId,
       roomCode,
       status: "waiting",
+      initialTurn,
+      gameConfig: {
+        boardHeight: gameConfig.boardHeight,
+        boardWidth: gameConfig.boardWidth,
+        shipCounts: gameConfig.shipCounts,
+      },
+      initialState: {
+        playerShips,
+        enemyShips,
+      },
       host: {
         ...hostPlayer,
         joinedAt: now,
@@ -132,20 +160,30 @@ export class RoomService {
 
     if (room.host.uid === playerUid) {
       const updatedHost = { ...room.host, isReady };
+
+      const bothPlayersReady = updatedHost.isReady && room.guest?.isReady;
+      const status = bothPlayersReady ? "playing" : "waiting";
+
       await dbUtils.updateDocument(`rooms/${roomId}`, {
         host: updatedHost,
+        status,
       });
     } else if (room.guest?.uid === playerUid) {
       const updatedGuest = { ...room.guest, isReady };
+
+      const bothPlayersReady = room.host.isReady && updatedGuest.isReady;
+      const status = bothPlayersReady ? "playing" : "waiting";
+
       await dbUtils.updateDocument(`rooms/${roomId}`, {
         guest: updatedGuest,
+        status,
       });
     } else {
       throw new Error("Jugador no encontrado en la sala");
     }
   }
 
-  async startGame(roomId: string, gameConfig: GameConfig): Promise<void> {
+  async startGame(roomId: string): Promise<void> {
     const room = await this.getRoom(roomId);
     if (!room) {
       throw new Error("Sala no encontrada");
@@ -157,14 +195,23 @@ export class RoomService {
 
     await dbUtils.updateDocument(`rooms/${roomId}`, {
       status: "playing",
-      gameConfig,
     });
   }
 
-  async updateGameState(roomId: string, gameState: GameState): Promise<void> {
+  async updateCurrentTurn(
+    roomId: string,
+    currentTurn: PlayerRole
+  ): Promise<void> {
     await dbUtils.updateDocument(`rooms/${roomId}`, {
-      gameState,
+      currentTurn,
     });
+  }
+
+  async updateGameStateShots(
+    roomId: string,
+    shots: Record<"hostShots" | "guestShots", Shot[]>
+  ): Promise<void> {
+    await dbUtils.updateDocument(`rooms/${roomId}`, shots);
   }
 
   async endGame(roomId: string): Promise<void> {

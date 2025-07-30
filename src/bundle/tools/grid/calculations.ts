@@ -21,7 +21,10 @@ export function generateGridCells(
 
   for (let x = 0; x < boardWidth; x++) {
     for (let y = 0; y < boardHeight; y++) {
-      const [posX, posY] = gridToWorldCoordinates(x, y);
+      const [posX, posY] = gridToWorldCoordinates(
+        !isPlayerShot ? x : boardWidth - 1 - x,
+        !isPlayerShot ? y : boardHeight - 1 - y
+      );
       const position: [number, number, number] = [posX, posY, 0];
 
       const isShot = isCellShot(x, y, isPlayerShot);
