@@ -7,7 +7,7 @@ import { GameInitializer } from "@/game/manager/initializer";
 let count = 0;
 
 const GameScene: React.FC<SceneProps> = ({ gameSetup }) => {
-  const { initializeGame } = useGameStore();
+  const { initializeGame, resetGame } = useGameStore();
 
   useEffect(() => {
     if (count === 0) {
@@ -24,6 +24,7 @@ const GameScene: React.FC<SceneProps> = ({ gameSetup }) => {
           : undefined
       );
 
+      resetGame()
       initializeGame(gameIntializerSetup);
       count++;
     }
