@@ -133,7 +133,7 @@ export const GAME_CONSTANTS = {
       DEFAULT_LEVELS: 1,
       DEFAULT_SCALE: 5,
       DEFAULT_OFFSET: { x: 0, z: 0 },
-      GROUP_SCALE: 9.5,
+      GROUP_SCALE: 9,
       GROUP_POSITION_Y: 0.1,
       GROUP_ROTATION: Math.PI / 2,
     },

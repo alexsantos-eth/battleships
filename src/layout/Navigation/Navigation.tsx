@@ -36,6 +36,10 @@ export const Navigation: React.FC<NavigationProps> = ({ className = "" }) => {
     }
   };
 
+  if (location.pathname.startsWith("/match")) {
+    return null;
+  }
+
   return (
     <nav
       className={`relative top-0 left-0 right-0 z-50 bg-black/30 backdrop-blur-lg border-b border-white/20 ${className}`}
