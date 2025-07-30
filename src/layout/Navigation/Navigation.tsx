@@ -24,7 +24,7 @@ export const Navigation: React.FC<NavigationProps> = ({ className = "" }) => {
   const navItems: NavItem[] = [
     { path: "/", label: "Home", icon: "🏠" },
     { path: "/match", label: "Play", icon: "🎮" },
-    { path: "/playground", label: "Practice", icon: "🎯" },
+    { path: "/debug", label: "Practice", icon: "🎯" },
   ];
 
   const handleLogout = async () => {

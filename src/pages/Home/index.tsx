@@ -32,7 +32,7 @@ const Home = () => {
   };
 
   const handleGoToPlayground = () => {
-    navigate("/playground");
+    navigate("/debug");
   };
 
   const handleGoToMultiplayer = () => {

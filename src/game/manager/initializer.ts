@@ -8,7 +8,7 @@ export interface GameSetup {
   playerShips: GameShip[];
   enemyShips: GameShip[];
   initialTurn: GameTurn;
-  config: GameConfig;
+  config: Partial<GameConfig>;
 }
 
 export class GameInitializer {

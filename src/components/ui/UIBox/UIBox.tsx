@@ -1,16 +1,12 @@
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
 
-import { COLORS } from "@/config/colors/palette";
 import { useGameStore } from "@/bundle/stores/game/gameStore";
-import { cameraEventBus, CAMERA_EVENTS } from "@/events/camera/bus";
+import { COLORS } from "@/config/colors/palette";
+import { CAMERA_EVENTS, cameraEventBus } from "@/events/camera/bus";
 
 const UIBox: React.FC = () => {
-  const location = useLocation();
   const [isPlayerPerspective, setIsPlayerPerspective] = useState(false);
-  const { currentTurn, isPlayerTurn, toggleTurn } = useGameStore();
-
-  const isPlaygroundRoute = location.pathname === "/playground";
+  const { currentTurn, isPlayerTurn } = useGameStore();
 
   const handlePlayerCamera = () => {
     if (!isPlayerTurn) {
@@ -49,7 +45,9 @@ const UIBox: React.FC = () => {
           right: "120px",
           zIndex: 1000,
           padding: "10px 20px",
-          backgroundColor: isPlayerPerspective ? COLORS.ui.danger : COLORS.ui.debug.button,
+          backgroundColor: isPlayerPerspective
+            ? COLORS.ui.danger
+            : COLORS.ui.debug.button,
           color: "white",
           border: "none",
           borderRadius: "5px",
@@ -59,27 +57,6 @@ const UIBox: React.FC = () => {
       >
         {isPlayerPerspective ? "Vista Enemigo" : "Vista Jugador"}
       </button>
-
-      {isPlaygroundRoute && (
-        <button
-          onClick={toggleTurn}
-          style={{
-            position: "absolute",
-            bottom: "20px",
-            right: "20px",
-            zIndex: 1000,
-            padding: "10px 20px",
-            backgroundColor: COLORS.ui.primary,
-            color: "white",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-            fontSize: "16px",
-          }}
-        >
-          Cambiar Turno
-        </button>
-      )}
     </>
   );
 };

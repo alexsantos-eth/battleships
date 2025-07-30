@@ -195,17 +195,17 @@ export function generateRandomPosition(
   return [x, y];
 }
 
-export function generateShips(config: GameConfig): GameShip[] {
+export function generateShips(config: Partial<GameConfig>): GameShip[] {
   const ships: GameShip[] = [];
   const shipVariants: ShipVariant[] = ["small", "medium", "large", "xlarge"];
 
   for (const variant of shipVariants) {
-    const count = config.shipCounts[variant];
+    const count = config.shipCounts?.[variant] ?? 0;
     for (let i = 0; i < count; i++) {
       const ship = generateShip(
         variant,
-        config.boardWidth,
-        config.boardHeight,
+        config.boardWidth ?? GAME_CONSTANTS.BOARD.DEFAULT_WIDTH,
+        config.boardHeight ?? GAME_CONSTANTS.BOARD.DEFAULT_HEIGHT,
         ships
       );
       if (ship) {
