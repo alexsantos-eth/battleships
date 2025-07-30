@@ -51,7 +51,7 @@ export const RoomLobby = ({
 
     setIsStarting(true);
     try {
-      await startGame(gameConfig);
+      await startGame();
       onGameStart?.(gameConfig);
     } catch (err) {
       console.error("Error al iniciar el juego:", err);

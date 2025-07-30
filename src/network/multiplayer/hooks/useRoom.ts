@@ -4,7 +4,6 @@ import { useAuth } from "@/auth/hooks/data/useAuth";
 import { roomService } from "@/services/room/realtime";
 
 import type { GameRoom, RoomPlayer } from "@/types/game/room";
-import type { GameConfig } from "@/types/game/config";
 
 export const useRoom = (roomId?: string) => {
   const [room, setRoom] = useState<GameRoom | null>(null);
@@ -111,32 +110,29 @@ export const useRoom = (roomId?: string) => {
     [room, user]
   );
 
-  const startGame = useCallback(
-    async (gameConfig: GameConfig): Promise<void> => {
-      if (!room || !user) {
-        throw new Error("Sala o usuario no disponible");
-      }
+  const startGame = useCallback(async (): Promise<void> => {
+    if (!room || !user) {
+      throw new Error("Sala o usuario no disponible");
+    }
 
-      if (room.host.uid !== user.uid) {
-        throw new Error("Solo el host puede iniciar el juego");
-      }
+    if (room.host.uid !== user.uid) {
+      throw new Error("Solo el host puede iniciar el juego");
+    }
 
-      setLoading(true);
-      setError(null);
+    setLoading(true);
+    setError(null);
 
-      try {
-        await roomService.startGame(room.id, gameConfig);
-      } catch (err) {
-        const errorMessage =
-          err instanceof Error ? err.message : "Error al iniciar el juego";
-        setError(errorMessage);
-        throw err;
-      } finally {
-        setLoading(false);
-      }
-    },
-    [room, user]
-  );
+    try {
+      await roomService.startGame(room.id);
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : "Error al iniciar el juego";
+      setError(errorMessage);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }, [room, user]);
 
   const leaveRoom = useCallback(async (): Promise<void> => {
     if (!room || !user) {
