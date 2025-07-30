@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from "react";
 
 import { useGameStore } from "@/bundle/stores/game/gameStore";
