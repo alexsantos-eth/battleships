@@ -7,17 +7,16 @@ import type { Shot } from "@/types/game/common";
 
 export const useMatchGameStateConnection = () => {
   const { room, currentPlayer } = useMatchConnection();
-  const { shotCount, playerShots, currentTurn } = useGameStore();
+  const { shotCount, playerShots } = useGameStore();
 
   const roomId = room?.id;
   const isHost = currentPlayer?.role === "host";
-  const isHostAndPlayerTurn = isHost && currentTurn === "PLAYER_TURN";
 
   const playerShotsLength = playerShots.length;
 
   useEffect(() => {
     const refreshGameState = () => {
-      if (roomId) {
+      if (roomId && shotCount) {
         const shotsId = isHost ? "hostShots" : "guestShots";
         roomService.updateGameStateShots(roomId, {
           [shotsId as "hostShots" | "guestShots"]: playerShots.map((shot) => ({
@@ -32,13 +31,4 @@ export const useMatchGameStateConnection = () => {
 
     refreshGameState();
   }, [roomId, shotCount, playerShotsLength, isHost]);
-
-  useEffect(() => {
-    if (roomId) {
-      roomService.updateCurrentTurn(
-        roomId,
-        isHostAndPlayerTurn ? "host" : "guest"
-      );
-    }
-  }, [roomId, currentTurn]);
 };

@@ -4,10 +4,15 @@ import {
   generatePlayerGridCells,
   generateEnemyGridCells,
 } from "@/bundle/tools/grid/calculations";
+import { roomService } from "@/services/room/realtime";
+import { useMatchConnection } from "@/network/multiplayer/hooks/useMatchConnection";
 
 export const useCellPositions = (isPlayerGrid: boolean = true) => {
   const gameStore = useGameStore();
   const gridDimensions = useGridDimensions();
+
+  const { room, currentPlayer } = useMatchConnection();
+  const isHost = currentPlayer?.role === "host";
 
   const {
     boardWidth,
@@ -76,9 +81,17 @@ export const useCellPositions = (isPlayerGrid: boolean = true) => {
 
       if (shipDestroyed) {
         setEnemyTurn();
+
+        if (room?.id) {
+          roomService.updateCurrentTurn(room?.id, isHost ? "guest" : "host");
+        }
       }
     } else {
       setEnemyTurn();
+
+      if (room?.id) {
+        roomService.updateCurrentTurn(room?.id, isHost ? "guest" : "host");
+      }
     }
   };
 

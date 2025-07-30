@@ -30,6 +30,8 @@ export interface GameState {
   setBoardDimensions: (width: number, height: number) => void;
   addPlayerShot: (shot: Shot) => void;
   addEnemyShot: (shot: Shot) => void;
+  setEnemyShots: (shots: Shot[]) => void;
+  setPlayerShots: (shots: Shot[]) => void;
   incrementShotCount: () => void;
   getShotCount: () => number;
   initializeGame: (gameSetup: GameSetup) => void;
@@ -81,6 +83,14 @@ export const useGameStore = create<GameState>((set, get) => ({
     } else {
       get().setPlayerTurn();
     }
+  },
+
+  setEnemyShots: (shots: Shot[]) => {
+    set({ enemyShots: shots });
+  },
+
+  setPlayerShots: (shots: Shot[]) => {
+    set({ playerShots: shots });
   },
 
   setPlayerShips: (ships: GameShip[]) => {
