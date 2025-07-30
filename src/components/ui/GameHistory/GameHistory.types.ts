@@ -1,4 +1,4 @@
-import type { GameHistory as GameHistoryType } from '@/types/user';
+import type { GameHistory as GameHistoryType } from '@/types/user/profile';
 
 export interface GameHistoryProps {
   className?: string;

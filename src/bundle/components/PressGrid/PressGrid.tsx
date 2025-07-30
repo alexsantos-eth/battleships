@@ -1,0 +1,26 @@
+import React from "react";
+
+import { Cell } from "@/bundle/components/Cell";
+import { useCellPositions } from "@/bundle/hooks/grid/useCellPositions";
+
+import type { PressGridProps } from "./PressGrid.types";
+
+export const PressGrid: React.FC<PressGridProps> = () => {
+  const { cells, handleCellClick } = useCellPositions(true);
+
+  return (
+    <>
+      <group rotation={[0, 0, 0]} position={[0, 0, 0.2]}>
+        {cells.map(({ x, y, position, isShot, isHit }) => (
+          <Cell
+            key={`${x}-${y}`}
+            position={position}
+            onClick={handleCellClick}
+            isShot={isShot}
+            isHit={isHit}
+          />
+        ))}
+      </group>
+    </>
+  );
+};

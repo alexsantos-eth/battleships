@@ -33,12 +33,12 @@ Object.defineProperty(global, 'import', {
   configurable: true
 });
 
-jest.mock('@/config/firebase', () => ({
+jest.mock('@/config/database/firebase', () => ({
   app: {},
   auth: {}
 }));
 
-jest.mock('@/config/firestore', () => ({
+jest.mock('@/config/database/firestore', () => ({
   db: {}
 }));
 

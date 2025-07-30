@@ -1,4 +1,4 @@
-import { useUserProfile } from "@/hooks/useUserProfile";
+import { useUserProfile } from "@/user/hooks/profile/useUserProfile";
 
 import type {
   GameHistoryProps,

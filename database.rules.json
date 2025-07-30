@@ -1,0 +1,28 @@
+{
+  "rules": {
+    "rooms": {
+      ".indexOn": ["roomCode", "status", "createdAt"],
+      "$roomId": {
+        ".read": "auth != null",
+        ".write": "auth != null",
+        ".validate": "newData.hasChildren(['roomCode', 'status', 'host'])"
+      }
+    },
+    "users": {
+      "$userId": {
+        ".read": "auth != null && auth.uid == $userId",
+        ".write": "auth != null && auth.uid == $userId"
+      }
+    },
+    "games": {
+      "$gameId": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+      }
+    },
+    "temp": {
+      ".read": false,
+      ".write": false
+    }
+  }
+} 
