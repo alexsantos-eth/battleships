@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 
 import { useGameStore } from "@/bundle/stores/game/gameStore";
+import type { Shot } from "@/types/game/common";
 
 import { useMatchConnection } from "./useMatchConnection";
 
@@ -21,58 +22,55 @@ export const useMatchTurnHandler = () => {
 
   const enemyShots = (isHost ? room?.guestShots : room?.hostShots) ?? [];
   const playerShots = (isHost ? room?.hostShots : room?.guestShots) ?? [];
-  const enemyShotsLength = enemyShots?.length ?? 0;
-  const playerShotsLength = playerShots?.length ?? 0;
+
+  const processShots = (shots: Shot[], isPlayerBoard: boolean) => {
+    return shots.map((shot) => {
+      const coordinates = isPlayerBoard
+        ? { x: shot.x, y: shot.y }
+        : { x: boardWidth - 1 - shot.x, y: boardHeight - 1 - shot.y };
+
+      const result = checkShot(coordinates.x, coordinates.y, isPlayerBoard);
+
+      return {
+        x: shot.x,
+        y: shot.y,
+        hit: result.hit,
+        shipId: result.shipId,
+      };
+    });
+  };
+
+  const isPlayerTurn = (turn: string) => {
+    return (turn === "host" && isHost) || (turn === "guest" && !isHost);
+  };
+
+  const isEnemyTurn = (turn: string) => {
+    return (turn === "host" && !isHost) || (turn === "guest" && isHost);
+  };
 
   useEffect(() => {
-    if (roomTurn === "host" && isHost) {
+    if (roomTurn && isPlayerTurn(roomTurn)) {
       setPlayerTurn();
-    } else if (roomTurn === "guest" && !isHost) {
-      setPlayerTurn();
     }
-  }, [roomTurn]);
+  }, [roomTurn, isHost]);
 
   useEffect(() => {
-    if (roomTurn === "host" && !isHost) {
-      setEnemyTurn();
-    } else if (roomTurn === "guest" && isHost) {
+    if (roomTurn && isEnemyTurn(roomTurn)) {
       setEnemyTurn();
     }
-  }, [roomTurn]);
+  }, [roomTurn, isHost]);
 
   useEffect(() => {
-    if (enemyShotsLength) {
-      const newShots = enemyShots.map((shot) => {
-        const newShot = checkShot(
-          boardWidth - 1 - shot.x,
-          boardHeight - 1 - shot.y,
-          false
-        );
-
-        return {
-          x: shot.x,
-          y: shot.y,
-          hit: newShot.hit,
-          shipId: newShot.shipId,
-        };
-      });
-
-      setEnemyShots(newShots);
+    if (enemyShots.length > 0) {
+      const processedShots = processShots(enemyShots, false);
+      setEnemyShots(processedShots);
     }
+  }, [enemyShots.length]);
 
-    if (playerShotsLength) {
-      const newShots = playerShots.map((shot) => {
-        const newShot = checkShot(shot.x, shot.y, true);
-
-        return {
-          x: shot.x,
-          y: shot.y,
-          hit: newShot.hit,
-          shipId: newShot.shipId,
-        };
-      });
-
-      setPlayerShots(newShots);
+  useEffect(() => {
+    if (playerShots.length > 0) {
+      const processedShots = processShots(playerShots, true);
+      setPlayerShots(processedShots);
     }
-  }, [enemyShotsLength, playerShotsLength]);
+  }, [playerShots.length]);
 };

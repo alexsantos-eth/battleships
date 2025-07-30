@@ -74,24 +74,23 @@ export const useCellPositions = (isPlayerGrid: boolean = true) => {
     };
 
     addPlayerShot(shot);
+    const savedShot = () => {
+      setEnemyTurn();
+
+      if (room?.id) {
+        roomService.updateCurrentTurn(room?.id, isHost ? "guest" : "host");
+      }
+    };
 
     if (hit) {
       const shipDestroyed =
         shipId !== undefined && shipId !== -1 && isShipDestroyed(shipId, true);
 
       if (shipDestroyed) {
-        setEnemyTurn();
-
-        if (room?.id) {
-          roomService.updateCurrentTurn(room?.id, isHost ? "guest" : "host");
-        }
+        savedShot();
       }
     } else {
-      setEnemyTurn();
-
-      if (room?.id) {
-        roomService.updateCurrentTurn(room?.id, isHost ? "guest" : "host");
-      }
+      savedShot();
     }
   };
 
