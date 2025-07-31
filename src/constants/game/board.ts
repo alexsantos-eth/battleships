@@ -7,10 +7,10 @@ export const GAME_CONSTANTS = {
     GRID_SPACING: 0.5,
     SHIP_SPACING: 0.5,
     ZOOM: {
-      MOBILE: window.innerWidth * 0.10,
+      MOBILE: window.innerWidth * 0.1,
       DESKTOP: 110,
     },
-    SCALE: [0.6, 0.6, 0.6] as [number, number, number],
+    SCALE: [1, 1, 1] as [number, number, number],
     PLANE_GEOMETRY: {
       SEGMENTS: 10,
       MIN_SIZE: 5,
