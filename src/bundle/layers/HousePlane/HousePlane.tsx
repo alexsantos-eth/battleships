@@ -21,7 +21,7 @@ const houses: HouseConfig[] = [
   },
   {
     id: "house-right-2",
-    position: [0.5, 0, 3.7],
+    position: [0.6, 0, 3.4],
     rotation: [0, Math.PI / 1.8, 0],
     scale: [0.3, 0.3, 0.3],
     variant: 2,

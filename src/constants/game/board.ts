@@ -10,7 +10,7 @@ export const GAME_CONSTANTS = {
       MOBILE: window.innerWidth * 0.17,
       DESKTOP: 120,
     },
-    SCALE: [1, 1, 1] as [number, number, number],
+    SCALE: [0.95, 0.95, 0.95] as [number, number, number],
     PLANE_GEOMETRY: {
       SEGMENTS: 10,
       MIN_SIZE: 5,
