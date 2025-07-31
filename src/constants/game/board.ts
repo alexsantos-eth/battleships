@@ -7,8 +7,8 @@ export const GAME_CONSTANTS = {
     GRID_SPACING: 0.5,
     SHIP_SPACING: 0.5,
     ZOOM: {
-      MOBILE: window.innerWidth * 0.1,
-      DESKTOP: 110,
+      MOBILE: window.innerWidth * 0.17,
+      DESKTOP: 120,
     },
     SCALE: [1, 1, 1] as [number, number, number],
     PLANE_GEOMETRY: {
@@ -43,15 +43,15 @@ export const GAME_CONSTANTS = {
     MOBILE_BREAKPOINT: 768,
     POSITIONS: {
       PLAYER: {
-        position: [0, -4, 4] as [number, number, number],
+        position: [0, -4, 5] as [number, number, number],
         rotation: [0, 0, 0] as [number, number, number],
         mobile: {
-          position: [0, -2, 4] as [number, number, number],
+          position: [0, -2, 5] as [number, number, number],
           rotation: [0, 0, 0] as [number, number, number],
         },
       },
       ENEMY: {
-        position: [0, 9, 4] as [number, number, number],
+        position: [0, 9, 5] as [number, number, number],
         rotation: [0, 0, 0] as [number, number, number],
       },
       PERSPECTIVE: {
@@ -68,8 +68,8 @@ export const GAME_CONSTANTS = {
       },
     },
     SETTINGS: {
-      far: 1500,
-      near: 0.5,
+      far: 2000,
+      near: 0.1,
       animationSpeed: 0.15,
       eventThrottleMs: 16,
       animationThrottleMs: 8,
