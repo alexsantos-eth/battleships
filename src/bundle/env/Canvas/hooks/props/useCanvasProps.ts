@@ -24,7 +24,7 @@ const useCanvasProps = () => {
     ...canvasProps,
     camera: {
       ...canvasProps.camera,
-      zoom: isMobile ? window.innerWidth * 0.15 : 110,
+      zoom: isMobile ? window.innerWidth * 0.13: 110,
     },
   };
 
