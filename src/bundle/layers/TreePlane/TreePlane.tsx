@@ -27,7 +27,7 @@ const trees: TreeConfig[] = [
   },
   {
     id: "tree-right-2",
-    position: [-2, 0, 3],
+    position: [-2.2, 0, 3],
     rotation: [0, Math.PI / 2, 0],
     scale: [0.8, 0.8, 0.8],
     variant: 2,
