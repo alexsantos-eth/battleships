@@ -14,6 +14,7 @@ import { WaterPlane } from "@/bundle/layers/WaterPlane";
 import { useGameStore } from "@/bundle/stores/game/gameStore";
 
 import type { GameGridProps } from "./GameGrid.types";
+import { HousePlane } from "@/bundle/layers";
 
 export const GameGrid: React.FC<GameGridProps> = ({
   position,
@@ -51,6 +52,7 @@ export const GameGrid: React.FC<GameGridProps> = ({
         <SandPlane />
         <RocksPlane />
         <TreePlane />
+        <HousePlane />
 
         <GridHelper />
 

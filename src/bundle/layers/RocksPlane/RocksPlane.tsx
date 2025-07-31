@@ -49,19 +49,19 @@ const rocks: RockConfig[] = [
   {
     id: "rock-right-1",
     variant: 7,
-    position: [3.1, -1, 0],
+    position: [3.1, -1.25, 0],
     rotation: [Math.PI / 2, Math.PI / 2, 0],
   },
   {
     id: "rock-right-2",
     variant: 4,
-    position: [3.4, 0.5, 0.2],
+    position: [3.4, 1.2, 0.2],
     rotation: [Math.PI / 2, -Math.PI / 2, 0],
   },
   {
     id: "rock-right-3",
     variant: 3,
-    position: [3.1, 1, -0.1],
+    position: [3.1, 1.76, -0.1],
     rotation: [Math.PI / 2, -Math.PI / 2, 0],
   },
   {

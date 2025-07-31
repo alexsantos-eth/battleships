@@ -19,3 +19,9 @@ export type {
   RocksPlaneProps,
   RockConfig,
 } from "./RocksPlane/RocksPlane.types";
+
+export { HousePlane } from "./HousePlane";
+export type {
+  HousePlaneProps,
+  HouseConfig,
+} from "./HousePlane/HousePlane.types";
