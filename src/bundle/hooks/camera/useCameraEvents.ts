@@ -173,9 +173,9 @@ export const useCameraEvents = (
       }
 
       targetScale.current.set(
-        GAME_CONSTANTS.BOARD.SCALE[0] * 1.1,
-        GAME_CONSTANTS.BOARD.SCALE[1] * 1.1,
-        GAME_CONSTANTS.BOARD.SCALE[2] * 1.1
+        GAME_CONSTANTS.BOARD.SCALE[0] * 1.05,
+        GAME_CONSTANTS.BOARD.SCALE[1] * 1.05,
+        GAME_CONSTANTS.BOARD.SCALE[2] * 1.05
       );
       isAnimating.current = true;
 
