@@ -47,10 +47,10 @@ export const SandPlane: React.FC<SandPlaneProps> = ({
       uniforms: {
         sandColor: { value: new Vector3(...getTerrainColor("sand")) },
         grassColor: { value: new Vector3(...getTerrainColor("grass")) },
-        transitionDistance: { value: 0.42 },
-        transitionWidth: { value: 0.2 },
+        transitionDistance: { value: 0.5 },
+        transitionWidth: { value: 0 },
         noiseSeed: { value: Math.random() * 1000.0 },
-        smoothness: { value: 1.0 },
+        smoothness: { value: 1 },
         sandTexture: { value: sandTexture },
         grassTexture: { value: grassTexture },
       },
