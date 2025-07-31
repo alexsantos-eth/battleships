@@ -6,6 +6,7 @@ export const GAME_CONSTANTS = {
     MAX_SIZE: 15,
     GRID_SPACING: 0.5,
     SHIP_SPACING: 0.5,
+    SCALE: [0.9, 0.9, 0.9] as [number, number, number],
     PLANE_GEOMETRY: {
       SEGMENTS: 10,
       MIN_SIZE: 5,
@@ -39,10 +40,10 @@ export const GAME_CONSTANTS = {
     POSITIONS: {
       PLAYER: {
         position: [0, -4, 4] as [number, number, number],
-        rotation: [1.1, 0, 0] as [number, number, number],
+        rotation: [0, 0, 0] as [number, number, number],
         mobile: {
           position: [0, -2, 4] as [number, number, number],
-          rotation: [1.05, 0, 0] as [number, number, number],
+          rotation: [0, 0, 0] as [number, number, number],
         },
       },
       ENEMY: {
