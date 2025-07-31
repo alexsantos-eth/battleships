@@ -8,6 +8,7 @@ import {
 import { DEBUG_CONFIG } from "@/constants/debug/settings";
 
 import type { CanvasProps } from "@react-three/fiber";
+import { GAME_CONSTANTS } from "@/constants/game/board";
 
 const useCanvasProps = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -24,7 +25,7 @@ const useCanvasProps = () => {
     ...canvasProps,
     camera: {
       ...canvasProps.camera,
-      zoom: isMobile ? window.innerWidth * 0.13: 110,
+      zoom: isMobile ? GAME_CONSTANTS.BOARD.ZOOM.MOBILE : GAME_CONSTANTS.BOARD.ZOOM.DESKTOP,
     },
   };
 
