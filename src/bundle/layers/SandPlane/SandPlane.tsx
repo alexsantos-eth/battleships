@@ -140,7 +140,7 @@ export const SandPlane: React.FC<SandPlaneProps> = ({
       position={[-offset.x, 0, GAME_CONSTANTS.TERRAIN.SAND.GROUP_POSITION_Y]}
       rotation={[GAME_CONSTANTS.TERRAIN.SAND.GROUP_ROTATION, 0, 0]}
     >
-      <mesh>
+      <mesh frustumCulled={false}>
         <planeGeometry args={[1, 1, size - 1, size - 1]} ref={ref} />
         <primitive object={material} />
       </mesh>

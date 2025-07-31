@@ -131,7 +131,11 @@ export const useCameraEvents = (
 
       targetPosition.current.set(...ENEMY_CAMERA_POSITION.position);
       targetRotation.current.set(...ENEMY_CAMERA_POSITION.rotation);
-      targetScale.current.set(...GAME_CONSTANTS.BOARD.SCALE);
+      targetScale.current.set(
+        GAME_CONSTANTS.BOARD.SCALE[0] * 1,
+        GAME_CONSTANTS.BOARD.SCALE[1] * 1,
+        GAME_CONSTANTS.BOARD.SCALE[2] * 1
+      );
       isAnimating.current = true;
 
       const isSlowDevice = navigator.hardwareConcurrency <= 4;
@@ -163,12 +167,16 @@ export const useCameraEvents = (
       if (isPlayerPerspective) {
         targetPosition.current.set(...PLAYER_PERSPECTIVE_POSITION.position);
         targetRotation.current.set(...PLAYER_PERSPECTIVE_POSITION.rotation);
-        targetScale.current.set(...GAME_CONSTANTS.BOARD.SCALE);
       } else {
         targetPosition.current.set(...PLAYER_CAMERA_POSITION.position);
         targetRotation.current.set(...PLAYER_CAMERA_POSITION.rotation);
-        targetScale.current.set(...GAME_CONSTANTS.BOARD.SCALE);
       }
+
+      targetScale.current.set(
+        GAME_CONSTANTS.BOARD.SCALE[0] * 1.2,
+        GAME_CONSTANTS.BOARD.SCALE[1] * 1.2,
+        GAME_CONSTANTS.BOARD.SCALE[2] * 1.2
+      );
       isAnimating.current = true;
 
       const isSlowDevice = navigator.hardwareConcurrency <= 4;
