@@ -77,7 +77,7 @@ const rocks: RockConfig[] = [
     rotation: [Math.PI / 2, Math.PI / 2, Math.PI / 4],
   },
   {
-    id: "rock-top-2",
+    id: "rock-top-3",
     variant: 2,
     position: [1.7, 2.8, -0.1],
     rotation: [Math.PI / 4, -Math.PI / 2, -Math.PI / 4],

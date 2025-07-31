@@ -35,7 +35,7 @@ export const GameGrid: React.FC<GameGridProps> = ({
   );
 
   return (
-    <mesh rotation={rotation} position={position}>
+    <mesh rotation={rotation} position={position} scale={1}>
       <planeGeometry
         args={[
           planeSize,

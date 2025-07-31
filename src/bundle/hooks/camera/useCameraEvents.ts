@@ -10,6 +10,7 @@ import {
 import { DEBUG_CONFIG } from "@/constants/debug/settings";
 import { CAMERA_EVENTS, cameraEventBus } from "@/events/camera/bus";
 import { useFrame, useThree } from "@react-three/fiber";
+import { GAME_CONSTANTS } from "@/constants/game/board";
 
 interface CameraEventData {
   newRotation: number;
@@ -48,6 +49,7 @@ export const useCameraEvents = (
 
   const targetPosition = useRef(camera.position.clone());
   const targetRotation = useRef(camera.rotation.clone());
+  const targetScale = useRef(camera.scale.clone());
   const isAnimating = useRef(false);
   const [isShooting, setIsShooting] = useState(false);
   const [shootData, setShootData] = useState<CameraEventData | null>(null);
@@ -96,30 +98,16 @@ export const useCameraEvents = (
   const setPlayerCameraPosition = useCallback(
     (usePlayerPerspective: boolean) => {
       if (DEBUG_CONFIG.ENABLE_CAMERA_CONTROLS) return;
-      
+
       throttledEvent(() => {
         if (usePlayerPerspective) {
-          targetPosition.current.set(
-            PLAYER_PERSPECTIVE_POSITION.position[0],
-            PLAYER_PERSPECTIVE_POSITION.position[1],
-            PLAYER_PERSPECTIVE_POSITION.position[2]
-          );
-          targetRotation.current.set(
-            PLAYER_PERSPECTIVE_POSITION.rotation[0],
-            PLAYER_PERSPECTIVE_POSITION.rotation[1],
-            PLAYER_PERSPECTIVE_POSITION.rotation[2]
-          );
+          targetPosition.current.set(...PLAYER_PERSPECTIVE_POSITION.position);
+          targetRotation.current.set(...PLAYER_PERSPECTIVE_POSITION.rotation);
+          targetScale.current.set(...GAME_CONSTANTS.BOARD.SCALE);
         } else {
-          targetPosition.current.set(
-            PLAYER_CAMERA_POSITION.position[0],
-            PLAYER_CAMERA_POSITION.position[1],
-            PLAYER_CAMERA_POSITION.position[2]
-          );
-          targetRotation.current.set(
-            PLAYER_CAMERA_POSITION.rotation[0],
-            PLAYER_CAMERA_POSITION.rotation[1],
-            PLAYER_CAMERA_POSITION.rotation[2]
-          );
+          targetPosition.current.set(...PLAYER_CAMERA_POSITION.position);
+          targetRotation.current.set(...PLAYER_CAMERA_POSITION.rotation);
+          targetScale.current.set(...GAME_CONSTANTS.BOARD.SCALE);
         }
         isAnimating.current = true;
       });
@@ -141,16 +129,9 @@ export const useCameraEvents = (
         return;
       }
 
-      targetPosition.current.set(
-        ENEMY_CAMERA_POSITION.position[0],
-        ENEMY_CAMERA_POSITION.position[1],
-        ENEMY_CAMERA_POSITION.position[2]
-      );
-      targetRotation.current.set(
-        ENEMY_CAMERA_POSITION.rotation[0],
-        ENEMY_CAMERA_POSITION.rotation[1],
-        ENEMY_CAMERA_POSITION.rotation[2]
-      );
+      targetPosition.current.set(...ENEMY_CAMERA_POSITION.position);
+      targetRotation.current.set(...ENEMY_CAMERA_POSITION.rotation);
+      targetScale.current.set(...GAME_CONSTANTS.BOARD.SCALE);
       isAnimating.current = true;
 
       const isSlowDevice = navigator.hardwareConcurrency <= 4;
@@ -180,27 +161,13 @@ export const useCameraEvents = (
       }
 
       if (isPlayerPerspective) {
-        targetPosition.current.set(
-          PLAYER_PERSPECTIVE_POSITION.position[0],
-          PLAYER_PERSPECTIVE_POSITION.position[1],
-          PLAYER_PERSPECTIVE_POSITION.position[2]
-        );
-        targetRotation.current.set(
-          PLAYER_PERSPECTIVE_POSITION.rotation[0],
-          PLAYER_PERSPECTIVE_POSITION.rotation[1],
-          PLAYER_PERSPECTIVE_POSITION.rotation[2]
-        );
+        targetPosition.current.set(...PLAYER_PERSPECTIVE_POSITION.position);
+        targetRotation.current.set(...PLAYER_PERSPECTIVE_POSITION.rotation);
+        targetScale.current.set(...GAME_CONSTANTS.BOARD.SCALE);
       } else {
-        targetPosition.current.set(
-          PLAYER_CAMERA_POSITION.position[0],
-          PLAYER_CAMERA_POSITION.position[1],
-          PLAYER_CAMERA_POSITION.position[2]
-        );
-        targetRotation.current.set(
-          PLAYER_CAMERA_POSITION.rotation[0],
-          PLAYER_CAMERA_POSITION.rotation[1],
-          PLAYER_CAMERA_POSITION.rotation[2]
-        );
+        targetPosition.current.set(...PLAYER_CAMERA_POSITION.position);
+        targetRotation.current.set(...PLAYER_CAMERA_POSITION.rotation);
+        targetScale.current.set(...GAME_CONSTANTS.BOARD.SCALE);
       }
       isAnimating.current = true;
 
@@ -235,8 +202,10 @@ export const useCameraEvents = (
 
     const currentPos = camera.position;
     const currentRot = camera.rotation;
+    const currentScale = camera.scale;
     const targetPos = targetPosition.current;
     const targetRot = targetRotation.current;
+    const targetSc = targetScale.current;
 
     currentPos.lerp(targetPos, animationSpeed);
 
@@ -257,6 +226,7 @@ export const useCameraEvents = (
     );
 
     currentRot.set(lerpX, lerpY, lerpZ);
+    currentScale.lerp(targetSc, animationSpeed);
 
     const posDistanceSquared = currentPos.distanceToSquared(targetPos);
     const rotDistance =
@@ -267,6 +237,7 @@ export const useCameraEvents = (
     if (posDistanceSquared < 0.00001 && rotDistance < 0.005) {
       currentPos.copy(targetPos);
       currentRot.copy(targetRot);
+      currentScale.copy(targetSc);
       isAnimating.current = false;
 
       if (enableLOD) {
