@@ -128,13 +128,13 @@ export const GAME_CONSTANTS = {
 
   TERRAIN: {
     SAND: {
-      HOLE_RADIUS: 0.29,
-      DEFAULT_HEIGHT: 0.02,
+      HOLE_RADIUS: 0.27,
+      DEFAULT_HEIGHT: 0.015,
       DEFAULT_LEVELS: 1,
       DEFAULT_SCALE: 5,
       DEFAULT_OFFSET: { x: 0, z: 0 },
       GROUP_SCALE: 9,
-      GROUP_POSITION_Y: 0.1,
+      GROUP_POSITION_Y: -0.2,
       GROUP_ROTATION: Math.PI / 2,
     },
     GRASS: {

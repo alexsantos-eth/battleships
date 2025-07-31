@@ -6,8 +6,8 @@ import type { GameShip } from "@/types/game/common";
 import type { GameConfig } from "@/types/game/config";
 
 const config: Partial<GameConfig> = {
-  boardHeight: 8,
-  boardWidth: 8,
+  boardHeight: 10,
+  boardWidth: 10,
   shipCounts: {
     small: 2,
     medium: 2,

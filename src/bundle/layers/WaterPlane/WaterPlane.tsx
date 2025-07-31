@@ -10,7 +10,7 @@ import type { WaterPlaneProps, WaterAnimationConfig } from "./WaterPlane.types";
 const noise = createNoise2D();
 
 export const WaterPlane: React.FC<WaterPlaneProps> = ({
-  size = [7, 7],
+  size = [8, 8],
   segments = [30, 30],
   position = [0, 0, 0.1],
   rotation = [0, 0, 0],

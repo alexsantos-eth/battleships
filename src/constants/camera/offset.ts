@@ -1,4 +1,5 @@
 import { GAME_CONSTANTS } from "@/constants/game/board";
+import { DEBUG_CONFIG } from "@/constants/debug/settings";
 import type { CanvasProps } from "@react-three/fiber";
 
 export const isMobile = window.innerWidth <= GAME_CONSTANTS.CAMERA.MOBILE_BREAKPOINT;
@@ -29,14 +30,15 @@ export const canvasProps: CanvasProps = {
     near: GAME_CONSTANTS.CAMERA.SETTINGS.near,
   },
   gl: {
-    precision: "lowp",
+    precision: DEBUG_CONFIG.ENABLE_ANTIALIASING ? "highp" : "lowp",
     powerPreference: "high-performance",
-    antialias: false,
+    antialias: DEBUG_CONFIG.ENABLE_ANTIALIASING,
     alpha: true,
     depth: true,
-    stencil: false,
-    preserveDrawingBuffer: false,
-    logarithmicDepthBuffer: false,
   },
-  style: { background: "#a4d15d", height: "100dvh" },
+  style: { 
+    background: "#a4d15d", 
+    height: "100dvh",
+    imageRendering: DEBUG_CONFIG.ENABLE_ANTIALIASING ? "auto" : "pixelated",
+  },
 };
