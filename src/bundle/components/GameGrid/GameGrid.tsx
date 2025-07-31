@@ -52,7 +52,7 @@ export const GameGrid: React.FC<GameGridProps> = ({
         <SandPlane />
         <RocksPlane />
         <TreePlane />
-        <HousePlane />
+        <HousePlane isPlayerBoard={isPlayerBoard} />
 
         <GridHelper />
 
