@@ -10,4 +10,5 @@ export interface HouseConfig {
   scale: [number, number, number];
   variant: 1 | 2 | 3 | 4;
   hidenInEnemy?: boolean;
+  hidenInPlayer?: boolean;
 } 

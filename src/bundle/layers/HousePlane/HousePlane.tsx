@@ -11,6 +11,7 @@ const houses: HouseConfig[] = [
     rotation: [0, -0.1, 0],
     scale: [0.3, 0.3, 0.3],
     variant: 3,
+    hidenInPlayer: true,
   },
   {
     id: "house-right-1",
@@ -18,6 +19,7 @@ const houses: HouseConfig[] = [
     rotation: [0, Math.PI / 2.2, 0],
     scale: [0.3, 0.3, 0.3],
     variant: 1,
+    hidenInEnemy: true,
   },
   {
     id: "house-right-2",
@@ -25,6 +27,7 @@ const houses: HouseConfig[] = [
     rotation: [0, Math.PI / 1.8, 0],
     scale: [0.3, 0.3, 0.3],
     variant: 2,
+    hidenInPlayer: true,
   },
   {
     id: "house-top-1",
@@ -41,7 +44,7 @@ export const HousePlane: React.FC<HousePlaneProps> = ({ isPlayerBoard }) => {
     <group rotation={[Math.PI / 2, Math.PI / 2, 0]} position={[0, 0, 0.1]}>
       {houses
         .filter((house) =>
-          isPlayerBoard ? true : !house.hidenInEnemy
+          isPlayerBoard ? !house.hidenInPlayer : !house.hidenInEnemy
         )
         .map((house) => (
           <House

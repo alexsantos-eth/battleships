@@ -43,20 +43,23 @@ export const GAME_CONSTANTS = {
     MOBILE_BREAKPOINT: 768,
     POSITIONS: {
       PLAYER: {
-        position: [0, -4, 5] as [number, number, number],
+        position: [0, -3, 5] as [number, number, number],
         rotation: [0, 0, 0] as [number, number, number],
         mobile: {
-          position: [0, -2, 5] as [number, number, number],
+          position: [0, -3, 5] as [number, number, number],
           rotation: [0, 0, 0] as [number, number, number],
         },
       },
       ENEMY: {
-        position: [0, 9, 5] as [number, number, number],
+        position: [0, 12, 5] as [number, number, number],
         rotation: [0, 0, 0] as [number, number, number],
       },
       PERSPECTIVE: {
-        position: [0, 0, 6] as [number, number, number],
-        rotation: [0, 0, 0] as [number, number, number],
+        position: [0, -4.6, 5] as [number, number, number],
+        rotation: [Math.PI/4, 0, 0] as [number, number, number],
+        mobile: {
+          position: [0, -3, 5]
+        }
       },
       SHOOT_START: {
         position: [0, 8, -8] as [number, number, number],
@@ -68,9 +71,9 @@ export const GAME_CONSTANTS = {
       },
     },
     SETTINGS: {
-      far: 2000,
-      near: 0.1,
-      animationSpeed: 0.15,
+      far: 3000,
+      near: -100,
+      animationSpeed: 0.06,
       eventThrottleMs: 16,
       animationThrottleMs: 8,
       positionThreshold: 0.00001,
@@ -133,12 +136,13 @@ export const GAME_CONSTANTS = {
 
   TERRAIN: {
     SAND: {
-      HOLE_RADIUS: 0.27,
+      HOLE_RADIUS: 0.17,
+      TRANSITION_DISTANCE: 0.345,
       DEFAULT_HEIGHT: 0.015,
       DEFAULT_LEVELS: 1,
       DEFAULT_SCALE: 5,
       DEFAULT_OFFSET: { x: 0, z: 0 },
-      GROUP_SCALE: 9,
+      GROUP_SCALE: 13,
       GROUP_POSITION_Y: -0.2,
       GROUP_ROTATION: Math.PI / 2,
     },
