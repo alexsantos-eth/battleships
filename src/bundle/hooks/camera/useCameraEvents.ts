@@ -40,7 +40,7 @@ export const useCameraEvents = (
   const {
     onShootStart,
     onShootEnd,
-    animationSpeed = 0.15,
+    animationSpeed = GAME_CONSTANTS.CAMERA.SETTINGS.animationSpeed,
     enableLOD = true,
   } = options;
 

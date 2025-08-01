@@ -10,13 +10,12 @@ import {
 } from "three";
 
 import { getTerrainColor } from "@/config/colors/palette";
+import { GAME_CONSTANTS } from "@/constants/game/board";
 import { useLoader } from "@react-three/fiber";
 
 import { generateTerrain } from "./tools/terrain";
 
 import type { SandPlaneProps } from "./SandPlane.types";
-import { GAME_CONSTANTS } from "@/constants/game/board";
-
 export const SandPlane: React.FC<SandPlaneProps> = ({
   size = GAME_CONSTANTS.TERRAIN.GRASS.SIZE,
   height = GAME_CONSTANTS.TERRAIN.SAND.DEFAULT_HEIGHT,
@@ -47,7 +46,7 @@ export const SandPlane: React.FC<SandPlaneProps> = ({
       uniforms: {
         sandColor: { value: new Vector3(...getTerrainColor("sand")) },
         grassColor: { value: new Vector3(...getTerrainColor("grass")) },
-        transitionDistance: { value: 0.5 },
+        transitionDistance: { value:GAME_CONSTANTS.TERRAIN.SAND.TRANSITION_DISTANCE },
         transitionWidth: { value: 0 },
         noiseSeed: { value: Math.random() * 1000.0 },
         smoothness: { value: 1 },
@@ -135,15 +134,21 @@ export const SandPlane: React.FC<SandPlaneProps> = ({
   }, [size, height, levels, scale, offset, simplex]);
 
   return (
-    <group
-      scale={GAME_CONSTANTS.TERRAIN.SAND.GROUP_SCALE / scale}
-      position={[-offset.x, 0, GAME_CONSTANTS.TERRAIN.SAND.GROUP_POSITION_Y]}
-      rotation={[GAME_CONSTANTS.TERRAIN.SAND.GROUP_ROTATION, 0, 0]}
-    >
-      <mesh frustumCulled={false}>
-        <planeGeometry args={[1, 1, size - 1, size - 1]} ref={ref} />
-        <primitive object={material} />
-      </mesh>
+    <group>
+      <group
+        scale={[
+          GAME_CONSTANTS.TERRAIN.SAND.GROUP_SCALE / scale,
+          GAME_CONSTANTS.TERRAIN.SAND.GROUP_SCALE / scale,
+          GAME_CONSTANTS.TERRAIN.SAND.GROUP_SCALE / scale,
+        ]}
+        position={[-offset.x, 0, GAME_CONSTANTS.TERRAIN.SAND.GROUP_POSITION_Y]}
+        rotation={[GAME_CONSTANTS.TERRAIN.SAND.GROUP_ROTATION, 0, 0]}
+      >
+        <mesh frustumCulled={false}>
+          <planeGeometry args={[1, 1, size - 1, size - 1]} ref={ref} />
+          <primitive object={material} />
+        </mesh>
+      </group>
     </group>
   );
 };

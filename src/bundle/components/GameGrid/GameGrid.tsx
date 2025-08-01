@@ -4,18 +4,17 @@ import { EnemyShotsGrid } from "@/bundle/components/EnemyShotsGrid";
 import { GridHelper } from "@/bundle/components/GridHelper";
 import { PlayerShotsGrid } from "@/bundle/components/PlayerShotsGrid";
 import { PressGrid } from "@/bundle/components/PressGrid";
-import { GAME_CONSTANTS } from "@/constants/game/board";
 import { useGridDimensions } from "@/bundle/hooks/grid/useGridDimensions";
+import { HousePlane } from "@/bundle/layers";
 import { RocksPlane } from "@/bundle/layers/RocksPlane";
 import { SandPlane } from "@/bundle/layers/SandPlane";
 import { ShipsPlane } from "@/bundle/layers/ShipsPlane";
 import { TreePlane } from "@/bundle/layers/TreePlane";
 import { WaterPlane } from "@/bundle/layers/WaterPlane";
 import { useGameStore } from "@/bundle/stores/game/gameStore";
+import { GAME_CONSTANTS } from "@/constants/game/board";
 
 import type { GameGridProps } from "./GameGrid.types";
-import { HousePlane } from "@/bundle/layers";
-
 export const GameGrid: React.FC<GameGridProps> = ({
   position,
   rotation,
@@ -51,7 +50,7 @@ export const GameGrid: React.FC<GameGridProps> = ({
         <WaterPlane />
         <SandPlane />
         <RocksPlane />
-        <TreePlane />
+        <TreePlane isPlayerBoard={isPlayerBoard} />
         <HousePlane isPlayerBoard={isPlayerBoard} />
 
         <GridHelper />

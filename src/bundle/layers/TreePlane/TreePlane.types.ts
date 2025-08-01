@@ -1,5 +1,6 @@
 export interface TreePlaneProps {
   className?: string;
+  isPlayerBoard?: boolean;
 }
 
 export interface TreeConfig {
@@ -8,4 +9,6 @@ export interface TreeConfig {
   rotation: [number, number, number];
   scale: [number, number, number];
   variant: 1 | 2 | 3;
+  hidenInPlayer?: boolean;
+  hidenInEnemy?: boolean;
 } 
