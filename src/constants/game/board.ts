@@ -58,7 +58,7 @@ export const GAME_CONSTANTS = {
         position: [0, -4.6, 5] as [number, number, number],
         rotation: [Math.PI/4, 0, 0] as [number, number, number],
         mobile: {
-          position: [0, -3, 5]
+          position: [0, -3, 5] as [number, number, number]
         }
       },
       SHOOT_START: {
