@@ -7,7 +7,7 @@ export const COLORS = {
   },
 
   water: {
-    primary: "#4aceff",
+    primary: "#00c2ff",
     droplet: "#bbf0ff",
     splash: "#99ddff",
   },

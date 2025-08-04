@@ -46,7 +46,9 @@ export const SandPlane: React.FC<SandPlaneProps> = ({
       uniforms: {
         sandColor: { value: new Vector3(...getTerrainColor("sand")) },
         grassColor: { value: new Vector3(...getTerrainColor("grass")) },
-        transitionDistance: { value:GAME_CONSTANTS.TERRAIN.SAND.TRANSITION_DISTANCE },
+        transitionDistance: {
+          value: GAME_CONSTANTS.TERRAIN.SAND.TRANSITION_DISTANCE,
+        },
         transitionWidth: { value: 0 },
         noiseSeed: { value: Math.random() * 1000.0 },
         smoothness: { value: 1 },
@@ -105,10 +107,10 @@ export const SandPlane: React.FC<SandPlaneProps> = ({
           float t = step(transitionDistance, organicDistance);
           
    
-          vec4 sandTex = texture2D(sandTexture, vUv * 6.0);
+          vec4 sandTex = texture2D(sandTexture, vUv * 2.0);
           vec3 texturedSandColor = sandColor * sandTex.rgb;
           
-          vec4 grassTex = texture2D(grassTexture, vUv * 6.0);
+          vec4 grassTex = texture2D(grassTexture, vUv * 2.0);
           vec3 texturedGrassColor = grassColor * grassTex.rgb;
           
           vec3 finalColor = mix(texturedSandColor, texturedGrassColor, t);
@@ -120,35 +122,44 @@ export const SandPlane: React.FC<SandPlaneProps> = ({
   }, [sandTexture, grassTexture]);
 
   useEffect(() => {
-    const [vertices] = generateTerrain(
-      simplex,
-      size,
-      height,
-      levels,
-      scale,
-      offset
-    );
+    if (ref.current) {
+      const [vertices] = generateTerrain(
+        simplex,
+        size,
+        height,
+        levels,
+        scale,
+        offset
+      );
 
-    ref.current.setAttribute("position", new BufferAttribute(vertices, 3));
-    ref.current.computeVertexNormals();
+      ref.current.setAttribute("position", new BufferAttribute(vertices, 3));
+      ref.current.computeVertexNormals();
+    }
   }, [size, height, levels, scale, offset, simplex]);
 
   return (
-    <group>
-      <group
-        scale={[
-          GAME_CONSTANTS.TERRAIN.SAND.GROUP_SCALE / scale,
-          GAME_CONSTANTS.TERRAIN.SAND.GROUP_SCALE / scale,
-          GAME_CONSTANTS.TERRAIN.SAND.GROUP_SCALE / scale,
-        ]}
-        position={[-offset.x, 0, GAME_CONSTANTS.TERRAIN.SAND.GROUP_POSITION_Y]}
-        rotation={[GAME_CONSTANTS.TERRAIN.SAND.GROUP_ROTATION, 0, 0]}
-      >
-        <mesh frustumCulled={false}>
-          <planeGeometry args={[1, 1, size - 1, size - 1]} ref={ref} />
-          <primitive object={material} />
-        </mesh>
+    <>
+      <group>
+        <group
+          scale={[
+            GAME_CONSTANTS.TERRAIN.SAND.GROUP_SCALE / scale,
+            GAME_CONSTANTS.TERRAIN.SAND.GROUP_SCALE / scale,
+            GAME_CONSTANTS.TERRAIN.SAND.GROUP_SCALE / scale,
+          ]}
+          position={[
+            -offset.x,
+            0,
+            GAME_CONSTANTS.TERRAIN.SAND.GROUP_POSITION_Y,
+          ]}
+          rotation={[GAME_CONSTANTS.TERRAIN.SAND.GROUP_ROTATION, 0, 0]}
+        >
+          <mesh frustumCulled={false} receiveShadow>
+            <planeGeometry args={[1, 1, size - 1, size - 1]} ref={ref} />
+            <primitive object={material} />
+            {/* <meshStandardMaterial  color={COLORS.terrain.grass} /> */}
+          </mesh>
+        </group>
       </group>
-    </group>
+    </>
   );
 };

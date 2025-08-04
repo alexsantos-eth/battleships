@@ -55,8 +55,8 @@ export const GAME_CONSTANTS = {
         rotation: [0, 0, 0] as [number, number, number],
       },
       PERSPECTIVE: {
-        position: [0, -4.6, 5] as [number, number, number],
-        rotation: [Math.PI/4, 0, 0] as [number, number, number],
+        position: [0, -2.7, 5] as [number, number, number],
+        rotation: [Math.PI/6, 0, 0] as [number, number, number],
         mobile: {
           position: [0, -3, 5] as [number, number, number]
         }

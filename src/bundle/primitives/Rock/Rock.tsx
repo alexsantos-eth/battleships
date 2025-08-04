@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 
 import { useGLTF } from "@react-three/drei";
 
@@ -13,14 +13,18 @@ export const Rock: React.FC<RockProps> = ({
   scale = [1.2, 1.2, 1.2],
 }) => {
   const { scene } = useGLTF(ROCK_VARIANTS[variant]);
-  const clonedScene = useMemo(() => scene.clone(), [scene]);
+
+  const clonedScene = scene.clone();
+  scene?.traverse((o) => (o.castShadow = true));
 
   return (
-    <primitive
-      object={clonedScene}
-      position={position}
-      rotation={rotation}
-      scale={scale}
-    />
+    <mesh>
+      <primitive
+        object={clonedScene}
+        position={position}
+        rotation={rotation}
+        scale={scale}
+      />
+    </mesh>
   );
 };

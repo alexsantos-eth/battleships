@@ -8,6 +8,7 @@ import type { GameConfig } from "@/types/game/config";
 const config: Partial<GameConfig> = {
   boardHeight: 10,
   boardWidth: 10,
+  initialTurn: 'enemy',
   shipCounts: {
     small: 2,
     medium: 2,
