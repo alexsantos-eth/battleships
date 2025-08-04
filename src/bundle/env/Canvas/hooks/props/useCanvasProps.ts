@@ -35,6 +35,7 @@ const useCanvasProps = () => {
       camera: {
         ...baseProps.camera,
         position: PLAYER_CAMERA_POSITION.position,
+        // aspect: 1,
         rotation: PLAYER_CAMERA_POSITION.rotation,
       },
     } as CanvasProps;

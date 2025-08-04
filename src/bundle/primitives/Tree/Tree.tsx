@@ -1,4 +1,5 @@
-import React, { useMemo } from "react";
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import React from "react";
 
 import { useGLTF } from "@react-three/drei";
 
@@ -11,11 +12,13 @@ export const Tree: React.FC<TreeProps> = ({
   variant = 1,
 }) => {
   const { scene } = useGLTF(`/assets/models/Tree${variant}.glb`);
-  const clonedScene = useMemo(() => scene.clone(), [scene]);
 
+  const clonedScene = scene.clone();
+  scene?.traverse((o) => (o.castShadow = true));
+  
   return (
-    <group position={position} rotation={rotation} scale={scale}>
+    <mesh position={position} rotation={rotation} scale={scale}>
       <primitive object={clonedScene} />
-    </group>
+    </mesh>
   );
 };

@@ -52,7 +52,12 @@ const trees: TreeConfig[] = [
 
 export const TreePlane: React.FC<TreePlaneProps> = ({ isPlayerBoard }) => {
   return (
-    <group rotation={[Math.PI / 2, Math.PI / 2, 0]} position={[0, 0, 0.1]}>
+    <group
+      rotation={[Math.PI / 2, Math.PI / 2, 0]}
+      position={[0, 0, 0.1]}
+      receiveShadow
+      castShadow
+    >
       {trees
         .filter((tree) =>
           isPlayerBoard ? !tree.hidenInPlayer : !tree.hidenInEnemy

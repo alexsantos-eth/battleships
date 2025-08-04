@@ -51,8 +51,8 @@ export const WaterPlane: React.FC<WaterPlaneProps> = ({
       <planeGeometry args={[...size, ...segments]} />
       <meshStandardMaterial
         color={COLORS.water.primary}
-        roughness={0.8}
-        metalness={0.2}
+        roughness={0.5}
+        metalness={0.1}
         flatShading
       />
     </mesh>

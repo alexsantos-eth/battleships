@@ -1,5 +1,3 @@
-import { useMemo } from "react";
-
 import { useGLTF } from "@react-three/drei";
 
 import { HOUSE_VARIANTS } from "./constants/variants";
@@ -13,7 +11,9 @@ const House: React.FC<HouseProps> = ({
   scale,
 }) => {
   const { scene } = useGLTF(HOUSE_VARIANTS[variant]);
-  const clonedScene = useMemo(() => scene.clone(), [scene]);
+  const clonedScene = scene.clone();
+
+  scene?.traverse((o) => (o.castShadow = true));
 
   return (
     <primitive

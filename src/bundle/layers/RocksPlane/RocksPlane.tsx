@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-import { Rock } from '@/bundle/primitives';
+import { Rock } from "@/bundle/primitives";
 
 import type { RocksPlaneProps, RockConfig } from "./RocksPlane.types";
 const rocks: RockConfig[] = [
@@ -86,7 +86,7 @@ const rocks: RockConfig[] = [
 
 export const RocksPlane: React.FC<RocksPlaneProps> = () => {
   return (
-    <group>
+    <group position={[0, 0, 0]}>
       {rocks.map((rock) => (
         <Rock
           key={rock.id}

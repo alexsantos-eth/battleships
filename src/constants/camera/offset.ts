@@ -29,6 +29,7 @@ export const PLAYER_PERSPECTIVE_POSITION = {
 
 export const canvasProps: CanvasProps = {
   orthographic: true,
+  shadows: true,
   camera: {
     far: GAME_CONSTANTS.CAMERA.SETTINGS.far,
     near: GAME_CONSTANTS.CAMERA.SETTINGS.near,
