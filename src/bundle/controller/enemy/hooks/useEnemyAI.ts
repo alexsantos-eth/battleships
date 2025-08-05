@@ -40,7 +40,11 @@ export const useEnemyAI = () => {
     if (!shotPosition) return;
 
     const [x, y] = shotPosition;
-    const { hit, shipId } = checkShot(x, y, false);
+    const { hit, shipId } = checkShot(
+      boardWidth - 1 - x,
+      boardHeight - 1 - y,
+      false
+    );
 
     const shot = {
       x,

@@ -1,10 +1,11 @@
-import { useMemo, useRef } from "react";
+import { useRef } from "react";
 import { Group } from "three";
 
 import { useGameStore } from "@/bundle/stores/game/gameStore";
 import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 
+import { SHIP_VARIANTS } from "./constants/variants";
 import {
   calculateGroupOffset,
   calculateModelOffset,
@@ -16,7 +17,6 @@ import {
   calculateShipScale,
   calculateWaveAnimation,
 } from "./tools/calculations";
-import { SHIP_VARIANTS } from "./constants/variants";
 
 import type { ShipProps } from "./Ship.types";
 
@@ -28,13 +28,7 @@ const Ship: React.FC<ShipProps> = ({
   const { boardWidth, boardHeight } = useGameStore();
   const shipConfig = SHIP_VARIANTS[variant];
   const { scene } = useGLTF(shipConfig.modelUrl);
-  const clonedScene = useMemo(() => {
-    try {
-      return scene.clone();
-    } catch {
-      return scene;
-    }
-  }, [scene, variant]);
+  const clonedScene = scene.clone();
 
   const groupRef = useRef<Group>(null);
 
@@ -68,10 +62,8 @@ const Ship: React.FC<ShipProps> = ({
     orientation
   );
 
-  const planeSize = useMemo(() => {
-    const size = calculateShipPlaneSize(shipConfig.size, orientation);
-    return [size.width, size.height] as [number, number];
-  }, [shipConfig.size, orientation]);
+  const planeSizes = calculateShipPlaneSize(shipConfig.size, orientation);
+  const planeSize = [planeSizes.width, planeSizes.height] as [number, number];
 
   useFrame(({ clock }) => {
     if (groupRef.current) {
@@ -90,12 +82,12 @@ const Ship: React.FC<ShipProps> = ({
 
   return (
     <group position={[position.x, position.y, position.z + groupOffset.z]}>
-      <mesh rotation={[0, 0, 0]} position={[0, 0, 0.03]}>
+      <mesh rotation={[0, 0, 0]} position={[0, 0, 0.028]} frustumCulled={false}>
         <planeGeometry args={planeSize} />
         <meshStandardMaterial
           color={shipConfig.color}
           transparent
-          opacity={0.5}
+          opacity={1}
           flatShading
         />
       </mesh>

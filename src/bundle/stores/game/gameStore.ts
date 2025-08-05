@@ -39,7 +39,7 @@ export interface GameState {
     x: number,
     y: number,
     isPlayerShot: boolean
-  ) => { hit: boolean; shipId?: number };
+  ) => { hit: boolean; shipId?: number; variant: ShipVariant };
   isCellShot: (x: number, y: number, isPlayerShot: boolean) => boolean;
   isShipDestroyed: (shipId: number, isPlayerShot: boolean) => boolean;
   checkGameOver: () => void;
@@ -158,12 +158,12 @@ export const useGameStore = create<GameState>((set, get) => ({
 
       for (const cell of shipCells) {
         if (cell[0] === x && cell[1] === y) {
-          return { hit: true, shipId: i };
+          return { hit: true, shipId: i, variant: ship.variant };
         }
       }
     }
 
-    return { hit: false, shipId: -1 };
+    return { hit: false, shipId: -1, variant: "small" };
   },
 
   isCellShot: (x: number, y: number, isPlayerShot: boolean) => {
