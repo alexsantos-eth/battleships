@@ -4,7 +4,6 @@ import React from "react";
 import { useGLTF } from "@react-three/drei";
 
 import type { TreeProps } from "./Tree.types";
-
 export const Tree: React.FC<TreeProps> = ({
   position,
   rotation = [0, 0, 0],
@@ -14,8 +13,7 @@ export const Tree: React.FC<TreeProps> = ({
   const { scene } = useGLTF(`/assets/models/Tree${variant}.glb`);
 
   const clonedScene = scene.clone();
-  scene?.traverse((o) => (o.castShadow = true));
-  
+
   return (
     <mesh position={position} rotation={rotation} scale={scale}>
       <primitive object={clonedScene} />

@@ -3,7 +3,6 @@ import { useGLTF } from "@react-three/drei";
 import { HOUSE_VARIANTS } from "./constants/variants";
 
 import type { HouseProps } from "./House.types";
-
 const House: React.FC<HouseProps> = ({
   variant,
   position,
@@ -12,8 +11,6 @@ const House: React.FC<HouseProps> = ({
 }) => {
   const { scene } = useGLTF(HOUSE_VARIANTS[variant]);
   const clonedScene = scene.clone();
-
-  scene?.traverse((o) => (o.castShadow = true));
 
   return (
     <primitive

@@ -15,7 +15,6 @@ export const Rock: React.FC<RockProps> = ({
   const { scene } = useGLTF(ROCK_VARIANTS[variant]);
 
   const clonedScene = scene.clone();
-  scene?.traverse((o) => (o.castShadow = true));
 
   return (
     <mesh>

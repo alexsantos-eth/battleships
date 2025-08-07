@@ -48,6 +48,7 @@ export const GameGrid: React.FC<GameGridProps> = ({
 
       <group>
         <WaterPlane />
+        <WaterPlane size={[5,5]} />
         <SandPlane />
         <RocksPlane />
         <TreePlane isPlayerBoard={isPlayerBoard} />

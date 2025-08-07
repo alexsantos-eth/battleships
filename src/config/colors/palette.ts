@@ -1,9 +1,9 @@
 export const COLORS = {
   ships: {
-    small: "#FFE100",
-    medium: "#227DB6",
-    large: "#795cff",
-    xlarge: "#00FFFF",
+    small: "#F7C4A7",
+    medium: "#EB505E",
+    large: "#FFE100",
+    xlarge: "#a578ff",
   },
 
   water: {
