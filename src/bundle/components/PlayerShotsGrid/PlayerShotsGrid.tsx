@@ -15,7 +15,6 @@ export const PlayerShotsGrid: React.FC<PlayerShotsGridProps> = () => {
             <Cell
               key={`${x}-${y}`}
               position={position}
-              onClick={() => {}}
               isShot={isShot}
               isHit={isHit}
             />

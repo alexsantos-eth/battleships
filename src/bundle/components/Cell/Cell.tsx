@@ -60,11 +60,11 @@ export const Cell: React.FC<CellProps> = ({
       frustumCulled={false}
     >
       <planeGeometry args={[0.5, 0.5]} />
-      <meshStandardMaterial
+      <meshToonMaterial
         color={getColor()}
         opacity={getOpacity()}
         transparent
-        flatShading
+     
       />
     </mesh>
   );

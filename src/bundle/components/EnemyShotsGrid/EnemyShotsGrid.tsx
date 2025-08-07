@@ -16,7 +16,6 @@ export const EnemyShotsGrid: React.FC<EnemyShotsGridProps> = () => {
               isHit={isHit}
               isShot={isShot}
               key={`${x}-${y}`}
-              onClick={() => {}}
               position={position}
             />
           );

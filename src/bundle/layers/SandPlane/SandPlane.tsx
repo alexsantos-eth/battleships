@@ -107,10 +107,10 @@ export const SandPlane: React.FC<SandPlaneProps> = ({
           float t = step(transitionDistance, organicDistance);
           
    
-          vec4 sandTex = texture2D(sandTexture, vUv * 2.0);
+          vec4 sandTex = texture2D(sandTexture, vUv * 3.3);
           vec3 texturedSandColor = sandColor * sandTex.rgb;
           
-          vec4 grassTex = texture2D(grassTexture, vUv * 2.0);
+          vec4 grassTex = texture2D(grassTexture, vUv * 3.3);
           vec3 texturedGrassColor = grassColor * grassTex.rgb;
           
           vec3 finalColor = mix(texturedSandColor, texturedGrassColor, t);
@@ -156,7 +156,6 @@ export const SandPlane: React.FC<SandPlaneProps> = ({
           <mesh frustumCulled={false} receiveShadow>
             <planeGeometry args={[1, 1, size - 1, size - 1]} ref={ref} />
             <primitive object={material} />
-            {/* <meshStandardMaterial  color={COLORS.terrain.grass} /> */}
           </mesh>
         </group>
       </group>

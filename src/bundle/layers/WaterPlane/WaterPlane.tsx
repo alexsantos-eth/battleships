@@ -11,16 +11,19 @@ const noise = createNoise2D();
 
 export const WaterPlane: React.FC<WaterPlaneProps> = ({
   size = [8, 8],
-  segments = [30, 30],
+  segments = [25, 25],
   position = [0, 0, 0.1],
   rotation = [0, 0, 0],
+  amplitude = 0.1,
+  speed = 0.2,
+  scale = 0.5,
 }) => {
   const meshRef = useRef<Mesh>(null!);
 
   const animationConfig: WaterAnimationConfig = {
-    scale: 0.5,
-    amplitude: 0.1,
-    speed: 0.2,
+    scale,
+    amplitude,
+    speed,
   };
 
   useFrame(({ clock }) => {
