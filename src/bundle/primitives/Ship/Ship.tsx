@@ -86,7 +86,6 @@ const Ship: React.FC<ShipProps> = ({
         color={shipConfig.color}
         orientation={orientation}
         projectionRadius={projectionRadius}
-        textureUrl="/assets/textures/water_texture.jpg"
       />
 
       <group ref={groupRef}>
