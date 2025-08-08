@@ -5,7 +5,7 @@ import { useThree } from "@react-three/fiber";
 const CameraControls = () => {
   const { camera } = useThree();
 
-  if (!DEBUG_CONFIG.ENABLE_CAMERA_CONTROLS) {
+  if (!DEBUG_CONFIG.GET_ENABLE_CAMERA_CONTROLS()) {
     return null;
   }
 

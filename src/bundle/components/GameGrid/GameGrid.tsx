@@ -44,11 +44,11 @@ export const GameGrid: React.FC<GameGridProps> = ({
           GAME_CONSTANTS.BOARD.PLANE_GEOMETRY.SEGMENTS,
         ]}
       />
-      <meshStandardMaterial color="lightblue" wireframe={false} />
+      <meshLambertMaterial color="lightblue" wireframe={false} />
 
       <group>
         <WaterPlane />
-        <WaterPlane size={[5,5]} />
+        <WaterPlane size={[7,7]} />
         <SandPlane />
         <RocksPlane />
         <TreePlane isPlayerBoard={isPlayerBoard} />
