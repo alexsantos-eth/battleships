@@ -97,7 +97,7 @@ export const useCameraEvents = (
 
   const setPlayerCameraPosition = useCallback(
     (usePlayerPerspective: boolean) => {
-      if (DEBUG_CONFIG.ENABLE_CAMERA_CONTROLS) return;
+      if (DEBUG_CONFIG.GET_ENABLE_CAMERA_CONTROLS()) return;
 
       throttledEvent(() => {
         if (usePlayerPerspective) {
@@ -119,7 +119,7 @@ export const useCameraEvents = (
     (...args: unknown[]) => {
       const data = args[0] as CameraEventData;
 
-      if (DEBUG_CONFIG.ENABLE_CAMERA_CONTROLS) {
+      if (DEBUG_CONFIG.GET_ENABLE_CAMERA_CONTROLS()) {
         setIsShooting(true);
         setShootData(data);
 
@@ -157,7 +157,7 @@ export const useCameraEvents = (
     (...args: unknown[]) => {
       const data = args[0] as CameraEventData;
 
-      if (DEBUG_CONFIG.ENABLE_CAMERA_CONTROLS) {
+      if (DEBUG_CONFIG.GET_ENABLE_CAMERA_CONTROLS()) {
         if (onShootEnd) {
           onShootEnd(data);
         }
@@ -206,7 +206,7 @@ export const useCameraEvents = (
   const triggerShoot = useCallback(() => {}, []);
 
   useFrame(() => {
-    if (!isAnimating.current || DEBUG_CONFIG.ENABLE_CAMERA_CONTROLS) return;
+    if (!isAnimating.current || DEBUG_CONFIG.GET_ENABLE_CAMERA_CONTROLS()) return;
 
     const currentPos = camera.position;
     const currentRot = camera.rotation;

@@ -13,9 +13,6 @@ export type { TreeProps } from "./Tree/Tree.types";
 export { Rock } from "./Rock";
 export type { RockProps } from "./Rock/Rock.types";
 
-export { SplashRing } from "./SplashRing";
-export type { SplashRingProps } from "./SplashRing/SplashRing.types";
-
 export { default as House } from "./House/House";
 export type { HouseProps } from "./House/House.types";
 

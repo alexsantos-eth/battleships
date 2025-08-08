@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { Group } from "three";
 
+import WaterProjection from "@/bundle/components/WaterProjection/WaterProjection";
 import { useGameStore } from "@/bundle/stores/game/gameStore";
 import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
@@ -11,7 +12,6 @@ import {
   calculateModelOffset,
   calculateOrientationOffset,
   calculateShipModelOffset,
-  calculateShipPlaneSize,
   calculateShipPosition,
   calculateShipRotation,
   calculateShipScale,
@@ -19,7 +19,6 @@ import {
 } from "./tools/calculations";
 
 import type { ShipProps } from "./Ship.types";
-
 const Ship: React.FC<ShipProps> = ({
   coords,
   variant,
@@ -62,9 +61,6 @@ const Ship: React.FC<ShipProps> = ({
     orientation
   );
 
-  const planeSizes = calculateShipPlaneSize(shipConfig.size, orientation);
-  const planeSize = [planeSizes.width, planeSizes.height] as [number, number];
-
   useFrame(({ clock }) => {
     if (groupRef.current) {
       const time = clock.getElapsedTime();
@@ -80,17 +76,18 @@ const Ship: React.FC<ShipProps> = ({
     }
   });
 
+  const projectionRadius =
+    0.1 * shipConfig.size + shipConfig.projectionOffset.x;
+
   return (
     <group position={[position.x, position.y, position.z + groupOffset.z]}>
-      <mesh rotation={[0, 0, 0]} position={[0, 0, 0.028]} frustumCulled={false}>
-        <planeGeometry args={planeSize} />
-        <meshStandardMaterial
-          color={shipConfig.color}
-          transparent
-          opacity={1}
-          flatShading
-        />
-      </mesh>
+      <WaterProjection
+        shipConfig={shipConfig}
+        color={shipConfig.color}
+        orientation={orientation}
+        projectionRadius={projectionRadius}
+        textureUrl="/assets/textures/water_texture.jpg"
+      />
 
       <group ref={groupRef}>
         <primitive

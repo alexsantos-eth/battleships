@@ -159,6 +159,10 @@ export const SHIP_VARIANTS_CONFIG = {
     health: 2,
     size: 2,
     extraOffset: 0,
+    projectionOffset: {
+      x: 0,
+      y: 0,
+    },
     groupOffset: { x: 0, y: 0, z: 0 },
     shipOffset: {
       horizontal: { x: 0, y: 0, z: 0 },
@@ -173,6 +177,10 @@ export const SHIP_VARIANTS_CONFIG = {
     health: 3,
     size: 3,
     extraOffset: 0,
+    projectionOffset: {
+      x: 0.,
+      y: 0,
+    },
     groupOffset: { x: 0, y: 0, z: 0 },
     shipOffset: {
       horizontal: { x: 0, y: 0, z: 0 },
@@ -187,6 +195,10 @@ export const SHIP_VARIANTS_CONFIG = {
     health: 4,
     size: 4,
     extraOffset: 0,
+    projectionOffset: {
+      x: 0,
+      y: 0,
+    },
     groupOffset: { x: 0, y: 0, z: 0 },
     shipOffset: {
       horizontal: { x: 0, y: 0, z: 0 },
@@ -201,6 +213,10 @@ export const SHIP_VARIANTS_CONFIG = {
     health: 5,
     size: 5,
     extraOffset: 0,
+    projectionOffset: {
+      x: 0,
+      y: 0,
+    },
     groupOffset: { x: 0, y: 0, z: 0 },
     shipOffset: {
       horizontal: { x: 0, y: 0, z: 0 },

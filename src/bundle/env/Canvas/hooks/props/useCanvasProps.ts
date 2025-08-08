@@ -29,7 +29,7 @@ const useCanvasProps = () => {
     },
   };
 
-  if (!DEBUG_CONFIG.ENABLE_CAMERA_CONTROLS) {
+  if (!DEBUG_CONFIG.GET_ENABLE_CAMERA_CONTROLS()) {
     return {
       ...baseProps,
       camera: {

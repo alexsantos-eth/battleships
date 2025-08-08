@@ -4,7 +4,6 @@ import { EnemyShotsGrid } from "@/bundle/components/EnemyShotsGrid";
 import { GridHelper } from "@/bundle/components/GridHelper";
 import { PlayerShotsGrid } from "@/bundle/components/PlayerShotsGrid";
 import { PressGrid } from "@/bundle/components/PressGrid";
-import { useGridDimensions } from "@/bundle/hooks/grid/useGridDimensions";
 import { HousePlane } from "@/bundle/layers";
 import { RocksPlane } from "@/bundle/layers/RocksPlane";
 import { SandPlane } from "@/bundle/layers/SandPlane";
@@ -12,7 +11,6 @@ import { ShipsPlane } from "@/bundle/layers/ShipsPlane";
 import { TreePlane } from "@/bundle/layers/TreePlane";
 import { WaterPlane } from "@/bundle/layers/WaterPlane";
 import { useGameStore } from "@/bundle/stores/game/gameStore";
-import { GAME_CONSTANTS } from "@/constants/game/board";
 
 import type { GameGridProps } from "./GameGrid.types";
 export const GameGrid: React.FC<GameGridProps> = ({
@@ -23,32 +21,12 @@ export const GameGrid: React.FC<GameGridProps> = ({
   showShots = true,
 }) => {
   const { isPlayerTurn } = useGameStore();
-  const { calculateTotalGridWidth, calculateTotalGridHeight } =
-    useGridDimensions();
-
-  const gridWidth = calculateTotalGridWidth();
-  const gridHeight = calculateTotalGridHeight();
-  const planeSize = Math.max(
-    gridWidth,
-    gridHeight,
-    GAME_CONSTANTS.BOARD.PLANE_GEOMETRY.MIN_SIZE
-  );
 
   return (
     <mesh rotation={rotation} position={position} scale={1}>
-      <planeGeometry
-        args={[
-          planeSize,
-          planeSize,
-          GAME_CONSTANTS.BOARD.PLANE_GEOMETRY.SEGMENTS,
-          GAME_CONSTANTS.BOARD.PLANE_GEOMETRY.SEGMENTS,
-        ]}
-      />
-      <meshStandardMaterial color="lightblue" wireframe={false} />
-
       <group>
         <WaterPlane />
-        <WaterPlane size={[5,5]} />
+        <WaterPlane size={[7, 7]} />
         <SandPlane />
         <RocksPlane />
         <TreePlane isPlayerBoard={isPlayerBoard} />
