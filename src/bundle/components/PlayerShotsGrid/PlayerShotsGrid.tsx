@@ -1,15 +1,16 @@
-import React from "react";
+import React from 'react';
 
-import { Cell } from "@/bundle/components/Cell";
-import { useCellPositions } from "@/bundle/hooks/grid/useCellPositions";
+import { Cell } from '@/bundle/components/Cell';
+import { useCellPositions } from '@/bundle/hooks/grid/useCellPositions';
 
-import type { PlayerShotsGridProps } from "./PlayerShotsGrid.types";
+import type { PlayerShotsGridProps } from './PlayerShotsGrid.types';
+
 export const PlayerShotsGrid: React.FC<PlayerShotsGridProps> = () => {
-  const { cells } = useCellPositions(true);
+  const { cells , handleCellClick} = useCellPositions(true);
 
   return (
     <>
-      <group rotation={[0, 0, 0]} position={[0, 0, 0.206]}>
+      <group rotation={[0, 0, 0]} position={[0, 0, 0.206]} key={`player-shots-${cells.length}`}>
         {cells.map(({ x, y, position, isShot, isHit }) => {
           return (
             <Cell
@@ -17,6 +18,7 @@ export const PlayerShotsGrid: React.FC<PlayerShotsGridProps> = () => {
               position={position}
               isShot={isShot}
               isHit={isHit}
+              onClick={handleCellClick}
             />
           );
         })}

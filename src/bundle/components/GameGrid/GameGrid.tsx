@@ -1,18 +1,17 @@
-import React from "react";
+import React from 'react';
 
-import { EnemyShotsGrid } from "@/bundle/components/EnemyShotsGrid";
-import { GridHelper } from "@/bundle/components/GridHelper";
-import { PlayerShotsGrid } from "@/bundle/components/PlayerShotsGrid";
-import { PressGrid } from "@/bundle/components/PressGrid";
-import { HousePlane } from "@/bundle/layers";
-import { RocksPlane } from "@/bundle/layers/RocksPlane";
-import { SandPlane } from "@/bundle/layers/SandPlane";
-import { ShipsPlane } from "@/bundle/layers/ShipsPlane";
-import { TreePlane } from "@/bundle/layers/TreePlane";
-import { WaterPlane } from "@/bundle/layers/WaterPlane";
-import { useGameStore } from "@/bundle/stores/game/gameStore";
+import { EnemyShotsGrid } from '@/bundle/components/EnemyShotsGrid';
+import { GridHelper } from '@/bundle/components/GridHelper';
+import { PlayerShotsGrid } from '@/bundle/components/PlayerShotsGrid';
+import { HousePlane } from '@/bundle/layers';
+import { RocksPlane } from '@/bundle/layers/RocksPlane';
+import { SandPlane } from '@/bundle/layers/SandPlane';
+import { ShipsPlane } from '@/bundle/layers/ShipsPlane';
+import { TreePlane } from '@/bundle/layers/TreePlane';
+import { WaterPlane } from '@/bundle/layers/WaterPlane';
 
-import type { GameGridProps } from "./GameGrid.types";
+import type { GameGridProps } from './GameGrid.types';
+
 export const GameGrid: React.FC<GameGridProps> = ({
   position,
   rotation,
@@ -20,7 +19,6 @@ export const GameGrid: React.FC<GameGridProps> = ({
   showShips = true,
   showShots = true,
 }) => {
-  const { isPlayerTurn } = useGameStore();
 
   return (
     <mesh rotation={rotation} position={position} scale={1}>
@@ -34,7 +32,6 @@ export const GameGrid: React.FC<GameGridProps> = ({
 
         <GridHelper />
 
-        {isPlayerTurn && !isPlayerBoard && <PressGrid />}
         {showShots && !isPlayerBoard && <PlayerShotsGrid />}
         {showShots && isPlayerBoard && <EnemyShotsGrid />}
         {showShips && isPlayerBoard && <ShipsPlane />}

@@ -1,4 +1,6 @@
-import type { SHIP_VARIANTS } from "@/bundle/primitives/Ship/constants/variants";
+import type {
+  SHIP_VARIANTS,
+} from '@/bundle/primitives/Ship/constants/variants';
 
 export interface CellProps {
   position: [number, number, number];
@@ -8,4 +10,5 @@ export interface CellProps {
   disabled?: boolean;
   shipVariant?: keyof typeof SHIP_VARIANTS;
   isShipCell?: boolean;
+  swirlTextureRepeat?: number;
 }

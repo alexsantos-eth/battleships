@@ -1,2 +1,2 @@
-export { Cell } from './Cell';
-export type { CellProps } from './Cell.types'; 
+export { default as Cell } from './Cell';
+export type { CellProps } from './Cell.types';

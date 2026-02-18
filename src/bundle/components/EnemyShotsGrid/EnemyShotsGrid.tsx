@@ -1,9 +1,10 @@
-import React from "react";
+import React from 'react';
 
-import { Cell } from "@/bundle/components/Cell";
-import { useCellPositions } from "@/bundle/hooks/grid/useCellPositions";
+import { Cell } from '@/bundle/components/Cell';
+import { useCellPositions } from '@/bundle/hooks/grid/useCellPositions';
 
-import type { EnemyShotsGridProps } from "./EnemyShotsGrid.types";
+import type { EnemyShotsGridProps } from './EnemyShotsGrid.types';
+
 export const EnemyShotsGrid: React.FC<EnemyShotsGridProps> = () => {
   const { cells } = useCellPositions(false);
 

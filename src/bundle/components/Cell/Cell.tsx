@@ -1,11 +1,21 @@
-import React, { useState } from "react";
+import React, {
+  useRef,
+  useState,
+} from 'react';
 
-import { COLORS } from "@/config/colors/palette";
-import { useCursor } from "@react-three/drei";
+import * as THREE from 'three';
 
-import type { CellProps } from "./Cell.types";
-import { SHIP_VARIANTS } from "@/bundle/primitives/Ship/constants/variants";
-export const Cell: React.FC<CellProps> = ({
+import { SHIP_VARIANTS } from '@/bundle/primitives/Ship/constants/variants';
+import { COLORS } from '@/config/colors/palette';
+import {
+  useCursor,
+  useTexture,
+} from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
+
+import type { CellProps } from './Cell.types';
+
+const Cell: React.FC<CellProps> = ({
   position,
   onClick,
   isShot = false,
@@ -14,6 +24,7 @@ export const Cell: React.FC<CellProps> = ({
   isShipCell = false,
   shipVariant,
 }) => {
+  const meshRef = useRef<THREE.Mesh>(null);
   const [hovered, setHovered] = useState(false);
 
   useCursor(hovered && !disabled);
@@ -26,7 +37,7 @@ export const Cell: React.FC<CellProps> = ({
     if (isShipCell && shipVariant) return SHIP_VARIANTS[shipVariant].color;
     if (!isShot) return "white";
 
-    return COLORS.cells.miss;
+    return undefined;
   };
 
   const getOpacity = () => {
@@ -51,8 +62,18 @@ export const Cell: React.FC<CellProps> = ({
     setHovered(false);
   };
 
+  const swirlTexture = useTexture('/assets/textures/swirl.png');
+  const isMiss = isShot && !isHit && !isShipCell;
+
+  useFrame(() => {
+    if (isMiss && meshRef.current) {
+      meshRef.current.rotation.z += 0.05 * (Math.log(position[0]) * 0.2);
+    }
+  });
+
   return (
     <mesh
+      ref={meshRef}
       position={position}
       onPointerOver={handlePointerOver}
       onPointerOut={handlePointerOut}
@@ -60,7 +81,20 @@ export const Cell: React.FC<CellProps> = ({
       frustumCulled={false}
     >
       <planeGeometry args={[0.5, 0.5]} />
-      <meshBasicMaterial color={getColor()} opacity={getOpacity()} transparent />
+      {isMiss && swirlTexture ? (
+        <>
+          <meshBasicMaterial
+            map={swirlTexture}
+            opacity={0.5}
+            transparent
+          />
+        </>
+      ) : (
+        <meshBasicMaterial color={getColor()} opacity={getOpacity()} transparent />
+      )}
     </mesh>
   );
 };
+
+
+export default Cell

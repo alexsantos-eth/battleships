@@ -4,10 +4,25 @@ import {
   BufferAttribute,
   BufferGeometry,
   RepeatWrapping,
-  ShaderMaterial,
   TextureLoader,
-  Vector3,
-} from "three";
+  MeshStandardNodeMaterial,
+} from "three/webgpu";
+import { 
+  texture,
+  uv,
+  vec3,
+  mix,
+  step,
+  length,
+  add,
+  mul,
+  floor,
+  fract,
+  sin,
+  dot,
+  pow,
+  uniform,
+} from "three/tsl";
 
 import { getTerrainColor } from "@/config/colors/palette";
 import { GAME_CONSTANTS } from "@/constants/game/board";
@@ -42,83 +57,70 @@ export const SandPlane: React.FC<SandPlaneProps> = ({
   grassTexture.wrapT = RepeatWrapping;
 
   const material = useMemo(() => {
-    return new ShaderMaterial({
-      uniforms: {
-        sandColor: { value: new Vector3(...getTerrainColor("sand")) },
-        grassColor: { value: new Vector3(...getTerrainColor("grass")) },
-        transitionDistance: {
-          value: GAME_CONSTANTS.TERRAIN.SAND.TRANSITION_DISTANCE,
-        },
-        transitionWidth: { value: 0 },
-        noiseSeed: { value: Math.random() * 1000.0 },
-        smoothness: { value: 1 },
-        sandTexture: { value: sandTexture },
-        grassTexture: { value: grassTexture },
-      },
-      vertexShader: `
-        varying vec2 vUv;
-        varying vec3 vPosition;
-        
-        void main() {
-          vUv = uv;
-          vPosition = position;
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        }
-      `,
-      fragmentShader: `
-        uniform vec3 sandColor;
-        uniform vec3 grassColor;
-        uniform float transitionDistance;
-        uniform float transitionWidth;
-        uniform float noiseSeed;
-        uniform float smoothness;
-        uniform sampler2D sandTexture;
-        uniform sampler2D grassTexture;
-        
-        varying vec2 vUv;
-        varying vec3 vPosition;
-        
-        float noise(vec2 p) {
-          return fract(sin(dot(p + noiseSeed, vec2(12.9898, 78.233))) * 43758.5453);
-        }
-        
-        float angularNoise(vec2 p) {
-          vec2 i = floor(p);
-          vec2 f = fract(p);
-          
-          float fx = pow(f.x, smoothness);
-          float fy = pow(f.y, smoothness);
-          
-          float a = noise(i);
-          float b = noise(i + vec2(1.0, 0.0));
-          float c = noise(i + vec2(0.0, 1.0));
-          float d = noise(i + vec2(1.0, 1.0));
-          
-          return mix(mix(a, b, fx), mix(c, d, fx), fy);
-        }
-        
-        void main() {
-          vec2 center = vec2(0.5, 0.5);
-          float baseDistance = length(vUv - center);
-          
-          float noiseValue = angularNoise(vUv * 8.0) * 0.1; 
-          float organicDistance = baseDistance + noiseValue;
-          
-          float t = step(transitionDistance, organicDistance);
-          
-   
-          vec4 sandTex = texture2D(sandTexture, vUv * 3.3);
-          vec3 texturedSandColor = sandColor * sandTex.rgb;
-          
-          vec4 grassTex = texture2D(grassTexture, vUv * 3.3);
-          vec3 texturedGrassColor = grassColor * grassTex.rgb;
-          
-          vec3 finalColor = mix(texturedSandColor, texturedGrassColor, t);
-          
-          gl_FragColor = vec4(finalColor, 1.0);
-        }
-      `,
-    });
+    // Crear uniformes
+    const noiseSeedUniform = uniform(Math.random() * 1000.0);
+    const smoothnessUniform = uniform(1.0);
+    const transitionDistanceUniform = uniform(GAME_CONSTANTS.TERRAIN.SAND.TRANSITION_DISTANCE);
+    
+    const sandColorVec = getTerrainColor("sand");
+    const grassColorVec = getTerrainColor("grass");
+    const sandColorNode = vec3(sandColorVec[0], sandColorVec[1], sandColorVec[2]);
+    const grassColorNode = vec3(grassColorVec[0], grassColorVec[1], grassColorVec[2]);
+    
+    // Obtener el uv
+    const uvNode = uv();
+    
+    // Función de ruido simplificada usando TSL
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const noise = (p: any) => {
+      const sinValue = sin(dot(add(p, vec3(noiseSeedUniform, noiseSeedUniform, 0)), vec3(12.9898, 78.233, 0)));
+      return fract(mul(sinValue, 43758.5453));
+    };
+    
+    // Función de ruido angular
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const angularNoise = (p: any) => {
+      const i = floor(p);
+      const f = fract(p);
+      
+      const fx = pow(f.x, smoothnessUniform);
+      const fy = pow(f.y, smoothnessUniform);
+      
+      const a = noise(vec3(i.x, i.y, 0));
+      const b = noise(vec3(add(i.x, 1.0), i.y, 0));
+      const c = noise(vec3(i.x, add(i.y, 1.0), 0));
+      const d = noise(vec3(add(i.x, 1.0), add(i.y, 1.0), 0));
+      
+      return mix(mix(a, b, fx), mix(c, d, fx), fy);
+    };
+    
+    // Calcular distancia desde el centro
+    const center = vec3(0.5, 0.5, 0);
+    const baseDistance = length(uvNode.xy.sub(center.xy));
+    
+    // Agregar ruido
+    const noiseValue = mul(angularNoise(vec3(mul(uvNode.x, 8.0), mul(uvNode.y, 8.0), 0)), 0.1);
+    const organicDistance = add(baseDistance, noiseValue);
+    
+    // Calcular transición
+    const t = step(transitionDistanceUniform, organicDistance);
+    
+    // Cargar texturas
+    const sandTexNode = texture(sandTexture, mul(uvNode, 3.3));
+    const grassTexNode = texture(grassTexture, mul(uvNode, 3.3));
+    
+    // Mezclar colores con texturas
+    const texturedSandColor = mul(sandColorNode, sandTexNode.rgb);
+    const texturedGrassColor = mul(grassColorNode, grassTexNode.rgb);
+    
+    // Color final
+    const finalColor = mix(texturedSandColor, texturedGrassColor, t);
+    
+    // Crear material
+    const mat = new MeshStandardNodeMaterial();
+    mat.colorNode = finalColor;
+    
+    return mat;
   }, [sandTexture, grassTexture]);
 
   useEffect(() => {
