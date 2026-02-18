@@ -1,6 +1,7 @@
 import { create } from "zustand";
 
 import { GAME_CONSTANTS } from "@/constants/game/board";
+import { GameEngine } from "@/game/engine/GameEngine";
 
 import type { GameShip, Shot, Winner } from "@/types/game/common";
 import type { GameSetup } from "@/game/manager/initializer";
@@ -10,6 +11,10 @@ export type GameTurn = "PLAYER_TURN" | "ENEMY_TURN";
 export type ShipVariant = "small" | "medium" | "large" | "xlarge";
 
 export interface GameState {
+  // Engine interno (privado, no expuesto a componentes)
+  _engine: GameEngine;
+  
+  // Estado (derivado del engine)
   currentTurn: GameTurn;
   isPlayerTurn: boolean;
   isEnemyTurn: boolean;
@@ -22,6 +27,8 @@ export interface GameState {
   boardWidth: number;
   boardHeight: number;
   shotCount: number;
+  
+  // Acciones (delegan al engine)
   setPlayerTurn: () => void;
   setEnemyTurn: () => void;
   toggleTurn: () => void;
@@ -46,208 +53,163 @@ export interface GameState {
   resetGame: () => void;
 }
 
-export const useGameStore = create<GameState>((set, get) => ({
-  currentTurn: "PLAYER_TURN",
-  isPlayerTurn: true,
-  isEnemyTurn: false,
-  playerShips: [],
-  enemyShips: [],
-  playerShots: [],
-  enemyShots: [],
-  isGameOver: false,
-  winner: null,
-  boardWidth: GAME_CONSTANTS.BOARD.DEFAULT_WIDTH,
-  boardHeight: GAME_CONSTANTS.BOARD.DEFAULT_HEIGHT,
-  shotCount: 0,
+/**
+ * Sincroniza el estado de Zustand con el estado del engine
+ */
+function syncStateFromEngine(engine: GameEngine): Partial<GameState> {
+  const engineState = engine.getState();
+  
+  return {
+    currentTurn: engineState.currentTurn,
+    isPlayerTurn: engineState.isPlayerTurn,
+    isEnemyTurn: engineState.isEnemyTurn,
+    playerShips: engineState.playerShips,
+    enemyShips: engineState.enemyShips,
+    playerShots: engineState.playerShots,
+    enemyShots: engineState.enemyShots,
+    isGameOver: engineState.isGameOver,
+    winner: engineState.winner,
+    boardWidth: engineState.boardWidth,
+    boardHeight: engineState.boardHeight,
+    shotCount: engineState.shotCount,
+  };
+}
 
-  setPlayerTurn: () => {
-    set({
-      currentTurn: "PLAYER_TURN",
-      isPlayerTurn: true,
-      isEnemyTurn: false,
-    });
-  },
-
-  setEnemyTurn: () => {
-    set({
-      currentTurn: "ENEMY_TURN",
-      isPlayerTurn: false,
-      isEnemyTurn: true,
-    });
-  },
-
-  toggleTurn: () => {
-    const { currentTurn } = get();
-    if (currentTurn === "PLAYER_TURN") {
-      get().setEnemyTurn();
-    } else {
-      get().setPlayerTurn();
-    }
-  },
-
-  setEnemyShots: (shots: Shot[]) => {
-    set({ enemyShots: shots });
-  },
-
-  setPlayerShots: (shots: Shot[]) => {
-    set({ playerShots: shots });
-  },
-
-  setPlayerShips: (ships: GameShip[]) => {
-    set({ playerShips: ships });
-  },
-
-  setEnemyShips: (ships: GameShip[]) => {
-    set({ enemyShips: ships });
-  },
-
-  setBoardDimensions: (width: number, height: number) => {
-    set({ boardWidth: width, boardHeight: height });
-  },
-
-  addPlayerShot: (shot: Shot) => {
-    set((state) => ({
-      playerShots: [...state.playerShots, shot],
-      shotCount: state.shotCount + 1,
-    }));
-    get().checkGameOver();
-  },
-
-  addEnemyShot: (shot: Shot) => {
-    set((state) => ({
-      enemyShots: [...state.enemyShots, shot],
-      shotCount: state.shotCount + 1,
-    }));
-    get().checkGameOver();
-  },
-
-  incrementShotCount: () => {
-    set((state) => ({
-      shotCount: state.shotCount + 1,
-    }));
-  },
-
-  getShotCount: () => {
-    return get().shotCount;
-  },
-
-  checkShot: (posX: number, posY: number, isPlayerShot: boolean) => {
-    const x = isPlayerShot
-      ? posX
-      : GAME_CONSTANTS.BOARD.DEFAULT_WIDTH - 1 - posX;
-    const y = isPlayerShot
-      ? posY
-      : GAME_CONSTANTS.BOARD.DEFAULT_HEIGHT - 1 - posY;
-
-    const ships = isPlayerShot ? get().enemyShips : get().playerShips;
-
-    for (let i = 0; i < ships.length; i++) {
-      const ship = ships[i];
-      const shipSize = GAME_CONSTANTS.SHIPS.SIZES[ship.variant];
-
-      const shipCells: [number, number][] = [];
-      if (ship.orientation === "horizontal") {
-        for (let j = 0; j < shipSize; j++) {
-          shipCells.push([ship.coords[0] + j, ship.coords[1]]);
-        }
-      } else {
-        for (let j = 0; j < shipSize; j++) {
-          shipCells.push([ship.coords[0], ship.coords[1] + j]);
-        }
-      }
-
-      for (const cell of shipCells) {
-        if (cell[0] === x && cell[1] === y) {
-          return { hit: true, shipId: i, variant: ship.variant };
-        }
-      }
-    }
-
-    return { hit: false, shipId: -1, variant: "small" };
-  },
-
-  isCellShot: (x: number, y: number, isPlayerShot: boolean) => {
-    const shots = isPlayerShot ? get().playerShots : get().enemyShots;
-    return shots.some((shot) => shot.x === x && shot.y === y);
-  },
-
-  isShipDestroyed: (shipId: number, isPlayerShot: boolean) => {
-    const ships = isPlayerShot ? get().enemyShips : get().playerShips;
-    const shots = isPlayerShot ? get().playerShots : get().enemyShots;
-
-    if (shipId >= ships.length) return false;
-
-    const ship = ships[shipId];
-    const shipSize = GAME_CONSTANTS.SHIPS.SIZES[ship.variant];
-
-    const shipCells: [number, number][] = [];
-    if (ship.orientation === "horizontal") {
-      for (let j = 0; j < shipSize; j++) {
-        shipCells.push([ship.coords[0] + j, ship.coords[1]]);
-      }
-    } else {
-      for (let j = 0; j < shipSize; j++) {
-        shipCells.push([ship.coords[0], ship.coords[1] + j]);
-      }
-    }
-
-    const hitCells = shots.filter((shot) => shot.hit && shot.shipId === shipId);
-    return hitCells.length === shipCells.length;
-  },
-
-  checkGameOver: () => {
-    const { playerShips, enemyShips } = get();
-
-    const areAllPlayerShipsDestroyed = playerShips.every((_, shipId) =>
-      get().isShipDestroyed(shipId, false)
-    );
-
-    const areAllEnemyShipsDestroyed = enemyShips.every((_, shipId) =>
-      get().isShipDestroyed(shipId, true)
-    );
-
-    if (areAllPlayerShipsDestroyed || areAllEnemyShipsDestroyed) {
-      const winner: Winner = areAllPlayerShipsDestroyed ? "enemy" : "player";
-      set({
-        isGameOver: true,
-        winner,
-      });
-    }
-  },
-
-  resetGame: () => {
-    set({
-      currentTurn: "PLAYER_TURN",
-      isPlayerTurn: true,
-      isEnemyTurn: false,
-      playerShips: [],
-      enemyShips: [],
-      playerShots: [],
-      enemyShots: [],
-      isGameOver: false,
-      winner: null,
+export const useGameStore = create<GameState>((set, get) => {
+  // Crear la instancia del engine con callbacks para sincronizar
+  const engine = new GameEngine(
+    {
       boardWidth: GAME_CONSTANTS.BOARD.DEFAULT_WIDTH,
       boardHeight: GAME_CONSTANTS.BOARD.DEFAULT_HEIGHT,
-      shotCount: 0,
-    });
-  },
+    },
+    {
+      // Callback para sincronizar automáticamente el estado
+      onStateChange: () => {
+        set(syncStateFromEngine(get()._engine));
+      },
+    }
+  );
 
-  initializeGame: (gameSetup: GameSetup) => {
-    const newState = {
-      playerShips: gameSetup.playerShips,
-      enemyShips: gameSetup.enemyShips,
-      boardWidth: gameSetup.config.boardWidth,
-      boardHeight: gameSetup.config.boardHeight,
-      currentTurn: gameSetup.initialTurn,
-      isPlayerTurn: gameSetup.initialTurn === "PLAYER_TURN",
-      isEnemyTurn: gameSetup.initialTurn === "ENEMY_TURN",
-      playerShots: [],
-      enemyShots: [],
-      isGameOver: false,
-      winner: null,
-      shotCount: 0,
-    };
+  return {
+    _engine: engine,
+    
+    // Estado inicial
+    currentTurn: "PLAYER_TURN",
+    isPlayerTurn: true,
+    isEnemyTurn: false,
+    playerShips: [],
+    enemyShips: [],
+    playerShots: [],
+    enemyShots: [],
+    isGameOver: false,
+    winner: null,
+    boardWidth: GAME_CONSTANTS.BOARD.DEFAULT_WIDTH,
+    boardHeight: GAME_CONSTANTS.BOARD.DEFAULT_HEIGHT,
+    shotCount: 0,
 
-    set(newState);
-  },
-}));
+    setPlayerTurn: () => {
+      get()._engine.setPlayerTurn();
+    },
+
+    setEnemyTurn: () => {
+      get()._engine.setEnemyTurn();
+    },
+
+    toggleTurn: () => {
+      get()._engine.toggleTurn();
+    },
+
+    setEnemyShots: (shots: Shot[]) => {
+      get()._engine.setEnemyShots(shots);
+    },
+
+    setPlayerShots: (shots: Shot[]) => {
+      get()._engine.setPlayerShots(shots);
+    },
+
+    setPlayerShips: (ships: GameShip[]) => {
+      get()._engine.setPlayerShips(ships);
+    },
+
+    setEnemyShips: (ships: GameShip[]) => {
+      get()._engine.setEnemyShips(ships);
+    },
+
+    setBoardDimensions: (width: number, height: number) => {
+      get()._engine.setBoardDimensions(width, height);
+    },
+
+    addPlayerShot: (shot: Shot) => {
+      get()._engine.executeShot(shot.x, shot.y, true);
+      // El estado ya fue sincronizado por el callback
+    },
+
+    addEnemyShot: (shot: Shot) => {
+      get()._engine.executeShot(shot.x, shot.y, false);
+      // El estado ya fue sincronizado por el callback
+    },
+
+    incrementShotCount: () => {
+      // Este método ya no es necesario, el engine maneja el conteo
+      // Mantenido por compatibilidad
+    },
+
+    getShotCount: () => {
+      return get()._engine.getShotCount();
+    },
+
+    checkShot: (posX: number, posY: number, isPlayerShot: boolean) => {
+      const x = isPlayerShot
+        ? posX
+        : GAME_CONSTANTS.BOARD.DEFAULT_WIDTH - 1 - posX;
+      const y = isPlayerShot
+        ? posY
+        : GAME_CONSTANTS.BOARD.DEFAULT_HEIGHT - 1 - posY;
+
+      const result = get()._engine.checkShot(x, y, isPlayerShot);
+      
+      const ships = isPlayerShot ? get().enemyShips : get().playerShips;
+      const variant = result.shipId >= 0 && result.shipId < ships.length
+        ? ships[result.shipId].variant
+        : "small";
+
+      return { 
+        hit: result.hit, 
+        shipId: result.shipId >= 0 ? result.shipId : undefined,
+        variant: variant as ShipVariant
+      };
+    },
+
+    isCellShot: (x: number, y: number, isPlayerShot: boolean) => {
+      return get()._engine.isCellShot(x, y, isPlayerShot);
+    },
+
+    isShipDestroyed: (shipId: number, isPlayerShot: boolean) => {
+      return get()._engine.isShipDestroyed(shipId, isPlayerShot);
+    },
+
+    checkGameOver: () => {
+      // El engine maneja esto automáticamente en executeShot
+      // Mantenido por compatibilidad
+    },
+
+    resetGame: () => {
+      get()._engine.resetGame();
+    },
+
+    initializeGame: (gameSetup: GameSetup) => {
+      const { _engine } = get();
+      
+      _engine.setBoardDimensions(
+        gameSetup.config.boardWidth || GAME_CONSTANTS.BOARD.DEFAULT_WIDTH,
+        gameSetup.config.boardHeight || GAME_CONSTANTS.BOARD.DEFAULT_HEIGHT
+      );
+      
+      _engine.initializeGame(
+        gameSetup.playerShips,
+        gameSetup.enemyShips,
+        gameSetup.initialTurn
+      );
+    },
+  };
+});

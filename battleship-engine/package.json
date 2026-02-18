@@ -1,0 +1,24 @@
+{
+  "name": "battleship-engine",
+  "version": "1.0.0",
+  "description": "Pure JavaScript/TypeScript battleship game engine",
+  "main": "src/engine/index.ts",
+  "types": "src/engine/index.ts",
+  "scripts": {
+    "dev": "ts-node src/engine/examples.ts",
+    "build": "tsc",
+    "build:demo": "tsc && node scripts/build-demo.js"
+  },
+  "keywords": [
+    "battleship",
+    "game-engine",
+    "typescript",
+    "game-logic"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0"
+  }
+}
