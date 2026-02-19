@@ -1,19 +1,14 @@
 import { useEffect } from "preact/hooks";
 
 import useMatch from "./core-react/hooks/useMatch";
-import { AIPlayer } from "./core/engine";
+import { runMultipleSimulations } from "./examples/simulationExamples";
+import { AIPlayer } from "./simulations/automata";
 
 const boardSize = { width: 5, height: 5 };
 const App = () => {
-  const {gameState, initializeNewGame, match, engine} = useMatch({
+  const { gameState, initializeNewGame, match, engine } = useMatch({
     config: { boardWidth: boardSize.width, boardHeight: boardSize.height },
-    callbacks: {
-      onGameOver: (winner) => {
-        alert(`¡Juego terminado! Ganador: ${winner === "player" ? "Jugador" : "Enemigo"}`);
-      },
-    }
   });
-
 
   const executeAIShot = (isPlayerTurn?: boolean) => {
     if (!match || !gameState) return;
@@ -48,10 +43,14 @@ const App = () => {
       executeAIShot();
     }
 
-    if(gameState?.isPlayerTurn){
-       executeAIShot(true);
+    if (gameState?.isPlayerTurn) {
+      executeAIShot(true);
     }
   }, [gameState?.shotCount]);
+
+  useEffect(() => {
+    runMultipleSimulations(10);
+  }, []);
 
   return (
     <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
@@ -109,13 +108,11 @@ const App = () => {
                       justifyContent: "center",
                       fontSize: "20px",
                       cursor:
-                        gameState?.isGameOver ||
-                        !gameState?.isPlayerTurn
+                        gameState?.isGameOver || !gameState?.isPlayerTurn
                           ? "not-allowed"
                           : "pointer",
                       opacity:
-                        gameState?.isGameOver ||
-                        ! gameState?.isPlayerTurn
+                        gameState?.isGameOver || !gameState?.isPlayerTurn
                           ? 0.6
                           : 1,
                     }}

@@ -394,7 +394,6 @@ export class GameEngine {
    * @param shots - Array of player shots
    */
   public setPlayerShots(shots: Shot[]): void {
-    // Reconstruir Map de disparos
     this.playerShotsMap.clear();
     this.playerShipHits.clear();
     shots.forEach((shot) => {
@@ -410,11 +409,9 @@ export class GameEngine {
 
   /**
    * Set all enemy shots (useful for replay)
-   * 🚀 OPTIMIZADO: Reconstruye Map directamente
    * @param shots - Array of enemy shots
    */
   public setEnemyShots(shots: Shot[]): void {
-    // Reconstruir Map de disparos
     this.enemyShotsMap.clear();
     this.enemyShipHits.clear();
     shots.forEach((shot) => {

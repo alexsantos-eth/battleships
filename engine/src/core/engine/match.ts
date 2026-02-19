@@ -210,7 +210,11 @@ export class Match {
    * @param isPlayerShot - True to check player shots, false for enemy shots
    * @returns Shot object if found, undefined otherwise
    */
-  public getShotAtPosition(x: number, y: number, isPlayerShot: boolean): Shot | undefined {
+  public getShotAtPosition(
+    x: number,
+    y: number,
+    isPlayerShot: boolean,
+  ): Shot | undefined {
     return this.engine.getShotAtPosition(x, y, isPlayerShot);
   }
 
@@ -221,7 +225,11 @@ export class Match {
    * @param isPlayerShips - True to check player ships, false for enemy ships
    * @returns True if there's a ship at that position
    */
-  public hasShipAtPosition(x: number, y: number, isPlayerShips: boolean): boolean {
+  public hasShipAtPosition(
+    x: number,
+    y: number,
+    isPlayerShips: boolean,
+  ): boolean {
     return this.engine.hasShipAtPosition(x, y, isPlayerShips);
   }
 }

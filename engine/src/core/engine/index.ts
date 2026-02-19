@@ -4,7 +4,7 @@ export type { GameEngineState, ShotResult, GameEngineCallbacks } from "./logic";
 export { Match } from "./match";
 export type { MatchShotResult, MatchCallbacks } from "./match";
 
-export { AIPlayer, SmartAIPlayer } from "../simulations/automata";
+export type { SimulationResult } from "../../examples/runSimulation";
 
 export { GameInitializer } from "../manager";
 export type { GameSetup } from "../manager";

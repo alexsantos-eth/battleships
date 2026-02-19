@@ -20,10 +20,10 @@ export interface GameSetup {
 
 /**
  * Game Initializer
- * 
+ *
  * Helps generate initial game values from a simple configuration.
  * Handles validation, default values, and ship generation.
- * 
+ *
  * @example
  * ```typescript
  * const initializer = new GameInitializer({
@@ -31,7 +31,7 @@ export interface GameSetup {
  *   boardHeight: 10,
  *   shipCounts: { small: 1, medium: 2, large: 1, xlarge: 1 }
  * });
- * 
+ *
  * const setup = initializer.initializeGame();
  * // setup contains: playerShips, enemyShips, initialTurn, config
  * ```
@@ -61,7 +61,7 @@ export class GameInitializer {
       boardWidth > GAME_CONSTANTS.BOARD.MAX_SIZE
     ) {
       throw new Error(
-        `Board width must be between ${GAME_CONSTANTS.BOARD.MIN_SIZE} and ${GAME_CONSTANTS.BOARD.MAX_SIZE}`
+        `Board width must be between ${GAME_CONSTANTS.BOARD.MIN_SIZE} and ${GAME_CONSTANTS.BOARD.MAX_SIZE}`,
       );
     }
 
@@ -70,19 +70,19 @@ export class GameInitializer {
       boardHeight > GAME_CONSTANTS.BOARD.MAX_SIZE
     ) {
       throw new Error(
-        `Board height must be between ${GAME_CONSTANTS.BOARD.MIN_SIZE} and ${GAME_CONSTANTS.BOARD.MAX_SIZE}`
+        `Board height must be between ${GAME_CONSTANTS.BOARD.MIN_SIZE} and ${GAME_CONSTANTS.BOARD.MAX_SIZE}`,
       );
     }
 
     const totalShips = Object.values(shipCounts).reduce(
       (sum, count) => sum + count,
-      0
+      0,
     );
     const maxPossibleShips = Math.floor((boardWidth * boardHeight) / 4);
 
     if (totalShips > maxPossibleShips) {
       throw new Error(
-        `Too many ships for board size. Maximum possible: ${maxPossibleShips}`
+        `Too many ships for board size. Maximum possible: ${maxPossibleShips}`,
       );
     }
   }
@@ -122,19 +122,19 @@ export class GameInitializer {
 
   /**
    * Initialize a new game with all required values
-   * 
+   *
    * @param startTurn - Override initial turn ('player', 'enemy', or 'random')
    * @param ships - Provide custom ship placements (optional, will generate if not provided)
    * @returns Complete game setup ready to use
-   * 
+   *
    * @example
    * ```typescript
    * // Simple initialization
    * const setup = initializer.initializeGame();
-   * 
+   *
    * // With custom turn
    * const setup = initializer.initializeGame('player');
-   * 
+   *
    * // With custom ships
    * const customShips = {
    *   playerShips: generateShips(config),
@@ -145,7 +145,7 @@ export class GameInitializer {
    */
   public initializeGame(
     startTurn?: PlayerName | "random",
-    ships?: { playerShips: GameShip[]; enemyShips: GameShip[] }
+    ships?: { playerShips: GameShip[]; enemyShips: GameShip[] },
   ): GameSetup {
     const playerShips = ships?.playerShips ?? generateShips(this.config);
     const enemyShips = ships?.enemyShips ?? generateShips(this.config);
@@ -154,8 +154,8 @@ export class GameInitializer {
       startTurn === "player"
         ? "PLAYER_TURN"
         : startTurn === "enemy"
-        ? "ENEMY_TURN"
-        : undefined;
+          ? "ENEMY_TURN"
+          : undefined;
     let initialTurn: GameTurn;
 
     if (!nexTurn) {

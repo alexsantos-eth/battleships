@@ -6,7 +6,7 @@ export function getShipCells(
   x: number,
   y: number,
   size: number,
-  orientation: "horizontal" | "vertical"
+  orientation: "horizontal" | "vertical",
 ): [number, number][] {
   const cells: [number, number][] = [];
 
@@ -38,7 +38,7 @@ export function isValidShipPlacement(
   ship: GameShip,
   existingShips: GameShip[],
   boardWidth: number,
-  boardHeight: number
+  boardHeight: number,
 ): boolean {
   const shipCells = getShipCellsFromShip(ship);
 
@@ -55,7 +55,7 @@ export function isValidShipPlacement(
       for (const [existingX, existingY] of existingCells) {
         const distance = Math.max(
           Math.abs(shipX - existingX),
-          Math.abs(shipY - existingY)
+          Math.abs(shipY - existingY),
         );
         if (distance < GAME_CONSTANTS.SHIPS.MIN_DISTANCE) {
           return false;
@@ -71,7 +71,7 @@ export function generateShip(
   variant: ShipVariant,
   boardWidth: number,
   boardHeight: number,
-  existingShips: GameShip[]
+  existingShips: GameShip[],
 ): GameShip | null {
   const maxAttempts = GAME_CONSTANTS.SHIPS.MAX_PLACEMENT_ATTEMPTS;
   const shipSize = getShipSize(variant);
@@ -92,14 +92,14 @@ export function generateShip(
         orientation,
         quadrantPreferences,
         boardWidth,
-        boardHeight
+        boardHeight,
       );
     } else {
       coords = generateRandomPosition(
         shipSize,
         orientation,
         boardWidth,
-        boardHeight
+        boardHeight,
       );
     }
 
@@ -142,7 +142,7 @@ export function generatePositionInPreferredQuadrant(
   orientation: "horizontal" | "vertical",
   quadrantPreferences: number[][],
   boardWidth: number,
-  boardHeight: number
+  boardHeight: number,
 ): [number, number] {
   const targetQuadrant =
     quadrantPreferences[Math.floor(Math.random() * quadrantPreferences.length)];
@@ -151,7 +151,7 @@ export function generatePositionInPreferredQuadrant(
 
   const quadrantSize = Math.floor(
     Math.max(boardWidth, boardHeight) /
-    GAME_CONSTANTS.GAME_LOGIC.SHIP_GENERATION.QUADRANT_SIZE_DIVISOR
+      GAME_CONSTANTS.GAME_LOGIC.SHIP_GENERATION.QUADRANT_SIZE_DIVISOR,
   );
   const xMin = Math.floor((quadrant % 2) * quadrantSize);
   const yMin = Math.floor(Math.floor(quadrant / 2) * quadrantSize);
@@ -163,14 +163,14 @@ export function generatePositionInPreferredQuadrant(
   if (orientation === "horizontal") {
     x =
       Math.floor(
-        Math.random() * (Math.min(xMax, boardWidth - shipSize) - xMin + 1)
+        Math.random() * (Math.min(xMax, boardWidth - shipSize) - xMin + 1),
       ) + xMin;
     y = Math.floor(Math.random() * (yMax - yMin + 1)) + yMin;
   } else {
     x = Math.floor(Math.random() * (xMax - xMin + 1)) + xMin;
     y =
       Math.floor(
-        Math.random() * (Math.min(yMax, boardHeight - shipSize) - yMin + 1)
+        Math.random() * (Math.min(yMax, boardHeight - shipSize) - yMin + 1),
       ) + yMin;
   }
 
@@ -181,7 +181,7 @@ export function generateRandomPosition(
   shipSize: number,
   orientation: "horizontal" | "vertical",
   boardWidth: number,
-  boardHeight: number
+  boardHeight: number,
 ): [number, number] {
   let x: number, y: number;
 
@@ -202,13 +202,13 @@ export function generateShips(config: Partial<GameConfig>): GameShip[] {
 
   for (const variant of shipVariants) {
     const count = config.shipCounts?.[variant] ?? 0;
-    
+
     for (let i = 0; i < count; i++) {
       const ship = generateShip(
         variant,
         config.boardWidth ?? GAME_CONSTANTS.BOARD.DEFAULT_WIDTH,
         config.boardHeight ?? GAME_CONSTANTS.BOARD.DEFAULT_HEIGHT,
-        ships
+        ships,
       );
       if (ship) {
         ships.push(ship);
@@ -216,7 +216,7 @@ export function generateShips(config: Partial<GameConfig>): GameShip[] {
         console.warn(
           `Failed to place ${variant} ship ${
             i + 1
-          }/${count}. Board may be too crowded.`
+          }/${count}. Board may be too crowded.`,
         );
       }
     }

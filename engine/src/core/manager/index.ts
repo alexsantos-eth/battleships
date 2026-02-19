@@ -1,6 +1,6 @@
 /**
  * Manager Module
- * 
+ *
  * Utilities for game initialization and setup management
  */
 
