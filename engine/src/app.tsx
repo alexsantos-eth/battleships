@@ -7,6 +7,11 @@ const boardSize = { width: 5, height: 5 };
 const App = () => {
   const {gameState, initializeNewGame, match, engine} = useMatch({
     config: { boardWidth: boardSize.width, boardHeight: boardSize.height },
+    callbacks: {
+      onGameOver: (winner) => {
+        alert(`¡Juego terminado! Ganador: ${winner === "player" ? "Jugador" : "Enemigo"}`);
+      },
+    }
   });
 
 

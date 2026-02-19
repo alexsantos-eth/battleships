@@ -7,10 +7,12 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
+    "benchmark": "tsx src/core/benchmarks/optimized-benchmark.ts",
     "benchmark:current": "tsx src/core/benchmarks/current-performance.ts",
     "benchmark:compare": "tsx src/core/benchmarks/comparative-benchmark.ts",
-    "benchmark:full": "tsx src/core/benchmarks/comparative-benchmark.ts --full",
+    "benchmark:full": "tsx src/core/benchmarks/optimized-benchmark.ts --full",
     "test:equivalence": "tsx src/core/tests/equivalence-test.ts",
+    "test:maps": "tsx src/core/tests/maps-verification.ts",
     "example:usage": "tsx src/core/examples/usage-comparison.ts"
   },
   "dependencies": {

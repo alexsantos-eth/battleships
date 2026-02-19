@@ -3,36 +3,57 @@ import { getShipCellsFromShip } from "../tools/ship/calculations";
 import type { GameShip, Shot, Winner, GameTurn } from "../types/common";
 import type { GameConfig } from "../types/config";
 
+type PositionKey = string;
+const posKey = (x: number, y: number): PositionKey => `${x},${y}`;
+
 export class GameEngine {
   // Game state
   private currentTurn: GameTurn;
   private playerShips: GameShip[];
   private enemyShips: GameShip[];
-  private playerShots: Shot[];
-  private enemyShots: Shot[];
   private isGameOver: boolean;
   private winner: Winner;
   private boardWidth: number;
   private boardHeight: number;
   private shotCount: number;
-  
+
+  private playerShotsMap: Map<PositionKey, Shot>;
+  private enemyShotsMap: Map<PositionKey, Shot>;
+  private playerShipPositions: Map<PositionKey, number>;
+  private enemyShipPositions: Map<PositionKey, number>;
+  private playerShipHits: Map<number, number>;
+  private enemyShipHits: Map<number, number>;
+  private playerShipSizes: Map<number, number>;
+  private enemyShipSizes: Map<number, number>;
+
   // Optional callbacks to observe changes
   private onStateChange?: (state: GameEngineState) => void;
   private onTurnChange?: (turn: GameTurn) => void;
   private onShot?: (shot: Shot, isPlayerShot: boolean) => void;
   private onGameOver?: (winner: Winner) => void;
 
-  constructor(config: Partial<GameConfig> = {}, callbacks?: GameEngineCallbacks) {
+  constructor(
+    config: Partial<GameConfig> = {},
+    callbacks?: GameEngineCallbacks,
+  ) {
     this.boardWidth = config.boardWidth ?? GAME_CONSTANTS.BOARD.DEFAULT_WIDTH;
-    this.boardHeight = config.boardHeight ?? GAME_CONSTANTS.BOARD.DEFAULT_HEIGHT;
+    this.boardHeight =
+      config.boardHeight ?? GAME_CONSTANTS.BOARD.DEFAULT_HEIGHT;
     this.currentTurn = "PLAYER_TURN";
     this.playerShips = [];
     this.enemyShips = [];
-    this.playerShots = [];
-    this.enemyShots = [];
     this.isGameOver = false;
     this.winner = null;
     this.shotCount = 0;
+
+    this.playerShotsMap = new Map();
+    this.enemyShotsMap = new Map();
+    this.playerShipPositions = new Map();
+    this.enemyShipPositions = new Map();
+    this.playerShipHits = new Map();
+    this.enemyShipHits = new Map();
+    this.playerShipSizes = new Map();
+    this.enemyShipSizes = new Map();
 
     // Optional callbacks
     this.onStateChange = callbacks?.onStateChange;
@@ -47,15 +68,37 @@ export class GameEngine {
    * @param enemyShips - Array of enemy's ships
    * @param initialTurn - Which player starts (defaults to PLAYER_TURN)
    */
-  public initializeGame(playerShips: GameShip[], enemyShips: GameShip[], initialTurn: GameTurn = "PLAYER_TURN"): void {
+  public initializeGame(
+    playerShips: GameShip[],
+    enemyShips: GameShip[],
+    initialTurn: GameTurn = "PLAYER_TURN",
+  ): void {
     this.playerShips = playerShips;
     this.enemyShips = enemyShips;
     this.currentTurn = initialTurn;
-    this.playerShots = [];
-    this.enemyShots = [];
     this.isGameOver = false;
     this.winner = null;
     this.shotCount = 0;
+
+    this.playerShotsMap.clear();
+    this.enemyShotsMap.clear();
+    this.playerShipPositions.clear();
+    this.enemyShipPositions.clear();
+    this.playerShipHits.clear();
+    this.enemyShipHits.clear();
+    this.playerShipSizes.clear();
+    this.enemyShipSizes.clear();
+
+    this.cacheShipPositions(
+      playerShips,
+      this.playerShipPositions,
+      this.playerShipSizes,
+    );
+    this.cacheShipPositions(
+      enemyShips,
+      this.enemyShipPositions,
+      this.enemyShipSizes,
+    );
 
     this.notifyStateChange();
   }
@@ -67,11 +110,18 @@ export class GameEngine {
     this.currentTurn = "PLAYER_TURN";
     this.playerShips = [];
     this.enemyShips = [];
-    this.playerShots = [];
-    this.enemyShots = [];
     this.isGameOver = false;
     this.winner = null;
     this.shotCount = 0;
+
+    this.playerShotsMap.clear();
+    this.enemyShotsMap.clear();
+    this.playerShipPositions.clear();
+    this.enemyShipPositions.clear();
+    this.playerShipHits.clear();
+    this.enemyShipHits.clear();
+    this.playerShipSizes.clear();
+    this.enemyShipSizes.clear();
 
     this.notifyStateChange();
   }
@@ -158,7 +208,7 @@ export class GameEngine {
     }
 
     const result = this.checkShot(x, y, isPlayerShot);
-    
+
     const shot: Shot = {
       x,
       y,
@@ -166,19 +216,24 @@ export class GameEngine {
       shipId: result.shipId >= 0 ? result.shipId : undefined,
     };
 
-    if (isPlayerShot) {
-      this.playerShots.push(shot);
-    } else {
-      this.enemyShots.push(shot);
+    const key = posKey(x, y);
+    const shotsMap = isPlayerShot ? this.playerShotsMap : this.enemyShotsMap;
+    shotsMap.set(key, shot);
+
+    if (result.hit && result.shipId >= 0) {
+      const hitsMap = isPlayerShot ? this.enemyShipHits : this.playerShipHits;
+      const currentHits = (hitsMap.get(result.shipId) || 0) + 1;
+      hitsMap.set(result.shipId, currentHits);
     }
 
     this.shotCount++;
     this.onShot?.(shot, isPlayerShot);
     this.checkGameOver();
 
-    const shipDestroyed = result.hit && result.shipId >= 0 
-      ? this.isShipDestroyed(result.shipId, isPlayerShot)
-      : false;
+    const shipDestroyed =
+      result.hit && result.shipId >= 0
+        ? this.isShipDestroyed(result.shipId, isPlayerShot)
+        : false;
 
     this.notifyStateChange();
 
@@ -199,18 +254,19 @@ export class GameEngine {
    * @param isPlayerShot - True if checking enemy ships, false if checking player ships
    * @returns Object with hit status and ship ID if hit
    */
-  public checkShot(x: number, y: number, isPlayerShot: boolean): { hit: boolean; shipId: number } {
-    const ships = isPlayerShot ? this.enemyShips : this.playerShips;
+  public checkShot(
+    x: number,
+    y: number,
+    isPlayerShot: boolean,
+  ): { hit: boolean; shipId: number } {
+    const shipPositions = isPlayerShot
+      ? this.enemyShipPositions
+      : this.playerShipPositions;
+    const key = posKey(x, y);
+    const shipId = shipPositions.get(key);
 
-    for (let i = 0; i < ships.length; i++) {
-      const ship = ships[i];
-      const shipCells = getShipCellsFromShip(ship);
-
-      for (const [cellX, cellY] of shipCells) {
-        if (cellX === x && cellY === y) {
-          return { hit: true, shipId: i };
-        }
-      }
+    if (shipId !== undefined) {
+      return { hit: true, shipId };
     }
 
     return { hit: false, shipId: -1 };
@@ -224,8 +280,8 @@ export class GameEngine {
    * @returns True if cell was already shot
    */
   public isCellShot(x: number, y: number, isPlayerShot: boolean): boolean {
-    const shots = isPlayerShot ? this.playerShots : this.enemyShots;
-    return shots.some((shot) => shot.x === x && shot.y === y);
+    const shotsMap = isPlayerShot ? this.playerShotsMap : this.enemyShotsMap;
+    return shotsMap.has(posKey(x, y));
   }
 
   /**
@@ -236,15 +292,15 @@ export class GameEngine {
    */
   public isShipDestroyed(shipId: number, isPlayerShot: boolean): boolean {
     const ships = isPlayerShot ? this.enemyShips : this.playerShips;
-    const shots = isPlayerShot ? this.playerShots : this.enemyShots;
-
     if (shipId >= ships.length) return false;
 
-    const ship = ships[shipId];
-    const shipCells = getShipCellsFromShip(ship);
-    const hitCells = shots.filter((shot) => shot.hit && shot.shipId === shipId);
+    const hitsMap = isPlayerShot ? this.enemyShipHits : this.playerShipHits;
+    const sizesMap = isPlayerShot ? this.enemyShipSizes : this.playerShipSizes;
 
-    return hitCells.length === shipCells.length;
+    const hits = hitsMap.get(shipId) || 0;
+    const size = sizesMap.get(shipId);
+
+    return size !== undefined && hits === size;
   }
 
   /**
@@ -254,13 +310,15 @@ export class GameEngine {
    */
   private areAllShipsDestroyed(isPlayerShips: boolean): boolean {
     const ships = isPlayerShips ? this.playerShips : this.enemyShips;
-    
+
     // If no ships, cannot be "all destroyed" - game shouldn't have started
     if (ships.length === 0) {
       return false;
     }
-    
-    return ships.every((_, shipId) => this.isShipDestroyed(shipId, !isPlayerShips));
+
+    return ships.every((_, shipId) =>
+      this.isShipDestroyed(shipId, !isPlayerShips),
+    );
   }
 
   /**
@@ -281,11 +339,37 @@ export class GameEngine {
   }
 
   /**
+   * Cache ship positions for O(1) lookup
+   * @private
+   */
+  private cacheShipPositions(
+    ships: GameShip[],
+    positionsMap: Map<PositionKey, number>,
+    sizesMap: Map<number, number>,
+  ): void {
+    ships.forEach((ship, shipId) => {
+      const cells = getShipCellsFromShip(ship);
+      sizesMap.set(shipId, cells.length);
+
+      cells.forEach(([x, y]) => {
+        positionsMap.set(posKey(x, y), shipId);
+      });
+    });
+  }
+
+  /**
    * Set player's ships
    * @param ships - Array of player ships
    */
   public setPlayerShips(ships: GameShip[]): void {
     this.playerShips = ships;
+    this.playerShipPositions.clear();
+    this.playerShipSizes.clear();
+    this.cacheShipPositions(
+      ships,
+      this.playerShipPositions,
+      this.playerShipSizes,
+    );
     this.notifyStateChange();
   }
 
@@ -295,6 +379,13 @@ export class GameEngine {
    */
   public setEnemyShips(ships: GameShip[]): void {
     this.enemyShips = ships;
+    this.enemyShipPositions.clear();
+    this.enemyShipSizes.clear();
+    this.cacheShipPositions(
+      ships,
+      this.enemyShipPositions,
+      this.enemyShipSizes,
+    );
     this.notifyStateChange();
   }
 
@@ -303,16 +394,37 @@ export class GameEngine {
    * @param shots - Array of player shots
    */
   public setPlayerShots(shots: Shot[]): void {
-    this.playerShots = shots;
+    // Reconstruir Map de disparos
+    this.playerShotsMap.clear();
+    this.playerShipHits.clear();
+    shots.forEach((shot) => {
+      this.playerShotsMap.set(posKey(shot.x, shot.y), shot);
+      if (shot.hit && shot.shipId !== undefined) {
+        const currentHits = this.playerShipHits.get(shot.shipId) || 0;
+        this.playerShipHits.set(shot.shipId, currentHits + 1);
+      }
+    });
+    this.shotCount = this.playerShotsMap.size + this.enemyShotsMap.size;
     this.notifyStateChange();
   }
 
   /**
    * Set all enemy shots (useful for replay)
+   * 🚀 OPTIMIZADO: Reconstruye Map directamente
    * @param shots - Array of enemy shots
    */
   public setEnemyShots(shots: Shot[]): void {
-    this.enemyShots = shots;
+    // Reconstruir Map de disparos
+    this.enemyShotsMap.clear();
+    this.enemyShipHits.clear();
+    shots.forEach((shot) => {
+      this.enemyShotsMap.set(posKey(shot.x, shot.y), shot);
+      if (shot.hit && shot.shipId !== undefined) {
+        const currentHits = this.enemyShipHits.get(shot.shipId) || 0;
+        this.enemyShipHits.set(shot.shipId, currentHits + 1);
+      }
+    });
+    this.shotCount = this.playerShotsMap.size + this.enemyShotsMap.size;
     this.notifyStateChange();
   }
 
@@ -327,8 +439,8 @@ export class GameEngine {
       isEnemyTurn: this.isEnemyTurn(),
       playerShips: [...this.playerShips],
       enemyShips: [...this.enemyShips],
-      playerShots: [...this.playerShots],
-      enemyShots: [...this.enemyShots],
+      playerShots: Array.from(this.playerShotsMap.values()),
+      enemyShots: Array.from(this.enemyShotsMap.values()),
       isGameOver: this.isGameOver,
       winner: this.winner,
       boardWidth: this.boardWidth,
@@ -355,18 +467,20 @@ export class GameEngine {
 
   /**
    * Get player's shots
-   * @returns Copy of player shots array
+   * 🚀 OPTIMIZADO: Genera array bajo demanda desde Map
+   * @returns Array of player shots
    */
   public getPlayerShots(): Shot[] {
-    return [...this.playerShots];
+    return Array.from(this.playerShotsMap.values());
   }
 
   /**
    * Get enemy's shots
-   * @returns Copy of enemy shots array
+   * 🚀 OPTIMIZADO: Genera array bajo demanda desde Map
+   * @returns Array of enemy shots
    */
   public getEnemyShots(): Shot[] {
-    return [...this.enemyShots];
+    return Array.from(this.enemyShotsMap.values());
   }
 
   /**
@@ -410,31 +524,32 @@ export class GameEngine {
    * @param isPlayerShot - True to check player shots, false for enemy shots
    * @returns Shot object if found, undefined otherwise
    */
-  public getShotAtPosition(x: number, y: number, isPlayerShot: boolean): Shot | undefined {
-    const shots = isPlayerShot ? this.playerShots : this.enemyShots;
-    return shots.find(shot => shot.x === x && shot.y === y);
+  public getShotAtPosition(
+    x: number,
+    y: number,
+    isPlayerShot: boolean,
+  ): Shot | undefined {
+    const shotsMap = isPlayerShot ? this.playerShotsMap : this.enemyShotsMap;
+    return shotsMap.get(posKey(x, y));
   }
 
   /**
    * Check if there's a ship at specific coordinates
+   * 🚀 OPTIMIZADO: Usa Map para O(1) lookup
    * @param x - X coordinate
    * @param y - Y coordinate
    * @param isPlayerShips - True to check player ships, false for enemy ships
    * @returns True if there's a ship at that position
    */
-  public hasShipAtPosition(x: number, y: number, isPlayerShips: boolean): boolean {
-    const ships = isPlayerShips ? this.playerShips : this.enemyShips;
-    
-    for (const ship of ships) {
-      const shipCells = getShipCellsFromShip(ship);
-      for (const [cellX, cellY] of shipCells) {
-        if (cellX === x && cellY === y) {
-          return true;
-        }
-      }
-    }
-    
-    return false;
+  public hasShipAtPosition(
+    x: number,
+    y: number,
+    isPlayerShips: boolean,
+  ): boolean {
+    const positions = isPlayerShips
+      ? this.playerShipPositions
+      : this.enemyShipPositions;
+    return positions.has(posKey(x, y));
   }
 
   /**

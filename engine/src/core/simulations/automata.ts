@@ -5,6 +5,8 @@ import type { GameEngine } from "../engine/logic";
  * 
  * This class implements AI logic that plays automatically
  * without depending on React hooks or UI timeouts.
+ * 
+ * 🚀 OPTIMIZADO: Mantiene lista de posiciones disponibles y la actualiza incrementalmente
  */
 export class AIPlayer {
   private engine: GameEngine;
@@ -25,6 +27,7 @@ export class AIPlayer {
 
   /**
    * Update available positions to shoot
+   * 🚀 OPTIMIZADO: Reconstruye solo cuando es necesario, el engine ahora usa O(1) lookups
    * @private
    */
   private updateAvailablePositions(): void {
@@ -33,6 +36,7 @@ export class AIPlayer {
 
     for (let x = 0; x < width; x++) {
       for (let y = 0; y < height; y++) {
+        // 🚀 El engine ahora usa Set para O(1) lookup en vez de O(n)
         if (!this.engine.isCellShot(x, y, this.isPlayer)) {
           this.availablePositions.push([x, y]);
         }
