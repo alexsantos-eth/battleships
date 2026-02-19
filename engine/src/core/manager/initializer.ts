@@ -18,6 +18,8 @@ export interface GameSetup {
   config: Partial<GameConfig>;
 }
 
+export type GAME_INITIAL_TURN = PlayerName | "random";
+
 /**
  * Game Initializer
  *
@@ -144,7 +146,7 @@ export class GameInitializer {
    * ```
    */
   public initializeGame(
-    startTurn?: PlayerName | "random",
+    startTurn?: GAME_INITIAL_TURN,
     ships?: { playerShips: GameShip[]; enemyShips: GameShip[] },
   ): GameSetup {
     const playerShips = ships?.playerShips ?? generateShips(this.config);

@@ -464,7 +464,6 @@ export class GameEngine {
 
   /**
    * Get player's shots
-   * 🚀 OPTIMIZADO: Genera array bajo demanda desde Map
    * @returns Array of player shots
    */
   public getPlayerShots(): Shot[] {
@@ -473,7 +472,6 @@ export class GameEngine {
 
   /**
    * Get enemy's shots
-   * 🚀 OPTIMIZADO: Genera array bajo demanda desde Map
    * @returns Array of enemy shots
    */
   public getEnemyShots(): Shot[] {
@@ -532,7 +530,6 @@ export class GameEngine {
 
   /**
    * Check if there's a ship at specific coordinates
-   * 🚀 OPTIMIZADO: Usa Map para O(1) lookup
    * @param x - X coordinate
    * @param y - Y coordinate
    * @param isPlayerShips - True to check player ships, false for enemy ships

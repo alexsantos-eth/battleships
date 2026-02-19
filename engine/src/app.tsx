@@ -4,11 +4,20 @@ import useMatch from "./core-react/hooks/useMatch";
 import { runMultipleSimulations } from "./examples/simulationExamples";
 import { AIPlayer } from "./simulations/automata";
 
-const boardSize = { width: 5, height: 5 };
 const App = () => {
-  const { gameState, initializeNewGame, match, engine } = useMatch({
-    config: { boardWidth: boardSize.width, boardHeight: boardSize.height },
+  const {
+    initializeNewGame,
+    gameState,
+    match,
+    engine,
+  } = useMatch({
+    config: {
+      boardWidth: 5,
+      boardHeight: 5,
+    },
   });
+
+  const boardSize = match?.getBoardDimensions();
 
   const executeAIShot = (isPlayerTurn?: boolean) => {
     if (!match || !gameState) return;
@@ -32,7 +41,7 @@ const App = () => {
     if (isPlayerBoard && match.hasShipAtPosition(x, y, true)) {
       return "🚢";
     }
-
+    
     return "";
   };
 
@@ -62,9 +71,9 @@ const App = () => {
         <div>
           <h2>Tu Tablero</h2>
           <div style={{ display: "inline-block", border: "2px solid #333" }}>
-            {Array.from({ length: boardSize.height }).map((_, y) => (
+            {Array.from({ length: boardSize?.height ?? 0 }).map((_, y) => (
               <div key={y} style={{ display: "flex" }}>
-                {Array.from({ length: boardSize.width }).map((_, x) => (
+                {Array.from({ length: boardSize?.width ?? 0 }).map((_, x) => (
                   <div
                     key={`${x}-${y}`}
                     style={{
@@ -94,9 +103,9 @@ const App = () => {
         <div>
           <h2>Tablero Enemigo</h2>
           <div style={{ display: "inline-block", border: "2px solid #333" }}>
-            {Array.from({ length: boardSize.height }).map((_, y) => (
+            {Array.from({ length: boardSize?.height ?? 0 }).map((_, y) => (
               <div key={y} style={{ display: "flex" }}>
-                {Array.from({ length: boardSize.width }).map((_, x) => (
+                {Array.from({ length: boardSize?.width ?? 0 }).map((_, x) => (
                   <div
                     key={`${x}-${y}`}
                     style={{

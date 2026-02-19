@@ -1,4 +1,4 @@
-import type { GameEngine } from "../engine/logic";
+import type { GameEngine } from "../core/engine";
 
 /**
  * AI Player - Pure logic without React dependencies
